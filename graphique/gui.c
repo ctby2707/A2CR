@@ -15,11 +15,13 @@ GtkWidget *start_game_button;
 GtkWidget *exit_button;
 GtkBuilder *builder;
 
+
 const int wall = 0;
 const int alley = 1;
 const int alley_pac_gum = 2;
 const int alley_super = 3;
 const int fantom_home = 4;
+
 int map[31][28] ={
 // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, //0
