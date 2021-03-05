@@ -13,6 +13,7 @@ GtkWidget *window;
 GtkWidget *fixed1;
 GtkWidget *start_game_button;
 GtkWidget *exit_button;
+GtkDrawingArea *area;
 GtkBuilder *builder;
 
 
@@ -62,12 +63,17 @@ int map[31][28] ={
 
 void on_start_game_button_clicked()
 {
-  printf("start_game");
+  printf("start_game \n");
 }
 
 void on_exit_button_clicked()
 {
-  printf("exit");
+  printf("exit \n");
+}
+
+void on_draw()
+{
+  printf("draw  \n");
 }
 
 int launchgtk()
@@ -84,11 +90,13 @@ int launchgtk()
   fixed1 = GTK_WIDGET(gtk_builder_get_object(builder,"fixed1"));
   start_game_button = GTK_WIDGET(gtk_builder_get_object(builder,"start_game_button"));
   exit_button = GTK_WIDGET(gtk_builder_get_object(builder,"exit_button"));
+  area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
 
   //connect widgets to respective functions
 
   g_signal_connect(start_game_button,"clicked",G_CALLBACK(on_start_game_button_clicked),NULL);
   g_signal_connect(exit_button,"clicked",G_CALLBACK(on_exit_button_clicked),NULL);
+  g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
 
   //display window and begin windows loop
 
