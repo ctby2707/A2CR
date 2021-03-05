@@ -1,0 +1,88 @@
+@import
+url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  
+}
+
+.content
+{
+  max-width: 1250px;
+  margin: auto;
+  padding: 0 30px;
+}
+.navbar
+{
+  position: fixed;
+  z-index: 5;
+  width: 100%;
+  padding: 10px 0;
+  background: #1b1b1b;
+}
+
+.navbar .content
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar .menu-list
+{
+  display: inline-flex;
+  
+}
+
+.navbar .logo a
+{
+  color: #fff;
+  font-size: 30px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu-list li
+{
+  list-style: none;  
+}
+
+.menu-list li a
+{
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 25px;
+  text-decoration: none;
+}
+
+.banner
+{
+  height: 100vh;
+  background: url("pacman.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+}
+
+.about
+{
+  padding: 40px 0;
+   
+}
+
+.about .title
+{
+  font-size: 35px;
+  font-weight: 700;
+}
+
+.about p
+{
+  padding-top: 20px;
+  text-align: justify;
+}
