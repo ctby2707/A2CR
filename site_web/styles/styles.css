@@ -1,5 +1,15 @@
 @import
 url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+@font-face
+{
+  font-family: 'crack_manregular';
+  src:  url('../Fonts/crackman-webfont.woff2') format('woff2'),
+        url('../Fonts/crackman-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 *
 {
   margin: 0;
@@ -8,7 +18,28 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
   font-family: 'Poppins', sans-serif;
   
 }
+img
+{
+  width: 13%;
+  height: 13%;
+}
+.imgR
+{
+  float: right;
+  margin-left: 1%;
+}
 
+.imgL
+{
+  float: left;
+  margin-right: 1%
+}
+h1
+{
+  font-size: 20px;
+  text-decoration-line  : underline;
+  text-decoration-style : solid;
+}
 .content
 {
   max-width: 1250px;
@@ -40,8 +71,9 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
 .navbar .logo a
 {
   color: #fff;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 600;
+  font-family: 'crack_manregular', sans-serif;
   text-decoration: none;
 }
 
@@ -61,8 +93,9 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
 
 .banner
 {
+  padding-top: 40px;
   height: 100vh;
-  background: url("pacman.jpg") no-repeat;
+  background: url("../Images/pacman.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -71,7 +104,7 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
 
 .about
 {
-  padding: 40px 0;
+  padding-top: 70px;
    
 }
 
