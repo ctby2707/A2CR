@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="window">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFixed" id="fixed1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkButton" id="start_game_button">
+            <property name="label" translatable="yes">start game</property>
+            <property name="width-request">100</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <signal name="clicked" handler="on_start_game_button_clicked" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="exit_button">
+            <property name="label" translatable="yes">exit</property>
+            <property name="width-request">100</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <signal name="clicked" handler="on_exit_button_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="y">222</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="image_map_container">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">Originalpacmaze.jpg</property>
+          </object>
+          <packing>
+            <property name="x">170</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
