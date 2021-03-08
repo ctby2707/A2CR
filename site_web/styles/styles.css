@@ -18,22 +18,6 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
   font-family: 'Poppins', sans-serif;
   
 }
-img
-{
-  width: 13%;
-  height: 13%;
-}
-.imgR
-{
-  float: right;
-  margin-left: 1%;
-}
-
-.imgL
-{
-  float: left;
-  margin-right: 1%
-}
 h1
 {
   font-size: 20px;
