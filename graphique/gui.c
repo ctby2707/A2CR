@@ -88,24 +88,24 @@ void do_drawing (cairo_t *cr)
     {
       int x = 0;
       while(x<map_xlen)
-	{
-	  if(map[y][x]==2)
-	    {
-	      cairo_set_source_rgb(cr,1,1,0);
-	      cairo_rectangle(cr,18+x*22,30+y*22,5,5);
-	      cairo_fill(cr);
-	    }
-	  /*
+  {
+    if(map[y][x]==2)
+      {
+        cairo_set_source_rgb(cr,1,1,0);
+        cairo_rectangle(cr,18+x*22,30+y*22,5,5);
+        cairo_fill(cr);
+      }
+   /*
           //if the map supperposition doesnt work we have still this
-	  if(map[y][x]==0)
-	    {
-	      cairo_set_source_rgb(cr,0,0,1);
-	      cairo_rectangle(cr,x*20-7,y*20-7,20,20);
-	      cairo_fill(cr);
-	    }
-	  */
-	  x = x + 1;
-	}
+    if(map[y][x]==0)
+      {
+         cairo_set_source_rgb(cr,0,0,1);
+        cairo_rectangle(cr,x*20-7,y*20-7,20,20);
+        cairo_fill(cr);
+      }
+    */
+    x = x + 1;
+  }
       y = y + 1;
     }
   //propagate the signal
@@ -131,12 +131,11 @@ int launchgtk()
 
   //initisation of widgets
 
-  
   fixed1 = GTK_WIDGET(gtk_builder_get_object(builder,"fixed1"));
   overlay = gtk_overlay_new();
   start_game_button = GTK_WIDGET(gtk_builder_get_object(builder,"start_game_button"));
   exit_button = GTK_WIDGET(gtk_builder_get_object(builder,"exit_button"));
-  image = GTK_WIDGET(gtk_builder_get_object(builder,"image"));		       
+  image = GTK_WIDGET(gtk_builder_get_object(builder,"image"));
   area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
 
   //connect widgets to respective functions
@@ -148,7 +147,6 @@ int launchgtk()
   gtk_overlay_add_overlay(overlay,area);
   gtk_overlay_add_overlay(overlay,image);
 
-  
 
   //display window and begin windows loop
 
