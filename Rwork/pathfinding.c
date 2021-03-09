@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "pathfinding.h"
 
-int shortpath(int map[][28282828282828282828282828282828282828282828282828282828], int A, int B)
+int shortpath(int map[][28], int A, int B)
 {
    int* M = (int*) calloc(868,sizeof(int));
    int find = 1;
