@@ -13,14 +13,18 @@ int shortpath(int map[][28], int A, int B)
    int s;
    int o;
    int trans = A;
+   Cell *ctrans;
+   Cell *neso;
+   ctrans->value = trans;
    *(M+A) = trans;
-   TAILQ_HEAD(, int) file;
-   TAILQ_INIT(&file);
-   TAILQ_INSERT_HEAD(&file, trans, next);
+   SLIST_HEAD(, Cell) file;
+   SLIST_INIT(&file);
+   SLIST_INSERT_HEAD(&file, ctrans, next);
    while (!SLIST_EMPTY(&file) && find)
    {
-      trans = TAILQ_FIRST(&file);
-      TAILQ_REMOVE_HEAD(&file);
+      ctrans = SLIST_FIRST(&file);
+      trans = ctrans->value;
+      SLIST_REMOVE_HEAD(&file,);
       i = trans/31;
       j = trans%31;
       n = (i-1)*31 + j;
@@ -30,32 +34,36 @@ int shortpath(int map[][28], int A, int B)
       if (map[i-1][j] != 0 && map[i-1][j] != 5 && *(M+n) == 0 && find)
       {
          *(M+n) = trans;
+	 neso->value = n;
 	 if (n == B)
-	    TAILQ_INSERT_HEAD(&file, n, next);
+	    SLIST_INSERT_HEAD(&file, neso, next);
 	 else
 	    find = 0;
       }
       if (map[i][j+1] != 0 && map[i][j+1] != 5 && *(M+e) == 0 && find)
       {
          *(M+e) = trans;
+	 neso->value = e;
 	 if (e == B)
-	    TAILQ_INSERT_HEAD(&file, e, next); 
+	    SLIST_INSERT_HEAD(&file, neso, next); 
 	 else
 	    find = 0;
       }
       if (map[i+1][j] != 0 && map[i+1][j] != 5 && *(M+s) == 0 && find)
       {
          *(M+s) = trans;
+	 neso->value = s;
 	 if (s == B)
-	    TAILQ_INSERT_HEAD(&file, s, next);
+	    SLIST_INSERT_HEAD(&file, neso, next);
 	 else
 	    find = 0;
       }
       if (map[i][j-1] != 0 && map[i][j-1] != 5 && *(M+o) == 0 && find)
       {
          *(M+o) = trans;
+	 neso->value = o;
 	 if (o == B)
-	    TAILQ_INSERT_HEAD(&file, e, next);
+	    SLIST_INSERT_HEAD(&file, neso, next);
 	 else
 	    find = 0;
       }
