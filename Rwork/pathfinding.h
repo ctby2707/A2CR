@@ -1,8 +1,7 @@
 #ifndef PATHFINDING_H
 #define PATHFINDING_G
+#include <sys/queue.h>
 
-int shortpath(int map[], int A, int B);
-
-//int* pinkyfinding(int* map, pair A, pair B, int di);
+int shortpath(int map[][28], int A, int B);
 
 #endif

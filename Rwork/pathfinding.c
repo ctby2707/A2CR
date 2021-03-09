@@ -1,65 +1,69 @@
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "pathfinding.h"
-#include "fifo.h"
 
-int shortpath(int map[], int A, int B)
+int shortpath(int map[][28282828282828282828282828282828282828282828282828282828], int A, int B)
 {
    int* M = (int*) calloc(868,sizeof(int));
    int find = 1;
-   int start = A;
-   int end = B;
-   int neigh;
-   int trans = start;
+   int i;
+   int j;
+   int n;
+   int e;
+   int s;
+   int o;
+   int trans = A;
    *(M+A) = trans;
-   File F = Emptyfile();
-   Puton (F,A);
-   while (Length(F) && find)
+   TAILQ_HEAD(, int) file;
+   TAILQ_INIT(&file);
+   TAILQ_INSERT_HEAD(&file, trans, next);
+   while (!SLIST_EMPTY(&file) && find)
    {
-      trans = Scrolling(F);
-      neigh = trans;
-      neigh++;
-      if (map[neigh] != 0 && *(M+neigh) == 0 && find)
+      trans = TAILQ_FIRST(&file);
+      TAILQ_REMOVE_HEAD(&file);
+      i = trans/31;
+      j = trans%31;
+      n = (i-1)*31 + j;
+      e = i*31 + j + 1;
+      s = (i+1)*31 + j;
+      o = i*31 + j - 1;
+      if (map[i-1][j] != 0 && map[i-1][j] != 5 && *(M+n) == 0 && find)
       {
-         *(M+neigh) = trans;
-	 if (neigh != end)
-            Puton (F,neigh);
+         *(M+n) = trans;
+	 if (n == B)
+	    TAILQ_INSERT_HEAD(&file, n, next);
 	 else
 	    find = 0;
       }
-      neigh -= 2;
-      if (map[neigh] != 0 && *(M+neigh) == 0 && find)
+      if (map[i][j+1] != 0 && map[i][j+1] != 5 && *(M+e) == 0 && find)
       {
-         *(M+neigh) = trans;
-	 if (neigh != end)
-            Puton (F,neigh);
+         *(M+e) = trans;
+	 if (e == B)
+	    TAILQ_INSERT_HEAD(&file, e, next); 
 	 else
 	    find = 0;
       }
-      neigh += 32;
-      if (map[neigh] != 0 && *(M+neigh) == 0 && find)
+      if (map[i+1][j] != 0 && map[i+1][j] != 5 && *(M+s) == 0 && find)
       {
-         *(M+neigh) = trans;
-	 if (neigh != end)
-            Puton (F,neigh);
+         *(M+s) = trans;
+	 if (s == B)
+	    TAILQ_INSERT_HEAD(&file, s, next);
 	 else
 	    find = 0;
       }
-      neigh -= 62;
-      if (map[neigh] != 0 && *(M+neigh) == 0 && find)
+      if (map[i][j-1] != 0 && map[i][j-1] != 5 && *(M+o) == 0 && find)
       {
-         *(M+neigh) = trans;
-	 if (neigh != end)
-            Puton (F,neigh);
+         *(M+o) = trans;
+	 if (o == B)
+	    TAILQ_INSERT_HEAD(&file, e, next);
 	 else
 	    find = 0;
       }
    }
-   int next = end;
-   while (*M+next != start)
+   trans = B;
+   while (*(M+B) != A)
    { 
-      next = *M+next;
+      trans = *(M+B);
    }
-   return next;
+   return trans;
 }  
