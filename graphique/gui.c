@@ -7,8 +7,7 @@
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
 #include <cairo.h>
-
-//Make them Global
+//Global Variable
 
 GtkWidget *window;
 GtkWidget *fixed1;
@@ -19,15 +18,25 @@ GtkBuilder *builder;
 GtkOverlay *overlay;
 GtkWidget *image;
 
+typedef struct Player
+{
+  GdkRectangle rect;
+  guint event;
+  guint direction;
+  int x;
+  int y;
+} Player;
 
+const int speed = 1;
 const int wall = 0;
 const int alley = 1;
 const int alley_pac_gum = 2;
 const int alley_super = 3;
 const int fantom_home = 4;
 const int tunnel = 5;
-const int map_ylen = 31;
-const int map_xlen = 28;
+const int map_ylen = 28;
+const int map_xlen = 31;
+int score = 0;
 
 int map[31][28] ={
 // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 
@@ -76,49 +85,89 @@ void on_exit_button_clicked()
 {
   printf("exit \n");
 }
-
-void do_drawing (cairo_t *cr)
+gboolean on_move_p(gpointer user_data)
 {
-  //set background color to black
-  //cairo_set_source_rgb(cr,0,0,0);
-  //cairo_paint(cr);
-  //drawing every pac gum to test cairo function and map settings 
-  int y = 0;
-  while (y<map_ylen)
-    {
-      int x = 0;
-      while(x<map_xlen)
+  Player* player = user_data;
+  if(player->direction == 0)
   {
-    if(map[y][x]==2)
-      {
-        cairo_set_source_rgb(cr,1,1,0);
-        cairo_rectangle(cr,18+x*22,30+y*22,5,5);
-        cairo_fill(cr);
-      }
-   /*
-          //if the map supperposition doesnt work we have still this
-    if(map[y][x]==0)
-      {
-         cairo_set_source_rgb(cr,0,0,1);
-        cairo_rectangle(cr,x*20-7,y*20-7,20,20);
-        cairo_fill(cr);
-      }
-    */
-    x = x + 1;
+    player->rect.y = player->rect.y - speed;
   }
-      y = y + 1;
-    }
-  //propagate the signal
+  else if(player->direction == 1)
+  {
+    player->rect.y = player->rect.y + speed;
+  }
+  else if(player->direction == 2)
+  {
+    player->rect.x = player->rect.x - speed;
+  }
+  else if(player->direction == 3)
+  {
+    player->rect.x = player->rect.x + speed;
+  }
+  player->x = (player->rect.x-18)/22;
+  player->y = (player->rect.y-30)/22;
+  printf("{%i,%i}\n",player->x,player->y);
+   gtk_widget_queue_draw_area(GTK_WIDGET(area),0,0,635,760);
+  return TRUE;
+}
+gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  Player* player = user_data;
+  if(event->keyval == GDK_KEY_z)
+  {
+    player->direction = 0;
+  }
+  else if(event->keyval == GDK_KEY_s)
+  {
+    player->direction = 1;
+  }
+  else if(event->keyval == GDK_KEY_q)
+  {
+    player->direction = 2;
+  }
+  else if(event->keyval == GDK_KEY_d)
+  {
+    player->direction = 3;
+  }
+  else
+  {
+    player->direction = -1;
+  }
+  if(player->event == 0)
+    player->event = g_timeout_add(10,on_move_p,player);
+  return TRUE;
+}
+gboolean on_key_release(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  Player* player = user_data;
+  if(player->event != 0)
+    g_source_remove(player->event);
+  player->event = 0;
+  return TRUE;
 }
 
 gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
-  printf("draw  \n");
-  do_drawing(cr);
+  //drawing every pac gum to test cairo function and map settings
+  Player* p = user_data;
+  for(int x = 0; x < map_xlen; x++)
+  {
+    for(int y = 0; y < map_ylen; y++)
+    {
+      if(map[x][y]==2)
+      {
+        cairo_set_source_rgb(cr,1,1,0);
+        cairo_rectangle(cr,18+y*22,30+x*22,5,5);
+        cairo_fill(cr);
+      }
+    }
+  }
+
+  cairo_set_source_rgb(cr,1,1,0);
+  cairo_rectangle(cr,p->rect.x,p->rect.y,p->rect.width,p->rect.height);
+  cairo_fill(cr);
   return FALSE;
 }
-
-
 
 int launchgtk()
 {
@@ -127,27 +176,34 @@ int launchgtk()
   builder = gtk_builder_new_from_file("pac-man_gui.glade");
   window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 
-  g_signal_connect(window,"destroy",G_CALLBACK(gtk_main_quit),NULL);
-
   //initisation of widgets
 
   fixed1 = GTK_WIDGET(gtk_builder_get_object(builder,"fixed1"));
-  overlay = gtk_overlay_new();
+  overlay = GTK_OVERLAY(gtk_overlay_new());
   start_game_button = GTK_WIDGET(gtk_builder_get_object(builder,"start_game_button"));
   exit_button = GTK_WIDGET(gtk_builder_get_object(builder,"exit_button"));
   image = GTK_WIDGET(gtk_builder_get_object(builder,"image"));
   area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
-
   //connect widgets to respective functions
+
+  Player player = {
+    .rect = { 40, 42, 22, 22 },
+    .event = 0,
+    .direction = 0,
+    .x = 1,
+    .y = 1
+  };
 
   g_signal_connect(start_game_button,"clicked",G_CALLBACK(on_start_game_button_clicked),NULL);
   g_signal_connect(exit_button,"clicked",G_CALLBACK(on_exit_button_clicked),NULL);
-  g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
+  g_signal_connect(window,"destroy",G_CALLBACK(gtk_main_quit),NULL);
+  g_signal_connect(area, "draw", G_CALLBACK(on_draw), &player);
+  g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), &player);
+  g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), &player);
 
-  gtk_overlay_add_overlay(overlay,area);
+  gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
+  gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
   gtk_overlay_add_overlay(overlay,image);
-
-
   //display window and begin windows loop
 
   gtk_widget_show(window);
