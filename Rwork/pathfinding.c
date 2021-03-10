@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/queue.h>
 #include "pathfinding.h"
 
-int shortpath(int map[][28], int A, int B)
+int shortpath(int map[31][28], int A, int B)
 {
    int* M = (int*) calloc(868,sizeof(int));
    int find = 1;
@@ -14,13 +15,19 @@ int shortpath(int map[][28], int A, int B)
    int o;
    int trans = A;
    *(M+A) = trans;
-   TAILQ_HEAD(, int) file;
-   TAILQ_INIT(&file);
-   TAILQ_INSERT_HEAD(&file, trans, next);
-   while (!SLIST_EMPTY(&file) && find)
+   int file;
+   TAILQ_HEAD(tailhead, entry) head = TAILQ_HEAD_INITIALIZER(head);
+   struct tailhead *headp;
+   struct entry {
+                TAILQ_ENTRY(entry) entries;
+     } *n1, *n2, *n3, *np;
+   TAILQ_INIT(&head);
+   n1 = malloc(sizeof(struct entry));
+   TAILQ_INSERT_HEAD(&head, n1, entries);
+   while (!TAILQ_EMPTY(&head) && find)
    {
-      trans = TAILQ_FIRST(&file);
-      TAILQ_REMOVE_HEAD(&file);
+      trans = (int)TAILQ_FIRST(&head);
+      TAILQ_REMOVE_HEAD(&head);
       i = trans/31;
       j = trans%31;
       n = (i-1)*31 + j;
