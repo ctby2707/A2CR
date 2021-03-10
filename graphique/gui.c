@@ -26,7 +26,7 @@ typedef struct Player
   int x;
   int y;
 } Player;
-
+const int tile_width = 22;
 const int speed = 1;
 const int wall = 0;
 const int alley = 1;
@@ -72,8 +72,6 @@ int map[31][28] ={
   {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0}, //29
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}; //30
 
-
-
 //function when button clicked
 
 void on_start_game_button_clicked()
@@ -87,6 +85,7 @@ void on_exit_button_clicked()
 }
 gboolean on_move_p(gpointer user_data)
 {
+
   Player* player = user_data;
   if(player->direction == 0)
   {
@@ -98,34 +97,46 @@ gboolean on_move_p(gpointer user_data)
   }
   else if(player->direction == 2)
   {
+    if(map[player->x+1][player->y] == 0)
+    {
+      player->rect.x = CLAMP(player->rect.x - speed,(player->x-1)*tile_width
+      +2,800);
+    }
     player->rect.x = player->rect.x - speed;
   }
   else if(player->direction == 3)
   {
-    player->rect.x = player->rect.x + speed;
+    if(map[player->x+1][player->y] == 0)
+    {
+      player->rect.x = CLAMP(player->rect.x + speed,
+                            0,(player->x+1)*tile_width -2);
+    }
+    else
+    {
+      player->rect.x = player->rect.x +speed;
+    }
   }
-  player->x = (player->rect.x-18)/22;
-  player->y = (player->rect.y-30)/22;
-  printf("{%i,%i}\n",player->x,player->y);
-   gtk_widget_queue_draw_area(GTK_WIDGET(area),0,0,635,760);
+  player->x = (player->rect.x+11-10)/tile_width;
+  player->y = (player->rect.y+11-25)/tile_width;
+  gtk_widget_queue_draw_area(GTK_WIDGET(area),0,0,635,760);
   return TRUE;
 }
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
   Player* player = user_data;
-  if(event->keyval == GDK_KEY_z)
+  if(event->keyval == GDK_KEY_q)
   {
     player->direction = 0;
   }
-  else if(event->keyval == GDK_KEY_s)
+  else if(event->keyval == GDK_KEY_d)
   {
     player->direction = 1;
   }
-  else if(event->keyval == GDK_KEY_q)
+  else if(event->keyval == GDK_KEY_z)
   {
     player->direction = 2;
   }
-  else if(event->keyval == GDK_KEY_d)
+  else if(event->keyval == GDK_KEY_s)
   {
     player->direction = 3;
   }
@@ -156,15 +167,24 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
     {
       if(map[x][y]==2)
       {
+        cairo_set_source_rgba(cr,1,1,0,0.5);
+        cairo_rectangle(cr,10+y*tile_width,25+x*tile_width,tile_width,tile_width);
+        cairo_fill(cr);
         cairo_set_source_rgb(cr,1,1,0);
-        cairo_rectangle(cr,18+y*22,30+x*22,5,5);
+        cairo_rectangle(cr,10+y*tile_width+(tile_width-5)/2,25+x*tile_width+(tile_width-5)/2,5,5);
+        cairo_fill(cr);
+      }
+      if(map[x][y] == 0)
+      {
+        cairo_set_source_rgba(cr,1,0,1,0.5);
+        cairo_rectangle(cr,10+y*tile_width,25+x*tile_width,tile_width,tile_width);
         cairo_fill(cr);
       }
     }
   }
 
   cairo_set_source_rgb(cr,1,1,0);
-  cairo_rectangle(cr,p->rect.x,p->rect.y,p->rect.width,p->rect.height);
+  cairo_rectangle(cr,p->rect.y,p->rect.x,p->rect.width,p->rect.height);
   cairo_fill(cr);
   return FALSE;
 }
@@ -187,7 +207,7 @@ int launchgtk()
   //connect widgets to respective functions
 
   Player player = {
-    .rect = { 40, 42, 22, 22 },
+    .rect = { 25+tile_width+11, 10+tile_width+11, 22, 22 },
     .event = 0,
     .direction = 0,
     .x = 1,
