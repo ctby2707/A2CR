@@ -1,14 +1,13 @@
 CC = gcc
-CFALGS = -Wall - Wextra
+CFALGS = -Wall - Wextra -g
 
-all: test
+all: main
 
-test: test.o pathfinding.o fifo.o
-test.o: test.c pathfinding.h
-pathfinding.o: pathefinding.c pathfinding.h fifo.h
-fifo.o: fifo.c fifo.h cell.h
+main: main.o pathfinding.o
+main.o: main.c pathfinding.h
+pathfinding.o: pathfinding.c pathfinding.h 
 
 .PHONY: clean
 
 clean:
-	${RM} test.o pathfinding.o fifo.o
+	${RM} main main.o pathfinding.o 
