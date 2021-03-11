@@ -52,7 +52,7 @@ int main(void)
   int bi = 10;
   int bj = 19;
   int next;
-  next = shortpath(map[31][28], (ai*31+aj), (bi*31+bj));
-  printf("i = %d, j = %d \n", (next/31), (next%31));
+  next = shortpath(map, ((ai-1)*28+aj), (ai*28+aj), (bi*28+bj));
+  printf("i = %d, j = %d \n", (next/28), (next%28));
   return 1;
 }
