@@ -6,8 +6,8 @@
 #include <ctype.h>
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
-#include "gui.h"
-
+#include "GTK.h"
+#include "pac-man.h"
 int main()
 {
   return launchgtk();
