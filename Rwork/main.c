@@ -53,7 +53,6 @@ int main(void)
   int by = 7;
   int next;
   next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
-  printf("%d\n",next);
   printf("x = %d, y = %d \n", (next/28), (next%28));
   return 1;
 }
