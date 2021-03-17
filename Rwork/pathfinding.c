@@ -53,47 +53,86 @@ const int NORTH = -28;
 const int SOUTH = 28;
 const int EAST = 1;
 const int WEST = -1;
+int *M;
 
-
-typedef struct queue{
+struct queue{
   struct queue *prev;
   struct queue *next;
   int elem;
   int head;//1=head    0=not the head
   int last;//1=last    0=not the last
-}queue;
+  int unique; //  !0=unique     0=not unique
+};
 
-int remove_first_elem(queue *q)
+struct queue *remove_first_elem(struct queue *q_head, int first_time, int *elem)
 {
-  int elem = q->elem;
-  if (q->last == 1)
-    return -1;
-  q = q->next;
-  q->head=1;
-  return elem;
+  //*elem = q_head->elem;
+  //printf("remove elem = %d\n",*elem);
+  struct queue *useless = q_head;
+  //printf("remove q_head->last = %d\n",q_head->last);
+  if ((q_head->last == 1) && q_head->unique != 1){
+    q_head->elem =-1;
+  }
+  *elem = q_head->elem;
+  q_head = useless->next;
+ // q_head->head=1;
+  free(useless);
+  return q_head;
 }
 
-void add_elem(queue *q_last, int elem)
+struct queue *add_elem(struct queue *q_last, int elem, int *M, int prev, int A)
 {
-  printf("q_last elem before change = %d\n",q_last->elem);
-  queue  *new = malloc(sizeof(queue));
-  new->prev=q_last;
-  q_last->next = new;
-  new->elem = elem;
-  new->last = 1;
-  q_last = new;
-  printf("q_new elem = %d\n",new->elem);
-  printf("q_last elem = %d\n",q_last->elem);
+  if(*(M+elem)==0)
+  {
+    //printf("q_last elem before change = %d\n",q_last->elem);
+    struct queue  *new = malloc(sizeof(struct queue));
+    new->prev=q_last;
+    q_last->next = new;
+    new->elem = elem;
+    new->last = 1;
+    q_last->last = 0;
+    new->head=0;
+    //q_last = new;
+    //printf("q_new elem = %d\n",new->elem);
+    //printf("q_last elem = %d\n\n",q_last->elem);
+    printf("cocuocucoucocucoicucocucciucocucoicci %d\n",*(M+prev));
+    printf("element = %d\n",elem);
+    printf("previous = %d\n",prev);
+    *(M+elem)=prev;
+   /* if (elem == A)
+      *(M+elem)=*(M+prev);
+    else
+    {
+      if (elem+1==prev)
+      {
+        printf("WEST\n");
+        *(M+elem)=WEST;
+      }
+      if (elem-1==prev){printf("EAST\n");
+        *(M+elem)=EAST;}
+      if (elem-28==prev){printf("SOUTH\n");
+        *(M+elem)=SOUTH;}
+      if (elem+28==prev){printf("NORTH\n");
+        *(M+elem)=NORTH;}
+    }*/
+    //else
+      //*(M+elem)=*(M+prev);
+    return new;
+  }
+  else
+    return q_last;
 }
 
 void coo(int elem, int *x, int *y)
 {
-  *y = elem/31;
-  *x = elem%31;
+  *y = elem%28;
+  *x = elem/28;
 }
 
-void search_way(int map[][28],queue *q_last, int x, int y, int elem, int prev)
-{
+struct queue *search_way(int map[][28],struct queue *q_last,int x,int y,int elem,int prev,
+int *direction, int *M, int A)
+{ // retrurn the unique direction or 0 if more than one direction
+  //printf("putain de merde tu fonctionnes ou pas?\n");
   int x_prev;
   int y_prev;
   coo(prev, &x_prev, &y_prev);
@@ -106,76 +145,146 @@ void search_way(int map[][28],queue *q_last, int x, int y, int elem, int prev)
     orientation[2]=0;
   if (map[x][y-1]==0 || y_prev+1==y)
     orientation[3]=0;
+  //int unique=0;
+  int number=0;
+  for(int i=0;i<4;i++)
+  {
+    if (orientation[i]==1)
+    {
+      number++;
+      if(i==0)
+        *direction=NORTH;
+      if(i==1)
+        *direction=SOUTH;
+      if(i==2)
+        *direction=EAST;
+      if(i==3)
+        *direction=WEST;
+    }
+  }
+  if (number==1)
+  {
+    *direction = 0;
+    return q_last;
+  }
 
   if (orientation[0]==1)
-    add_elem(q_last,elem-28);
-  if (orientation[1]==1)
-    add_elem(q_last,elem+28);
+    {//printf("HERE\n");
+    q_last = add_elem(q_last,elem-28, M, prev, A);}
+  if (orientation[1]==1){//printf("HERE\n");
+    q_last = add_elem(q_last,elem+28, M, prev, A);}
   if (orientation[2]==1)
-    add_elem(q_last,elem+1);
+    q_last = add_elem(q_last,elem+1, M, prev, A);
   if (orientation[3]==1)
-    add_elem(q_last,elem-1);
-  printf("q_last elem in search_way=%d\n",q_last->elem);
+    q_last = add_elem(q_last,elem-1, M, prev, A);
+  //printf("q_last elem in search_way=%d\n\n",q_last->elem);
   //printf("q_head elem in search_way=%d\n",q_head->elem);
+  return q_last;
+}
+
+int number_elem(struct queue *q_head)
+{
+  int num = 0;
+  for (struct queue *res = q_head;res->last!=1;res = res->next)
+  {
+    //printf("adress of the elem %d = %p\n",num+1,res);
+    //printf("l'element c'est = %d\n",res->elem);
+    num++;
+  }
+  //printf("\n\n\n\n\n\n");
+  return num;
 }
 
 int shortpath(int map[][28], int prev, int A, int B)
 {
-  int *M;
-  printf("before calloc\n");
-  M = calloc(868,sizeof(int));
-  printf("calloc is not the problem\n");
+  //printf("size of struct queue %ld\n",sizeof(struct queue));
   int find = 1;
-  queue *q_head = malloc(sizeof(queue));
+  struct queue *q_head = malloc(sizeof(struct queue));
   q_head->head=1;
+  M = calloc(868,sizeof(int));
   int x;
   int y;
-  coo(q_head->elem,&x,&y);
-  int x_prev;
-  int y_prev;
-  coo(prev, &x_prev, &y_prev);
-  queue *q_last;
+  coo(A,&x,&y);
+  //printf("x = %d et y = %d x_prev = %d et y_prev = %d\n",x,y,x_prev,y_prev);
+  struct queue *q_last;// = malloc(sizeof(struct queue));
   q_last = q_head;
   q_last->last = 1;
-  q_last->elem =A;
-  printf("elem just after%d\n",q_last->elem);
+  q_last->unique = 1;
+  //printf("q_head->last = %d\n",q_head->last);
+  //printf("q_last->last = %d\n",q_last->last);
+  q_head->elem =A;
+  //printf("q_head elem = %d  q_last->elem = %d\n",q_head->elem,q_last->elem);
   int elem = A;
   int first = 0;
-  int dir =0;
-  search_way(map,q_last,x,y,A,prev);
+  int final_dir = 0;
+  int search=0;
+  int direction;
+  *(M+prev) = -1;
+  q_last = search_way(map,q_last,x,y,A,A, &direction, M, A);
   while ((elem != -1) && find)
   {
-    printf("q_last elem =%d\n",q_last->elem);
-    printf("q_head elem =%d\n",q_head->elem);
+    if (prev==A)
+      *(M+prev) = -1;
+    //printf("number total of element dans la queue = %d\n",number_elem(q_head));
+    //printf("q_last elem =%d et l'adress est %p\n",q_last->elem,q_last);
+    //printf("q_head elem =%d\n",q_head->elem);
+    //printf("début de while avant remove q_head = %p\n",q_head);
+    //prev=elem;
+    if (first == 0)
+    {
+      first--;
+      q_head = remove_first_elem(q_head, 0, &elem);
+    }
+    else
+      q_head = remove_first_elem(q_head, 1, &elem);
     prev=elem;
-    elem = remove_first_elem(q_head);
-    if (elem==B)
+    //printf("prev = %d\n",prev);
+    //printf("après avoir remove pour comparaison q_head = %p\n",q_head);
+    printf("THE ELEM= %d\n",elem);
+    printf("PREV = %d\n",*(M+prev));
+    if (elem!=A)
     {
-      find=0;
-      dir=*(M+prev);
-      printf("%d\n",dir);
-    }
-    if (first==0)
-    {
-      first=-1;
-      if (elem-1==A)
-        *(M+elem)=WEST;
-      if (elem+1==A)
-        *(M+elem)=EAST;
-      if (elem-28==A)
-        *(M+elem)=SOUTH;
-      if (elem+28==A)
-        *(M+elem)=NORTH;
-    }
-    elsefile descripto
+      if (elem==B)
+      {
+        find=0;
+        final_dir=*(M+prev);
+        printf("previous last = %d\n",*(M+prev));
+        printf("direction = %d\n",final_dir);
+      }
+      /*if (first==-1)
+      {
+        first=-1;
+        printf("elem = %d, prev = %d \n",elem,prev);
+        if (elem-1==prev)
+        {
+          printf("WEST\n");
+          *(M+elem)=WEST;
+        }
+        if (elem+1==prev){printf("EAST\n");
+          *(M+elem)=EAST;}
+        if (elem-28==prev){printf("SOUTH\n");
+          *(M+elem)=SOUTH;}
+        if (elem+28==prev){printf("NORTH\n");
+          *(M+elem)=NORTH;}
+        printf("%d\n",*(M+elem));
+      }*/
+    }/*
+    else
     {
       *(M+elem)=*(M+prev);
-    }
+    }*/
     coo(elem, &x, &y);
-    search_way(map, q_last, x, y, elem, prev);
-    printf("q_last elem =%d\n",q_last->elem);
-    printf("q_head elem =%d\n",q_head->elem);
+    q_last = search_way(map, q_last, x, y, elem, prev, &direction,M, A);
+    //printf("q_last elem =%d\n",q_last->elem);
+    //printf("q_head elem =%d\n",q_head->elem);
   }
+  int last = B;
+  while (*(M+last)!=A)
+  {
+    printf("%d\n",*(M+last));
+    last=*(M+last);
+  }
+  printf("coucou  = %d\n",last);
   free(M);
-  return A+dir;
+  return last;
 }

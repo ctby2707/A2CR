@@ -47,13 +47,13 @@ int map[31][28] ={
 
 int main(void)
 {
-  int ai = 9;
-  int aj = 10;
-  int bi = 10;
-  int bj = 19;
+  int ax = 4;
+  int ay = 12;
+  int bx = 7;
+  int by = 7;
   int next;
-  next = shortpath(map, ((ai-1)*31+aj), (ai*31+aj), (bi*31+bj));
+  next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
   printf("%d\n",next);
-  printf("i = %d, j = %d \n", (next/31), (next%31));
+  printf("x = %d, y = %d \n", (next/28), (next%28));
   return 1;
 }
