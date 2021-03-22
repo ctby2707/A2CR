@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pathfinding.h"
-
+#include "ghost.h"
+// 2 et 6       7 et 9
 const int wall = 0;
 const int alley = 1;
 const int alley_pac_gum = 2;
