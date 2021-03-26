@@ -10,12 +10,12 @@ int SE = 5;
 int SW = 10;
 int NW = 15;
 
-int blinky (int me, int pacman, int map[][28])
+int blinky (int me, int pacman, int map[][28], int prev)
 {
-  return shortpath(map, me, me, pacman);
+  return shortpath(map, prev, me, pacman);
 }
 
-int pinky (int me, int dir_pacman, int map[][28])
+int pinky (int me, int pacman, int dir_pacman, int map[][28], int prev)
 {
   int dir_value;
   int B = pacman;
@@ -34,10 +34,10 @@ int pinky (int me, int dir_pacman, int map[][28])
      mBp = map[Bp/28][Bp%28];
        }
   }
-  return shortpath(map, me, me, B);
+  return shortpath(map, prev, me, B);
 }
 
-int inky (int me, int blinky, int pacman, int map[][28])
+int inky (int me, int blinky, int dir_pacman, int map[][28], int prev)
 {
   int x1 = blinky/28;
   int y1 = blinky%28;
@@ -101,7 +101,7 @@ int inky (int me, int blinky, int pacman, int map[][28])
      mBp = map[Bi][Bj];
        }
    }
-   return shortpath(map, me, me, B);
+   return shortpath(map, prev, me, B);
 }
 
 int GPS(int x1, int y1, int x2, int y2)
@@ -117,30 +117,36 @@ int GPS(int x1, int y1, int x2, int y2)
   return 0;
 }
 
-int clyde (int me, int pacman, int map[][28])
-{/*
-  int y1 = me%28; //horizontal coo of clyde
+int clyde (int me, int pacman, int map[][28], int prev)
+{
+  int y1 = me%28; // horizontal coo of clyde
   int x1 = me/28; // vertical coo of clyde
-  int y2 = pacman%28; //horizontal coo of pacman
+  int y2 = pacman%28; // horizontal coo of pacman
   int x2 = pacman/28; // vertical coo of pacman
-  int diagonal = 500; // calculate the distance between target and clyde
-
+  int diagonal = 500; // the distance between target and clyde
+  int final_target = 30;
   for (int i=0;i<20;i++)
   {
     int dir = five_ray[i]; //the coordonate we need to test compare to pacman
     int target = pacman + dir; // the current point we check
     if (target<868 && target>=0 && y2+(dir%28)<28 && y2+(dir%28)>=0 && map[target/28][target%28]!=0 && map[target/28][target%28]!=4)
     {//check if the coordonnate can be use by clyde
-      if ((abs((target%28)-y1) + abs((target/28)-x1))<node)
+      if ((abs((target%28)-y1) + abs((target/28)-x1))<diagonal)
+      {
+        diagonal = abs((target%28)-y1) + abs((target/28)-x1);
+        final_target = target;
+      }
     }
   }
-*/
+  printf("final target = %d",final_target);
+  return shortpath(map,prev,me,final_target);
+/*
   int y1 = me%28;
   int x1 = me/28;
   int y2 = pacman%28;
   int x2 = pacman/28;
   int direction = GPS(x1,y1,x2,y2);
-  printf("the direction is = %d\n",direction);
+  //printf("the direction is = %d\n",direction);
   int node=500;
   int top;
   int stock;
@@ -149,20 +155,21 @@ int clyde (int me, int pacman, int map[][28])
   {
     int dir = five_ray[i];
     int target = pacman + dir;
-    printf("target = %d && y2+dir = %d && map =%d\n",target,y2+dir,map[target/28][target%28]);
+    //printf("target = %d && y2+dir = %d && map =%d\n",target,y2+dir,map[target/28][target%28]);
     if (target<868 && target>=0 && y2+(dir%28)<28 && y2+(dir%28)>=0 &&
 map[target/28][target%28]>0 && map[target/28][target%28]!=4)
     {
       top = pacman + five_ray[i];
-      printf("%d\n",abs((top%28)-y1) + abs((top/28)-x1));
+      //printf("%d\n",abs((top%28)-y1) + abs((top/28)-x1));
       if ((stock = abs((top%28)-y1) + abs((top/28)-x1))<node)
       {
         the_good_one = dir+pacman;
-        printf("the good one is %d && %d\n",the_good_one,abs((top%28)-y1) + abs((top/28)-x1));
+        //printf("the good one is %d && %d\n",the_good_one,abs((top%28)-y1) + abs((top/28)-x1));
         node = stock;
       }
     }
   }
   return the_good_one;
+*/
 }
 

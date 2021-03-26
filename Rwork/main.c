@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 #include "pathfinding.h"
@@ -54,13 +53,15 @@ int main(void)
   int bx = 7;
   int by = 7;
   int next;
-  next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
+  next = shortpath(map, ((ax)*28+(ay-1)), (ax*28+ay), (bx*28+by));
   printf("direction = %d\n",next);
-  int g1 = clyde(837,685,map);
-  printf("clyde is going here : %d\n",g1);
-  int g2 = pinky(625,542,543,map);
-  printf("pinky is going here : %d\n",g2);
-  int g3 = inky(382,466,463,map);
-  printf("inky is going here : i = %d j = %d\n",g3/28,g3%28);
+  int g1 = clyde(175,685,map,836);
+  printf("clyde is going to : %d\n",g1);
+  int g2 = pinky(625,542,543,map,626);
+  printf("pinky is going to : %d\n",g2);
+  int g3 = inky(382,466,463,map,410);
+  printf("inky is going to : %d\n",g3);
+  int g4 = blinky(175,684,map,836);
+  printf("blinky is going to : %d\n",g4);
   return 1;
 }

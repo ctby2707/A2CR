@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #ifndef PATHFINDING_H
 #define PATHFINDING_G
 
