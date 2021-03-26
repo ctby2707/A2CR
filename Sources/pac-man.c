@@ -7,6 +7,10 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 5;
+int dir_blinky = -1;
+int dir_inky = -1;
+int dir_clyde = -1;
+int dir_pinky = -1;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] ={
@@ -43,7 +47,7 @@ int map[31][28] ={
   {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0}, //29
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}; //30
 
-
+/*
 int pixel_art_pac_man[7][6]={
   {1,1,0,0,0,1},
   {1,0,0,0,0,0},
@@ -52,7 +56,7 @@ int pixel_art_pac_man[7][6]={
   {0,0,0,0,0,1},
   {1,0,0,0,0,0},
   {1,1,0,0,0,1}};
-
+*/
 
 Game game =
 {
@@ -65,7 +69,7 @@ Game game =
           },
   .blinky =
           {
-            .x = 296, //13 in mat
+            .x = 318, //13 in mat
             .y = 311, //13 in mat
           },
   .inky =
@@ -104,46 +108,150 @@ void request_move(char dire)
   }
 }
 
-void move_ghost(Player ghost,int dir)
+
+int random_ghost()
+{
+  
+  int num = rand() % 4;
+  printf("num = %i \n",num);
+  if(num == 0)
+    return -1;
+  if(num == 1)
+    return 1;
+  if(num == 2)
+    return 28;
+  if(num == 3)
+    return -28;
+  return -1;
+}
+
+void move_ghost(int ghostnum)
 {
   
   int x;
   int y;
-  pixel_To_MatCoord(ghost.x,ghost.y,&x,&y);
+  int X=0;
+  int Y=0;
+  int dir = 0;
+  if(ghostnum == 1)
+    {
+      X = game.blinky.x;
+      Y = game.blinky.y;
+      dir = dir_blinky;
+    }
+  if(ghostnum == 2)
+    {
+      X = game.inky.x;
+      Y = game.inky.y;
+      dir = dir_inky;
+    }
+  if(ghostnum == 3)
+    {
+      X = game.clyde.x;
+      Y = game.clyde.y;
+      dir = dir_clyde;
+    }
+  if(ghostnum == 4)
+    {
+      X = game.pinky.x;
+      Y = game.pinky.y;
+      dir = dir_pinky;
+    }
+  pixel_To_MatCoord(X,Y,&x,&y);
   
   if(dir == -28)//N
     {
-      if(map[(x-1)*28+y]!=0)
+      if(map[x-1][y]==1 || map[x-1][y]==2 || map[x-1][y]==3 || map[x-1][y]==4 )
 	{
-	  matCoord_To_Pixel(x-1,y,&ghost.x,&ghost.y);
-	  printf("moved");
+	  X= CLAMP(X - ghost_speed, 0, 635);
+	  printf("up \n");
 	}
     }
   if(dir == 28)//S
     {
-      if(map[(x+1)*28+y]!=0)
+      if(map[x+1][y]==1 || map[x+1][y]==2 || map[x+1][y]==3 || map[x+1][y]==4 )
 	{
-	  matCoord_To_Pixel(x+1,y,&ghost.x,&ghost.y);
-	  printf("moved");
+	  X= CLAMP(X + ghost_speed, 0, 635);
+	  printf("down \n");
 	}
     }
   if(dir == 1)//E
     {
-      if(map[x*28+y+1]!=0)
+      if(map[x][y+1]==1 || map[x][y+1]==2 || map[x][y+1]==3 || map[x][y+1]==4)
 	{
-	  matCoord_To_Pixel(x,y+1,&ghost.x,&ghost.y);
-	  printf("moved");
+	  Y= CLAMP(Y + ghost_speed, 0, 760);
+	  printf("right \n");
 	}
     }
   if(dir == -1)//W
     {
-      if(map[x*28+y-1]!=0)
+      if(map[x][y-1]==1 || map[x][y-1]==2 || map[x][y-1]==3 || map[x][y-1]==4)
 	{
-	  matCoord_To_Pixel(x,y-1,&ghost.x,&ghost.y);
-	  printf("moved \n");
+	  Y= CLAMP(Y - ghost_speed, 0, 760);
+	  printf("left \n");
 	}
     }
-  printf("ghost coord : x %i ; y %i \n",ghost.x,ghost.y);
+  if(ghostnum == 1)
+    {
+      game.blinky.x=X;
+      game.blinky.y=Y;
+    }
+  if(ghostnum == 2)
+    {
+      game.inky.x=X;
+      game.inky.y=Y;
+    }
+  if(ghostnum == 3)
+    {
+      game.clyde.x=X;
+      game.clyde.y=Y;
+    }
+  if(ghostnum == 4)
+    {
+      game.pinky.x=X;
+      game.pinky.y=Y;
+    }
+  
+}
+
+int choose_to_move_ghost(int ghostnum)
+{
+  int x;
+  int y;
+  int X=0;
+  int Y=0;
+  int dir = 0;
+  if(ghostnum == 1)
+    {
+      X = game.blinky.x;
+      Y = game.blinky.y;
+      dir = dir_blinky;
+    }
+  pixel_To_MatCoord(X,Y,&x,&y);
+  int XP,YP;
+  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&XP,&YP);
+  if((x*28+y)==(XP*28+YP))
+    return 1;
+  else
+    {
+      if(dir == 28 || dir == -28)//N or S
+	{
+	  if(map[x][y]==0 && map[x][y+1]==0)
+	    {
+	      return 1;
+	    }
+	}
+      
+      if(dir == 1 || dir == -1)//E or W
+	{
+	  if(map[x+1][y]==0 && map[x-1][y]==0)
+	    {
+	      return 1;
+	    }
+	}
+      
+    }
+  return 0;
 }
 
 gboolean loop()
@@ -203,22 +311,73 @@ gboolean loop()
       game.pac_man.x = game.pac_man.x + pac_man_speed;
     }
   }
-  //ghost move
+  //-------------------ghost move---------------------------------------------
   //blinky
-  printf("tamere \n");
+  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X,&Y);//update pac man coord
+  printf("\n new loop \n ");
   int xb;
   int yb;
-
   pixel_To_MatCoord(game.blinky.x,game.blinky.y,&xb,&yb);
+  printf("blinky coord mat:  %i ; pac mand coord  %i ; prev coord : %i \n",xb*28 + yb,X*28+Y,(xb*28)+yb-dir_blinky);
+  printf("blinky coord x:  %i ; y  %i \n",xb,yb);
+
+  srand(time(0));
   
-  int blinky_dir = blinky(xb*28+yb ,X*28+Y ,map);
-  printf("blinky coord : x %i ; y %i \n",game.blinky.x,game.blinky.y);
-  printf("blinky dir : %i\n",blinky_dir);
-  move_ghost(game.blinky,blinky_dir);
+  if(choose_to_move_ghost(1) == 0)
+    {
+      printf("lauched cancer blinky \n");
+      dir_blinky = random_ghost();
+      //dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
+    }
+  printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
+  printf("blinky dir : %i\n",dir_blinky);
+  
+  move_ghost(1);
+  
   printf("ghost moved\n");
-  printf("blinky coord : x %i ; y %i \n",game.blinky.x,game.blinky.y);
+  printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
+  
   draw(game.blinky.x - ghost_speed, game.blinky.y - ghost_speed, 22 +
       ghost_speed*2, 22 +ghost_speed*2);
+  /*
+  //inky
+  int xi;
+  int yi;
+  pixel_To_MatCoord(game.inky.x,game.inky.y,&xi,&yi);
+  if(choose_to_move_ghost(2) == 0)
+    {
+      //dir_inky = inky(xi*28+yi ,X*28+Y ,map,(xi*28)+yi-dir_inky);
+    }
+  move_ghost(2);
+  draw(game.inky.x - ghost_speed, game.inky.y - ghost_speed, 22 +
+      ghost_speed*2, 22 +ghost_speed*2);
+
+  //clyde
+  int xc;
+  int yc;
+  pixel_To_MatCoord(game.clyde.x,game.clyde.y,&xc,&yc);
+  if(choose_to_move_ghost(3) == 0)
+    {
+      //dir_clyde = clyde(xc*28+yc ,X*28+Y ,map,(xc*28)+yc-dir_clyde);
+    }
+  move_ghost(3);
+  draw(game.clyde.x - ghost_speed, game.clyde.y - ghost_speed, 22 +
+      ghost_speed*2, 22 +ghost_speed*2);
+
+  //pinky
+
+  int xp;
+  int yp;
+  pixel_To_MatCoord(game.pinky.x,game.pinky.y,&xp,&yp);
+  if(choose_to_move_ghost(4) == 0)
+    {
+      //dir_pinky = pinky(xp*28+yp ,X*28+Y ,map,(xp*28)+yp-dir_pinky);
+    }
+  move_ghost(3);
+  draw(game.pinky.x - ghost_speed, game.pinky.y - ghost_speed, 22 +
+      ghost_speed*2, 22 +ghost_speed*2);
+  */
+
   printf("ghost drawn \n");
   
 //---------------SCORE

@@ -10,9 +10,9 @@ int SE = 5;
 int SW = 10;
 int NW = 15;
 
-int blinky (int me, int pacman, int map[][28])
+int blinky (int me, int pacman, int map[][28],int prev)
 {
-  return shortpath(map, me, me, pacman);
+  return shortpath(map, prev, me, pacman);
 }
 
 int pinky (int me, int dir_pacman, int map[][28])

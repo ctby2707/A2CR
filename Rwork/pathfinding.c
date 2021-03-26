@@ -106,6 +106,7 @@ int shortpath(int map[][28], int prev, int A, int B)
   q_last = search_way(map,q_last,x,y,A,A, M);
   while ((elem != -1) && find)
   {
+    printf("prev = %i \n",prev);
     if (prev==A)
       *(M+prev) = -1;
     q_head = remove_first_elem(q_head, &elem);
@@ -117,5 +118,6 @@ int shortpath(int map[][28], int prev, int A, int B)
   while (*(M+last)!=A)
     last=*(M+last);
   free(M);
+  free(q_head);
   return last-A;
 }
