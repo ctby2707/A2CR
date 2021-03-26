@@ -117,5 +117,5 @@ int shortpath(int map[][28], int prev, int A, int B)
   while (*(M+last)!=A)
     last=*(M+last);
   free(M);
-  return last;
+  return last-A;
 }
