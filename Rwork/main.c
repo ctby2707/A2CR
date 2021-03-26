@@ -55,7 +55,7 @@ int main(void)
   int next;
   next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
   printf("x = %d, y = %d \n", (next/28), (next%28));
-  int g1 = clyde(62,430,map);
+  int g1 = clyde(837,685,map);
   printf("clyde is going here : %d\n",g1);
   return 1;
 }
