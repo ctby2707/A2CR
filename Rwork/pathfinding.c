@@ -1,8 +1,10 @@
-#include <unistd.h>
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/queue.h>
 #include "pathfinding.h"
 
+<<<<<<< HEAD
 const int NORTH = -28;
 const int SOUTH = 28;
 const int EAST = 1;

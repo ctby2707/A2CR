@@ -17,14 +17,91 @@ int blinky (int me, int pacman, int map[][28])
 
 int pinky (int me, int dir_pacman, int map[][28])
 {
-  //TODO
-  return 0;
+  int dir_value;
+  int B = pacman;
+  if (dir_pacman > pacman)
+       dir_value = dir_pacman - pacman;
+  else
+       dir_value = pacman - dir_pacman;
+  if (dir_value != 0)
+  {
+       int Bp = B + dir_value;
+       int mBp = map[Bp/28][Bp%28];
+       while (mBp != 0 && mBp != 4 && mBp != 5)
+       {
+           B = Bp;
+     Bp += dir_value;
+     mBp = map[Bp/28][Bp%28];
+       }
+  }
+  return shortpath(map, me, me, B);
 }
 
 int inky (int me, int blinky, int pacman, int map[][28])
 {
-  //TODO
-  return 0;
+  int x1 = blinky/28;
+  int y1 = blinky%28;
+  int x2 = dir_pacman/28;
+  int y2 = dir_pacman%28;
+  int dx = x2-x1;
+  int dy = y2-y1;
+  int a;
+  int b;
+  int dir_value;
+  int B = dir_pacman;
+  if (dx != 0)
+  {
+       if (dx > 0)
+     dir_value = 1;
+       else
+     dir_value = -1;
+       if (dy != 0)
+       {
+     a = dy/dx;
+     b = y1 - x1*a;
+       }
+       else
+       {
+     a = 0;
+     b = y1;
+       }
+       int Bi = x2 + abs(dx)*dir_value;
+       int Bj = Bi*a + b;
+       B = Bi*28 + Bj;
+       Bi += dir_value;
+       Bj = Bi*a + b;
+       int Bp = Bi*28 + Bj;
+       int mBp = map[Bi][Bj];
+       while (mBp != 0 && mBp != 4 && mBp != 5)
+       {
+     B = Bp;
+     Bi += dir_value;
+     Bj = a*Bi + b;
+     Bp = Bi*28 + Bj;
+     mBp = map[Bi][Bj];
+       }
+  }
+  else
+  {
+       if (dy > 0)
+     dir_value = 1;
+       else
+     dir_value = -1;
+       int Bi = x2;
+       int Bj = y2 + abs(dy)*dir_value;
+       B = Bi*28 + Bj;
+       Bj += dir_value;
+       int Bp = Bi*28 + Bj;
+       int mBp = map[Bi][Bj];
+       while (mBp != 0 && mBp != 4 && mBp != 5)
+       {
+     B = Bp;
+     Bj += dir_value;
+     Bp = Bi*28 + Bj;
+     mBp = map[Bi][Bj];
+       }
+   }
+   return shortpath(map, me, me, B);
 }
 
 int GPS(int x1, int y1, int x2, int y2)
@@ -88,3 +165,4 @@ map[target/28][target%28]>0 && map[target/28][target%28]!=4)
   }
   return the_good_one;
 }
+
