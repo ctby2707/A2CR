@@ -84,6 +84,7 @@ struct queue *search_way(int map[][28],struct queue *q_last,int x,int y,int elem
       save=i;
     }
   }
+  prev=elem;
   if (a==1)
   {
     if (save==0)
