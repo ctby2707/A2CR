@@ -74,7 +74,28 @@ struct queue *search_way(int map[][28],struct queue *q_last,int x,int y,int elem
     orientation[2]=0;
   if (map[x][y-1]==0 || y_prev+1==y)
     orientation[3]=0;
-
+  int a=0;
+  int save=0;
+  for (int i =0;i<4;i++)
+  {
+    if (orientation[i] == 1)
+    {
+      a++;
+      save=i;
+    }
+  }
+  if (a==1)
+  {
+    if (save==0)
+      q_last->elem=-28;
+    if (save==1)
+      q_last->elem=28;
+    if (save==2)
+      q_last->elem=1;
+    if (save==3)
+      q_last->elem=-1;
+    return q_last;
+  }
   if (orientation[0]==1)
     q_last = add_elem(q_last,elem-28, M, prev);
   if (orientation[1]==1)
@@ -103,7 +124,11 @@ int shortpath(int map[][28], int prev, int A, int B)
   q_head->elem =A;
   int elem = A;
   *(M+prev) = -1;
-  q_last = search_way(map,q_last,x,y,A,A, M);
+  q_last = search_way(map,q_last,x,y,A,prev, M);
+
+  if (q_last->elem==-1 || q_last->elem==1 || q_last->elem==28 || q_last->elem==-28)
+    return q_last->elem;
+
   while ((elem != -1) && find)
   {
     if (prev==A)
@@ -117,5 +142,5 @@ int shortpath(int map[][28], int prev, int A, int B)
   while (*(M+last)!=A)
     last=*(M+last);
   free(M);
-  return last;
+  return last-A;
 }
