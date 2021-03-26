@@ -69,8 +69,8 @@ Game game =
           },
   .blinky =
           {
-            .x = 318, //13 in mat
-            .y = 311, //13 in mat
+            .x = 208, //13 in mat
+            .y = 245, //13 in mat
           },
   .inky =
           {
@@ -326,8 +326,8 @@ gboolean loop()
   if(choose_to_move_ghost(1) == 0)
     {
       printf("lauched cancer blinky \n");
-      dir_blinky = random_ghost();
-      //dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
+      //dir_blinky = random_ghost();
+      dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
     }
   printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
   printf("blinky dir : %i\n",dir_blinky);
