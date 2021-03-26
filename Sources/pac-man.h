@@ -13,10 +13,10 @@ typedef struct Game
   int *map;
   int score;
   Player pac_man;
-  Player ghost_red;
-  Player ghost_blue;
-  Player ghost_orange;
-  Player ghost_rose;
+  Player blinky;
+  Player inky;
+  Player clyde;
+  Player pinky;
 }Game;
 
 void* get_game();

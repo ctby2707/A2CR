@@ -51,7 +51,7 @@ int clyde (int me, int pacman, int map[][28])
   int node=500;
   int top;
   int stock;
-  int the_good_one;
+  int the_good_one = 29;
   for (int i=direction;i<direction+5;i++)
   {
     int dir = five_ray[i];
