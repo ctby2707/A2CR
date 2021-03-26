@@ -1,7 +1,9 @@
+  
 #include <stdio.h>
 #include <stdlib.h>
 #include "pathfinding.h"
-
+#include "ghost.h"
+// 2 et 6       7 et 9
 const int wall = 0;
 const int alley = 1;
 const int alley_pac_gum = 2;
@@ -47,12 +49,18 @@ int map[31][28] ={
 
 int main(void)
 {
-	int ai = 9;
-	int aj = 10;
-	int bi = 10;
-	int bj = 19;
-	int next;
-	next = shortpath(map, (ai*31+aj), (bi*31+bj));
-	printf("i = %d, j = %d \n", (next/31), (next%31));
-	return 1;
+  int ax = 4;
+  int ay = 12;
+  int bx = 7;
+  int by = 7;
+  int next;
+  next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
+  printf("x = %d, y = %d \n", (next/28), (next%28));
+  int g1 = clyde(837,685,map);
+  printf("clyde is going here : %d\n",g1);
+  int g2 = pinky(625,542,543,map);
+  printf("pinky is going here : %d\n",g2);
+  int g3 = inky(382,466,463,map);
+  printf("inky is going here : i = %d j = %d\n",g3/28,g3%28);
+  return 1;
 }
