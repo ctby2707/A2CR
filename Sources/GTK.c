@@ -88,9 +88,15 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
         cairo_fill(cr);
       }
     }
-      cairo_set_source_rgb(cr,1,1,0);
-      cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
-      cairo_fill(cr);
+    cairo_set_source_rgb(cr,1,1,0);//yellow
+    cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
+    cairo_fill(cr);
+    cairo_set_source_rgb(cr,1,0,0);//red
+    cairo_rectangle(cr,game->blinky.x,game->blinky.y,20,20);
+    cairo_fill(cr);
+    cairo_set_source_rgb(cr,1,0.5,0);//orange
+    cairo_rectangle(cr,game->clyde.x,game->clyde.y,20,20);
+    cairo_fill(cr);
   }
   return TRUE;
 }
