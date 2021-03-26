@@ -41,7 +41,23 @@ int GPS(int x1, int y1, int x2, int y2)
 }
 
 int clyde (int me, int pacman, int map[][28])
-{
+{/*
+  int y1 = me%28; //horizontal coo of clyde
+  int x1 = me/28; // vertical coo of clyde
+  int y2 = pacman%28; //horizontal coo of pacman
+  int x2 = pacman/28; // vertical coo of pacman
+  int diagonal = 500; // calculate the distance between target and clyde
+
+  for (int i=0;i<20;i++)
+  {
+    int dir = five_ray[i]; //the coordonate we need to test compare to pacman
+    int target = pacman + dir; // the current point we check
+    if (target<868 && target>=0 && y2+(dir%28)<28 && y2+(dir%28)>=0 && map[target/28][target%28]!=0 && map[target/28][target%28]!=4)
+    {//check if the coordonnate can be use by clyde
+      if ((abs((target%28)-y1) + abs((target/28)-x1))<node)
+    }
+  }
+*/
   int y1 = me%28;
   int x1 = me/28;
   int y2 = pacman%28;

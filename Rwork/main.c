@@ -48,14 +48,15 @@ int map[31][28] ={
 
 int main(void)
 {
-  int ax = 4;
-  int ay = 12;
-  int bx = 7;
-  int by = 7;
+  int ax = 10;
+  int ay = 9;
+  int bx = 16;
+  int by = 13;
   int next;
-  next = shortpath(map, ((ax+1)*28+ay), (ax*28+ay), (bx*28+by));
-  printf("x = %d, y = %d \n", (next/28), (next%28));
-  int g1 = clyde(837,685,map);
-  printf("clyde is going here : %d\n",g1);
+  next = shortpath(map, ((ax-1)*28+ay), (ax*28+ay), (bx*28+by));
+  printf("direction = %d\n",next);
+  //printf("x = %d, y = %d \n", (next/28), (next%28));
+  //int g1 = clyde(837,685,map);
+  //printf("clyde is going here : %d\n",g1);
   return 1;
 }
