@@ -7,7 +7,7 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 5;
-int dir_blinky = -1;
+int dir_blinky = -28;
 int dir_inky = -1;
 int dir_clyde = -1;
 int dir_pinky = -1;
@@ -70,7 +70,7 @@ Game game =
   .blinky =
           {
             .x = 208, //13 in mat
-            .y = 245, //13 in mat
+            .y = 223, //13 in mat
           },
   .inky =
           {
@@ -326,8 +326,8 @@ gboolean loop()
   if(choose_to_move_ghost(1) == 0)
     {
       printf("lauched cancer blinky \n");
-      //dir_blinky = random_ghost();
-      dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
+      dir_blinky = random_ghost();
+      //dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
     }
   printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
   printf("blinky dir : %i\n",dir_blinky);
