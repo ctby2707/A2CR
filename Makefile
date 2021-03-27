@@ -9,8 +9,8 @@ LDLIBS= `pkg-config --libs gtk+-3.0`  -lm -ldl
 
 all: main
 
-main: Sources/main.o Sources/GTK.o Sources/pac-man.o Rwork/ghost.o Rwork/pathfinding.o
-	${CC} Sources/main.o Sources/GTK.o Sources/pac-man.o -o Pac-Man Rwork/ghost.o Rwork/pathfinding.o ${LDLIBS} 
+main: Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o
+	${CC} Sources/main.o Sources/GTK.o Sources/pac-man.o -o Pac-Man Sources/ghost.o Sources/pathfinding.o ${LDLIBS} 
 
 
 

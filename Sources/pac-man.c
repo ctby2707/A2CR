@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "pac-man.h"
 #include "GTK.h"
-#include "/home/epita/A2CR/Rwork/ghost.h"
+#include "ghost.h"
 
 const int pac_man_speed = 6;
 const int ghost_speed = 5;
