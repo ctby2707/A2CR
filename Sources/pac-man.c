@@ -7,7 +7,7 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 5;
-int dir_blinky = -28;
+int dir_blinky = 28;
 int dir_inky = -1;
 int dir_clyde = -1;
 int dir_pinky = -1;
@@ -69,8 +69,8 @@ Game game =
           },
   .blinky =
           {
-            .x = 208, //13 in mat
-            .y = 223, //13 in mat
+            .x = 318, //13 in mat
+            .y = 311, //13 in mat
           },
   .inky =
           {
@@ -159,33 +159,33 @@ void move_ghost(int ghostnum)
     }
   pixel_To_MatCoord(X,Y,&x,&y);
   
-  if(dir == -28)//N
+  if(dir == -1)//N
     {
-      if(map[x-1][y]==1 || map[x-1][y]==2 || map[x-1][y]==3 || map[x-1][y]==4 )
+      if(map[x-1][y]!=0)
 	{
 	  X= CLAMP(X - ghost_speed, 0, 635);
 	  printf("up \n");
 	}
     }
-  if(dir == 28)//S
+  if(dir == 1)//S
     {
-      if(map[x+1][y]==1 || map[x+1][y]==2 || map[x+1][y]==3 || map[x+1][y]==4 )
+      if(map[x+1][y]!=0)
 	{
 	  X= CLAMP(X + ghost_speed, 0, 635);
 	  printf("down \n");
 	}
     }
-  if(dir == 1)//E
+  if(dir == 28)//E
     {
-      if(map[x][y+1]==1 || map[x][y+1]==2 || map[x][y+1]==3 || map[x][y+1]==4)
+      if(map[x][y+1]!=0)
 	{
 	  Y= CLAMP(Y + ghost_speed, 0, 760);
 	  printf("right \n");
 	}
     }
-  if(dir == -1)//W
+  if(dir == -28)//W
     {
-      if(map[x][y-1]==1 || map[x][y-1]==2 || map[x][y-1]==3 || map[x][y-1]==4)
+      if(map[x][y-1]!=0)
 	{
 	  Y= CLAMP(Y - ghost_speed, 0, 760);
 	  printf("left \n");
@@ -236,7 +236,7 @@ int choose_to_move_ghost(int ghostnum)
     {
       if(dir == 28 || dir == -28)//N or S
 	{
-	  if(map[x][y]==0 && map[x][y+1]==0)
+	  if(map[x][y-1]==0 && map[x][y+1]==0)
 	    {
 	      return 1;
 	    }
@@ -321,14 +321,8 @@ gboolean loop()
   printf("blinky coord mat:  %i ; pac mand coord  %i ; prev coord : %i \n",xb*28 + yb,X*28+Y,(xb*28)+yb-dir_blinky);
   printf("blinky coord x:  %i ; y  %i \n",xb,yb);
 
-  srand(time(0));
+  dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
   
-  if(choose_to_move_ghost(1) == 0)
-    {
-      printf("lauched cancer blinky \n");
-      dir_blinky = random_ghost();
-      //dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
-    }
   printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
   printf("blinky dir : %i\n",dir_blinky);
   
@@ -351,19 +345,19 @@ gboolean loop()
   move_ghost(2);
   draw(game.inky.x - ghost_speed, game.inky.y - ghost_speed, 22 +
       ghost_speed*2, 22 +ghost_speed*2);
-
+  
   //clyde
   int xc;
   int yc;
   pixel_To_MatCoord(game.clyde.x,game.clyde.y,&xc,&yc);
   if(choose_to_move_ghost(3) == 0)
     {
-      //dir_clyde = clyde(xc*28+yc ,X*28+Y ,map,(xc*28)+yc-dir_clyde);
+      dir_clyde = clyde(xc*28+yc ,X*28+Y ,map,(xc*28)+yc-dir_clyde);
     }
   move_ghost(3);
   draw(game.clyde.x - ghost_speed, game.clyde.y - ghost_speed, 22 +
       ghost_speed*2, 22 +ghost_speed*2);
-
+  
   //pinky
 
   int xp;
