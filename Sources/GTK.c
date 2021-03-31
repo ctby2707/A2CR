@@ -91,11 +91,21 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
     cairo_set_source_rgb(cr,1,1,0);//yellow
     cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
     cairo_fill(cr);
+
     cairo_set_source_rgb(cr,1,0,0);//red
     cairo_rectangle(cr,game->blinky.x,game->blinky.y,20,20);
     cairo_fill(cr);
+
     cairo_set_source_rgb(cr,1,0.5,0);//orange
     cairo_rectangle(cr,game->clyde.x,game->clyde.y,20,20);
+    cairo_fill(cr);
+
+    cairo_set_source_rgb(cr,0,0,1);//blue
+    cairo_rectangle(cr,game->inky.x,game->inky.y,20,20);
+    cairo_fill(cr);
+
+    cairo_set_source_rgb(cr,1,0.7,0.8);//pink
+    cairo_rectangle(cr,game->pinky.x,game->pinky.y,20,20);
     cairo_fill(cr);
   }
   return TRUE;

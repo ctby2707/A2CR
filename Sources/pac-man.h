@@ -6,6 +6,7 @@ typedef struct Player
 {
   int x;
   int y;
+  char dir;
 }Player;
 
 typedef struct Game

@@ -7,10 +7,6 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 5;
-int dir_blinky = 28;
-int dir_inky = -1;
-int dir_clyde = -1;
-int dir_pinky = -1;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] ={
@@ -66,26 +62,31 @@ Game game =
           {
             .x = 307,
             .y = 377,
+            .dir = 'N',
           },
   .blinky =
           {
-            .x = 318, //13 in mat
-            .y = 311, //13 in mat
+            .x = 318, //13
+            .y = 311, //14
+            .dir = 'N',
           },
   .inky =
           {
-            .x = 0,
-            .y = 0,
+            .x = 318, //13
+            .y = 311, //14
+            .dir = 'N',
           },
   .clyde =
           {
-            .x = 318, //14 in mat
-            .y = 311, //13 in mat
+            .x = 318, //14
+            .y = 311, //13
+            .dir = 'N',
           },
   .pinky =
           {
-            .x = 0,
-            .y = 0,
+            .x = 318, //13
+            .y = 311, //14
+            .dir = 'N',
           },
 };
 
@@ -94,286 +95,308 @@ void* get_game()
 {
   return &game;
 }
-char dir = 'D';
-void request_move(char dire)
+
+void request_move(char dir)
 {
   int X,Y;
   pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X,&Y);
-  if((dire == 'N' && map[X-1][Y] != 0) ||
-     (dire == 'S' && map[X+1][Y] != 0) ||
-     (dire == 'G' && map[X][Y-1] != 0) ||
-     (dire == 'D' && map[X][Y+1] != 0))
+  if((dir == 'N' && map[X-1][Y] != 0) ||
+     (dir == 'S' && map[X+1][Y] != 0) ||
+     (dir == 'G' && map[X][Y-1] != 0) ||
+     (dir == 'D' && map[X][Y+1] != 0))
   {
-    dir = dire;
+    game.pac_man.dir = dir;
   }
 }
 
-
-int random_ghost()
+//modify the coords of each entity
+void move_entity(int* x,int* y, char dir, int speed)
 {
-  
-  int num = rand() % 4;
-  printf("num = %i \n",num);
-  if(num == 0)
-    return -1;
-  if(num == 1)
-    return 1;
-  if(num == 2)
-    return 28;
-  if(num == 3)
-    return -28;
-  return -1;
-}
-
-void move_ghost(int ghostnum)
-{
-  
-  int x;
-  int y;
-  int X=0;
-  int Y=0;
-  int dir = 0;
-  if(ghostnum == 1)
-    {
-      X = game.blinky.x;
-      Y = game.blinky.y;
-      dir = dir_blinky;
-    }
-  if(ghostnum == 2)
-    {
-      X = game.inky.x;
-      Y = game.inky.y;
-      dir = dir_inky;
-    }
-  if(ghostnum == 3)
-    {
-      X = game.clyde.x;
-      Y = game.clyde.y;
-      dir = dir_clyde;
-    }
-  if(ghostnum == 4)
-    {
-      X = game.pinky.x;
-      Y = game.pinky.y;
-      dir = dir_pinky;
-    }
-  pixel_To_MatCoord(X,Y,&x,&y);
-  
-  if(dir == -1)//N
-    {
-      if(map[x-1][y]!=0)
-	{
-	  X= CLAMP(X - ghost_speed, 0, 635);
-	  printf("up \n");
-	}
-    }
-  if(dir == 1)//S
-    {
-      if(map[x+1][y]!=0)
-	{
-	  X= CLAMP(X + ghost_speed, 0, 635);
-	  printf("down \n");
-	}
-    }
-  if(dir == 28)//E
-    {
-      if(map[x][y+1]!=0)
-	{
-	  Y= CLAMP(Y + ghost_speed, 0, 760);
-	  printf("right \n");
-	}
-    }
-  if(dir == -28)//W
-    {
-      if(map[x][y-1]!=0)
-	{
-	  Y= CLAMP(Y - ghost_speed, 0, 760);
-	  printf("left \n");
-	}
-    }
-  if(ghostnum == 1)
-    {
-      game.blinky.x=X;
-      game.blinky.y=Y;
-    }
-  if(ghostnum == 2)
-    {
-      game.inky.x=X;
-      game.inky.y=Y;
-    }
-  if(ghostnum == 3)
-    {
-      game.clyde.x=X;
-      game.clyde.y=Y;
-    }
-  if(ghostnum == 4)
-    {
-      game.pinky.x=X;
-      game.pinky.y=Y;
-    }
-  
-}
-
-int choose_to_move_ghost(int ghostnum)
-{
-  int x;
-  int y;
-  int X=0;
-  int Y=0;
-  int dir = 0;
-  if(ghostnum == 1)
-    {
-      X = game.blinky.x;
-      Y = game.blinky.y;
-      dir = dir_blinky;
-    }
-  pixel_To_MatCoord(X,Y,&x,&y);
-  int XP,YP;
-  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&XP,&YP);
-  if((x*28+y)==(XP*28+YP))
-    return 1;
-  else
-    {
-      if(dir == 28 || dir == -28)//N or S
-	{
-	  if(map[x][y-1]==0 && map[x][y+1]==0)
-	    {
-	      return 1;
-	    }
-	}
-      
-      if(dir == 1 || dir == -1)//E or W
-	{
-	  if(map[x+1][y]==0 && map[x-1][y]==0)
-	    {
-	      return 1;
-	    }
-	}
-      
-    }
-  return 0;
-}
-
-gboolean loop()
-{
-//------------Pac-man moves with collisions
-  int X,Y;
-  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X,&Y);
+  int X_mat,Y_mat;
+  pixel_To_MatCoord(*x,*y,&X_mat,&Y_mat);
   if(dir == 'N')
   {
-    if(map[X-1][Y] == 0)
+    if(map[X_mat-1][Y_mat] == 0)
     {
       int x1,y1;
-      matCoord_To_Pixel(X-1,Y,&x1,&y1);
-      game.pac_man.y = CLAMP(game.pac_man.y - pac_man_speed, y1 + 22, 800);
+      matCoord_To_Pixel(X_mat-1,Y_mat,&x1,&y1);
+      *y = CLAMP(*y - speed, y1 + 22, 800);
     }
     else
     {
-      game.pac_man.y =  game.pac_man.y - pac_man_speed;
+      *y = *y - speed;
     }
   }
   if(dir == 'S')
   {
-    if(map[X+1][Y] == 0)
+    if(map[X_mat+1][Y_mat] == 0)
     {
       int x1,y1;
-      matCoord_To_Pixel(X+1,Y,&x1,&y1);
-      game.pac_man.y =  CLAMP(game.pac_man.y + pac_man_speed, 0, y1 - 22);
+      matCoord_To_Pixel(X_mat+1,Y_mat,&x1,&y1);
+      *y = CLAMP(*y + speed, 0, y1 - 22);
     }
     else
     {
-      game.pac_man.y =  game.pac_man.y + pac_man_speed;
+      *y = *y + speed;
     }
   }
   if(dir == 'G')
   {
-    if(map[X][Y-1] == 0)
+    if(map[X_mat][Y_mat-1] == 0)
     {
       int x1,y1;
-      matCoord_To_Pixel(X,Y-1,&x1,&y1);
-      game.pac_man.x = CLAMP(game.pac_man.x - pac_man_speed, x1 + 22, 800);
+      matCoord_To_Pixel(X_mat,Y_mat-1,&x1,&y1);
+      *x = CLAMP(*x - speed, x1 + 22, 800);
     }
     else
     {
-      game.pac_man.x = game.pac_man.x - pac_man_speed;
+      *x = *x - speed;
     }
   }
   if(dir == 'D')
   {
-    if(map[X][Y+1] == 0)
+    if(map[X_mat][Y_mat+1] == 0)
     {
       int x1,y1;
-      matCoord_To_Pixel(X,Y+1,&x1,&y1);
-      game.pac_man.x = CLAMP(game.pac_man.x + pac_man_speed,0,x1 - 22);
+      matCoord_To_Pixel(X_mat,Y_mat+1,&x1,&y1);
+      *x = CLAMP(*x + speed,0,x1 - 22);
     }
     else
     {
-      game.pac_man.x = game.pac_man.x + pac_man_speed;
+      *x = *x + speed;
     }
   }
-  //-------------------ghost move---------------------------------------------
-  //blinky
-  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X,&Y);//update pac man coord
-  printf("\n new loop \n ");
-  int xb;
-  int yb;
-  pixel_To_MatCoord(game.blinky.x,game.blinky.y,&xb,&yb);
-  printf("blinky coord mat:  %i ; pac mand coord  %i ; prev coord : %i \n",xb*28 + yb,X*28+Y,(xb*28)+yb-dir_blinky);
-  printf("blinky coord x:  %i ; y  %i \n",xb,yb);
+}
 
-  dir_blinky = blinky(xb*28+yb ,X*28+Y ,map,(xb*28)+yb-dir_blinky);
-  
-  printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
-  printf("blinky dir : %i\n",dir_blinky);
-  
-  move_ghost(1);
-  
-  printf("ghost moved\n");
-  printf("blinky coord pix : x %i ; y %i \n",game.blinky.x,game.blinky.y);
-  
-  draw(game.blinky.x - ghost_speed, game.blinky.y - ghost_speed, 22 +
-      ghost_speed*2, 22 +ghost_speed*2);
-  /*
-  //inky
-  int xi;
-  int yi;
-  pixel_To_MatCoord(game.inky.x,game.inky.y,&xi,&yi);
-  if(choose_to_move_ghost(2) == 0)
-    {
-      //dir_inky = inky(xi*28+yi ,X*28+Y ,map,(xi*28)+yi-dir_inky);
-    }
-  move_ghost(2);
-  draw(game.inky.x - ghost_speed, game.inky.y - ghost_speed, 22 +
-      ghost_speed*2, 22 +ghost_speed*2);
-  
-  //clyde
-  int xc;
-  int yc;
-  pixel_To_MatCoord(game.clyde.x,game.clyde.y,&xc,&yc);
-  if(choose_to_move_ghost(3) == 0)
-    {
-      dir_clyde = clyde(xc*28+yc ,X*28+Y ,map,(xc*28)+yc-dir_clyde);
-    }
-  move_ghost(3);
-  draw(game.clyde.x - ghost_speed, game.clyde.y - ghost_speed, 22 +
-      ghost_speed*2, 22 +ghost_speed*2);
-  
-  //pinky
+// execute the pathfinding function for each ghost with parameters
+void define_direction(Player *pl, char type)
+{
+  int X_mat, Y_mat;
+  pixel_To_MatCoord(pl->x,pl->y,&X_mat,&Y_mat);
+  int X_pm, Y_pm;
+  pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X_pm,&Y_pm);
 
-  int xp;
-  int yp;
-  pixel_To_MatCoord(game.pinky.x,game.pinky.y,&xp,&yp);
-  if(choose_to_move_ghost(4) == 0)
+  if(pl->dir == 'N')
+  {
+    if(type == 'b')
     {
-      //dir_pinky = pinky(xp*28+yp ,X*28+Y ,map,(xp*28)+yp-dir_pinky);
+      pl->dir = blinky(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat+28);
     }
-  move_ghost(3);
-  draw(game.pinky.x - ghost_speed, game.pinky.y - ghost_speed, 22 +
-      ghost_speed*2, 22 +ghost_speed*2);
-  */
+    else if(type == 'p')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat+28);
 
-  printf("ghost drawn \n");
-  
+      if(game.pac_man.dir == 'N')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat+28);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat+28);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat+28);
+    }
+    else if(type == 'i')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat+28);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat+28);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat+28);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat+28);
+    }
+    if(type == 'c')
+    {
+      pl->dir = clyde(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat+28);
+    }
+  }
+  else if(pl->dir == 'S')
+  {
+  if(type == 'b')
+    {
+      pl->dir = blinky(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat-28);
+    }
+    else if(type == 'p')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat-28);
+    }
+    else if(type == 'i')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat-28);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat-28);
+    }
+    if(type == 'c')
+    {
+      pl->dir = clyde(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat-28);
+    }
+
+  }
+  else if(pl->dir == 'G')
+  {
+  if(type == 'b')
+    {
+      pl->dir = blinky(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat+1);
+    }
+    else if(type == 'p')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'D')
+
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat+1);
+    }
+    else if(type == 'i')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat+1);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat+1);
+    }
+    if(type == 'c')
+    {
+      pl->dir = clyde(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat+1);
+    }
+  }
+  else if(pl->dir == 'D') {
+  if(type == 'b')
+    {
+      pl->dir = blinky(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat-1);
+    }
+    else if(type == 'p')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = pinky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat-1);
+    }
+    else if(type == 'i')
+    {
+      if(game.pac_man.dir == 'S')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+28,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'N')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-28,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'D')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm+1,
+                 map, X_mat*28+Y_mat-1);
+
+      if(game.pac_man.dir == 'G')
+        pl->dir = inky(X_mat*28+Y_mat,X_pm*28+Y_pm,X_pm*28+Y_pm-1,
+                 map, X_mat*28+Y_mat-1);
+    }
+    if(type == 'c')
+    {
+      pl->dir = clyde(X_mat*28+Y_mat,X_pm*28+Y_pm,map,X_mat*28+Y_mat-1);
+    }
+  }
+}
+
+gboolean loop()
+{
+  move_entity(&game.pac_man.x,&game.pac_man.y,game.pac_man.dir,pac_man_speed);//pac-man 
+//---------------------------------GIVE INFOS----------------------------------
+  int X,Y;
+  pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
+  /*printf("\n---------------------NEW LOOP------------------------------\n");
+  int X_mat_blinky;
+  int Y_mat_blinky;
+  pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
+
+  //print current coords
+  printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
+        X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
+        X,game.pac_man.x,Y,game.pac_man.y);
+  printf("previous_dir: %c\n",game.blinky.dir);*/
+//----------------------------BLINKY DIRECTION---------------------------------
+  //define_direction(&game.blinky, 'b');
+  //move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
+//---------------------------CLYDE DIRECTION-----------------------------------
+  //define_direction(&game.clyde, 'c');
+  //move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+//---------------------------INKY DIRECTION------------------------------------
+  move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
+  define_direction(&game.inky, 'i');/*
+//---------------------------PINKY DIRECTION-----------------------------------
+  move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
+  define_direction(&game.inky, 'p');*/
+//-----------------------------END-------------------------------------------
+  draw(0,0,637,760);
 //---------------SCORE
   if(map[X][Y] == 2)
   {
@@ -384,8 +407,8 @@ gboolean loop()
   {
     map[X][Y] = 1;
   }
-  draw(game.pac_man.x - pac_man_speed, game.pac_man.y - pac_man_speed, 22 +
-      pac_man_speed*2, 22 +pac_man_speed*2);
+  //draw(game.pac_man.x - pac_man_speed, game.pac_man.y - pac_man_speed, 22 +
+  //    pac_man_speed*2, 22 +pac_man_speed*2);
 //------------------------
   return TRUE;
 }
