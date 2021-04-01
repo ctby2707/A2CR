@@ -384,17 +384,17 @@ gboolean loop()
         X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);*/
 //----------------------------BLINKY DIRECTION---------------------------------
-  //define_direction(&game.blinky, 'b');
-  //move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
+  define_direction(&game.blinky, 'b');
+  move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
 //---------------------------CLYDE DIRECTION-----------------------------------
-  //define_direction(&game.clyde, 'c');
-  //move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+  define_direction(&game.clyde, 'c');
+  move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
 //---------------------------INKY DIRECTION------------------------------------
   move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
-  define_direction(&game.inky, 'i');/*
+  define_direction(&game.inky, 'i');
 //---------------------------PINKY DIRECTION-----------------------------------
   move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
-  define_direction(&game.inky, 'p');*/
+  define_direction(&game.pinky, 'p');
 //-----------------------------END-------------------------------------------
   draw(0,0,637,760);
 //---------------SCORE

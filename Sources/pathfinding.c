@@ -27,11 +27,18 @@ void print_matrix(int *M) //!!!debbuging function!!!
 }
 int shortpath(int *map, int prev, int A, int B)
 {
+  //Check conformity of parameters
+  /*if(A < 0 || A > 868)
+    printf("Ghost position is not conform: A = %i\n",A);
+  if(B < 0 || B > 868)
+    printf("Target position is not conform : B = %i\n",B);
   if(map[A] == 0)
-    err(3,"Ghost position is wall (A = 0) cheh");
+    printf("Ghost position is wall (A = 0)\n");
   if(map[B] == 0)
-    err(3,"Pac-man position is a wall (B = 0) cheh");
+    printf("Target position is a wall (B = 0) cheh\n");
   if(A == B)
+    printf("A and B are the same\n");*/
+  if(A == B || map[B] == 0 || map[A] == 0 || B < 0 || B > 868 || A < 0 || A > 868)
   {
     if(map[A-28] != 0 && map[A-28] != 5)
       return -28;
@@ -60,9 +67,6 @@ int shortpath(int *map, int prev, int A, int B)
   }
 
   //find the direction
-  printf("short_path(map,%i,%i,%i\n);",prev,A,B);
-  printf("B = %i\n",map[B]);
-  print_matrix(Vect_P);
   int dir = B;
   while(Vect_P[dir] != A)
     dir = Vect_P[dir];

@@ -33,10 +33,7 @@ char pinky (int me, int pacman, int dir_pacman, int map[][28], int prev)
 {
   int dir_value;
   int B = pacman;
-  if (dir_pacman > pacman)
-       dir_value = dir_pacman - pacman;
-  else
-       dir_value = pacman - dir_pacman;
+  dir_value = dir_pacman - pacman;
   if (dir_value != 0)
   {
        int Bp = B + dir_value;
@@ -48,13 +45,12 @@ char pinky (int me, int pacman, int dir_pacman, int map[][28], int prev)
            mBp = map[Bp/28][Bp%28];
        }
   }
-  int res = shortpath((int *)map, prev, me, pacman);
+  int res = shortpath((int *)map, prev, me, B);
   return NSGD(res);
 }
 
 char inky (int me, int blinky, int dir_pacman, int map[][28], int prev)
 {
-  printf("inky(%i,%i,%i,map,%i);\n",me, blinky, dir_pacman, prev);
   int x1 = blinky/28;
   int y1 = blinky%28;
   int x2 = dir_pacman/28;
@@ -68,55 +64,52 @@ char inky (int me, int blinky, int dir_pacman, int map[][28], int prev)
   if (dx != 0)
   {
        if (dx > 0)
-     dir_value = 1;
+           dir_value = 1;
        else
-     dir_value = -1;
+           dir_value = -1;
        if (dy != 0)
        {
-     a = dy/dx;
-     b = y1 - x1*a;
+           a = dy/dx;
+           b = y1 - x1*a;
        }
        else
        {
-     a = 0;
-     b = y1;
+           a = 0;
+           b = y1;
        }
        int Bi = x2 + abs(dx)*dir_value;
        int Bj = Bi*a + b;
        B = Bi*28 + Bj;
-       Bi += dir_value;
-       Bj = Bi*a + b;
-       int Bp = Bi*28 + Bj;
        int mBp = map[Bi][Bj];
-       while (mBp != 0 && mBp != 4 && mBp != 5)
+       if (map[Bi][Bj] == 0 || map[Bi][Bj] >= 4)
        {
-          printf("I am in the while\n");
-          B = Bp;
-          Bi += dir_value;
-          Bj = a*Bi + b;
-          Bp = Bi*28 + Bj;
-          mBp = map[Bi][Bj];
+        while (mBp == 0 || mBp >= 4)
+        {
+                Bi += dir_value;
+                Bj = a*Bi + b;
+                B = Bi*28 + Bj;
+                mBp = map[Bi][Bj];
+        }
        }
   }
   else
   {
        if (dy > 0)
-     dir_value = 1;
+           dir_value = 1;
        else
-     dir_value = -1;
+           dir_value = -1;
        int Bi = x2;
        int Bj = y2 + abs(dy)*dir_value;
        B = Bi*28 + Bj;
-       Bj += dir_value;
-       int Bp = Bi*28 + Bj;
        int mBp = map[Bi][Bj];
-       while (mBp != 0 && mBp != 4 && mBp != 5)
+       if (mBp == 0 || mBp >= 4)
        {
-          printf("I am in the while\n");
-          B = Bp;
-          Bj += dir_value;
-          Bp = Bi*28 + Bj;
-          mBp = map[Bi][Bj];
+        while (mBp == 0 || mBp >= 4)
+        {
+           Bj += dir_value;
+           B = Bi*28 + Bj;
+           mBp = map[Bi][Bj];
+        }
        }
    }
    int res = shortpath((int *)map, prev, me, B);
