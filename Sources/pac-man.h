@@ -2,6 +2,7 @@
 #define PACMAN_H
 
 #include <gtk/gtk.h>
+#include "GTK.h"
 typedef struct Player
 {
   int x;
@@ -9,11 +10,25 @@ typedef struct Player
   char dir;
 }Player;
 
+typedef struct Pac_Man
+{
+  int x;
+  int y;
+  char dir;
+  char reqdir;
+  char color;
+  
+}Pac_Man;
+
 typedef struct Game
 {
+  int status;
   int *map;
   int score;
-  Player pac_man;
+  int live;
+  int chase;
+  int combo;
+  Pac_Man pac_man;
   Player blinky;
   Player inky;
   Player clyde;
@@ -21,6 +36,7 @@ typedef struct Game
 }Game;
 
 void* get_game();
+void change_game_status(int status);
 void request_move(char dire);
 gboolean loop();
 #endif

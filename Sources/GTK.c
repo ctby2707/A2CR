@@ -5,14 +5,19 @@
 #include "pac-man.h"
 
 //GTK global Variable
+
 GtkWidget      *window;
 GtkWidget      *fixed1;
-GtkWidget      *start_game_button;
-GtkWidget      *exit_button;
+GtkWidget      *Start;
+GtkWidget      *Pause;
 GtkDrawingArea *area;
 GtkBuilder     *builder;
 GtkOverlay     *overlay;
 GtkWidget      *image;
+GtkWidget      *score_label;
+GtkWidget      *live_label;
+int            alreadystarted = 0;
+cairo_t        *crg;
 
 int launchgtk()
 {
@@ -25,14 +30,18 @@ int launchgtk()
 
   fixed1 = GTK_WIDGET(gtk_builder_get_object(builder,"fixed1"));
   overlay = GTK_OVERLAY(gtk_overlay_new());
-  start_game_button = GTK_WIDGET(gtk_builder_get_object(builder,"start_game_button"));
-  exit_button = GTK_WIDGET(gtk_builder_get_object(builder,"exit_button"));
+  Start = GTK_WIDGET(gtk_builder_get_object(builder,"Start"));
+  Pause = GTK_WIDGET(gtk_builder_get_object(builder,"Pause"));
   image = GTK_WIDGET(gtk_builder_get_object(builder,"image"));
   area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
+  score_label = GTK_WIDGET(gtk_builder_get_object(builder,"score_label"));
+  live_label = GTK_WIDGET(gtk_builder_get_object(builder,"live_label"));
+						   
+  
   //connect widgets to respective function
 
-  g_signal_connect(start_game_button,"clicked",G_CALLBACK(on_start_game_button_clicked),NULL);
-  g_signal_connect(exit_button,"clicked",G_CALLBACK(on_exit_button_clicked),NULL);
+  g_signal_connect(Start,"clicked",G_CALLBACK(on_Start_clicked),NULL);
+  g_signal_connect(Pause,"clicked",G_CALLBACK(on_Pause_clicked),NULL);
   g_signal_connect(window,"destroy",G_CALLBACK(gtk_main_quit),NULL);
   g_signal_connect(area, "draw", G_CALLBACK(on_draw), get_game());
   g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
@@ -48,23 +57,66 @@ int launchgtk()
   return EXIT_SUCCESS;
 }
 
-void on_start_game_button_clicked()
+
+
+
+void on_Start_clicked()
 {
   printf("start_game \n");
-  g_timeout_add(41,loop,NULL);
+  gtk_widget_set_sensitive(Pause,TRUE);
+  gtk_widget_set_sensitive(Start,FALSE);
+  if(alreadystarted == 0)
+    {
+      g_timeout_add(41,loop,NULL);
+      change_game_status(1);
+      alreadystarted = 1;
+    }
+  else
+    change_game_status(1);
 }
 
-void on_exit_button_clicked()
+void on_Pause_clicked()
 {
-  printf("exit \n");
+  gtk_widget_set_sensitive(Start,TRUE);
+  gtk_widget_set_sensitive(Pause,FALSE);
+  change_game_status(0);
+  printf("Pause \n");
 }
+
+void set_score_label(char* score)
+{
+  gtk_label_set_text(GTK_LABEL(score_label),score);
+}
+void set_live_label(char* live)
+{
+  gtk_label_set_text(GTK_LABEL(live_label),live);
+}
+
+
 void draw(int x, int y, int width, int weight)
 {
  gtk_widget_queue_draw_area(GTK_WIDGET(area),x,y,width,weight);
 }
 
+void change_color_pac_man(char color)
+{
+  Game *game = (Game *)get_game();
+  printf("tamere \n");
+  if(color == 'b')
+    {
+      printf("tamere \n");
+      cairo_set_source_rgb(crg,0,0,0.7);//blue
+    }
+  else
+    cairo_set_source_rgb(crg,1,1,0);//yellow
+  
+  cairo_rectangle(crg,game->pac_man.x,game->pac_man.y,20,20);
+  cairo_fill(crg);
+}
+
 gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
+  crg = cr;
   Game *game = (Game *)user_data;
   int *map = game->map;
   for(int x = 0; x < 31; x++)
@@ -88,7 +140,10 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
         cairo_fill(cr);
       }
     }
-    cairo_set_source_rgb(cr,1,1,0);//yellow
+    if(game->pac_man.color == 'y')
+      cairo_set_source_rgb(cr,1,1,0);//yellow
+    else
+      cairo_set_source_rgb(cr,0,0,0.75);//blue
     cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
     cairo_fill(cr);
 

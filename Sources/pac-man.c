@@ -5,8 +5,9 @@
 #include "GTK.h"
 #include "ghost.h"
 
+
 const int pac_man_speed = 6;
-const int ghost_speed = 5;
+const int ghost_speed = 4;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] ={
@@ -56,13 +57,19 @@ int pixel_art_pac_man[7][6]={
 
 Game game =
 {
+  .status = 0,//status 0 = stopped, status 1 = playing
   .map = (int*)map,
   .score = 0,
+  .live = 3,
+  .chase = 0,
+  .combo = 200,
   .pac_man =
           {
             .x = 307,
             .y = 377,
             .dir = 'N',
+	    .reqdir = 'N',
+	    .color = 'y',
           },
   .blinky =
           {
@@ -96,6 +103,159 @@ void* get_game()
   return &game;
 }
 
+void change_game_status(int status)
+{
+  game.status = status;
+}
+
+
+
+
+void respawn()
+{
+  game.pac_man.color = 'y';
+  game.pac_man.x = 307;
+  game.pac_man.y = 377;
+  game.pac_man.dir = 'N';
+  game.pac_man.reqdir = 'N';
+
+  game.blinky.x = 318;
+  game.blinky.y = 311;
+
+  game.inky.x = 318;
+  game.inky.y = 311;
+
+  game.clyde.x = 318;
+  game.clyde.y = 311;
+
+  game.pinky.x = 318;
+  game.pinky.y = 311;
+
+  sleep(2);
+}
+
+void restart()
+{
+  game.status = 0;
+  respawn();
+  game.live = 3;
+  char tmp[42];
+  sprintf(tmp,"Lives : %i \n",game.live);
+  set_live_label(tmp);
+  
+  game.score = 0;
+  char str[42];
+  sprintf(str,"Score : %i \n",game.score); 
+  set_score_label(str);
+  for(int x = 0; x < 31; x++)
+  {
+    for(int y = 0; y < 28; y++)
+    {
+      if(map[x][y] == 6)
+      {
+        map[x][y]=2;
+        //cairo_rectangle(cr,X+9,Y+9,5,5);
+      }
+      if(map[x][y] == 7)
+      {
+        map[x][y]=3;
+        //cairo_rectangle(cr,X+4,Y+4,10,10);
+      }
+    }
+  }
+  draw(0,0,637,760);
+  on_Pause_clicked();
+}
+
+void ghost_kill(int n)
+{
+  if(n == 1)
+    {
+      game.blinky.x = 318;
+      game.blinky.y = 311;
+    }
+  if(n == 2)
+    {
+      game.inky.x = 318;
+      game.inky.y = 311;
+    }
+  if(n == 4)
+    {
+      game.clyde.x = 318;
+      game.clyde.y = 311;
+    }
+  if(n == 3)
+    {
+      game.pinky.x = 318;
+      game.pinky.y = 311;
+    }
+  game.score = game.score + game.combo;
+  char str[42];
+  sprintf(str,"Score : %i \n",game.score);
+  set_score_label(str);
+  game.combo = game.combo*2;
+}
+
+void is_pac_man_dead()
+{
+  int boo = 0;
+  int X,Y;
+  pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
+  int XB;
+  int YB;
+  pixel_To_MatCoord(game.blinky.x, game.blinky.y, &XB, &YB);
+  if(X == XB && game.pac_man.y == YB)
+    {
+      boo = 1;
+    }
+  else
+    {
+      int XI;
+      int YI;
+      pixel_To_MatCoord(game.inky.x, game.inky.y, &XI, &YI);
+      if(X == XI && Y == YI)
+	{
+	  boo = 2;
+	}
+      else
+	{
+	  int XP;
+	  int YP;
+	  pixel_To_MatCoord(game.pinky.x, game.pinky.y, &XP, &YP);
+	  if(X == XP && Y == YP)
+	    {
+	      boo = 3;
+	    }
+	  else
+	    {
+	      int XC;
+	      int YC;
+	      pixel_To_MatCoord(game.clyde.x, game.clyde.y, &XC, &YC);
+	      if(X == XC && Y == YC)
+		{
+		  boo = 4;
+		}
+	    }
+	}
+      
+    }
+  if(boo > 0)
+    {
+      if(game.chase == 0)
+	{
+	  game.live = game.live - 1;
+	  char str[42];
+	  sprintf(str,"Lives : %i \n",game.live);
+	  set_live_label(str);
+	  respawn();
+	}
+      else
+	{
+	  ghost_kill(boo);
+	}
+    }
+}
+
 void request_move(char dir)
 {
   int X,Y;
@@ -106,7 +266,10 @@ void request_move(char dir)
      (dir == 'D' && map[X][Y+1] != 0))
   {
     game.pac_man.dir = dir;
+    game.pac_man.reqdir = dir;
   }
+  else
+    game.pac_man.reqdir = dir;
 }
 
 //modify the coords of each entity
@@ -369,11 +532,25 @@ void define_direction(Player *pl, char type)
 
 gboolean loop()
 {
-  move_entity(&game.pac_man.x,&game.pac_man.y,game.pac_man.dir,pac_man_speed);//pac-man 
+  if(game.status == 0)//break loop if game is in pause status 
+    return TRUE;
+  
+  if(game.chase > 0)
+    {
+      game.chase = game.chase - 1;
+      if(game.chase == 0)
+	{
+	  game.pac_man.color = 'y';
+	  game.combo = 200;
+	}
+    }
+  request_move(game.pac_man.reqdir);
+  move_entity(&game.pac_man.x,&game.pac_man.y,game.pac_man.dir,pac_man_speed);//pac-man
+  
 //---------------------------------GIVE INFOS----------------------------------
   int X,Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
-  /*printf("\n---------------------NEW LOOP------------------------------\n");
+  printf("\n---------------------NEW LOOP------------------------------\n");
   int X_mat_blinky;
   int Y_mat_blinky;
   pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
@@ -382,7 +559,8 @@ gboolean loop()
   printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
         X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
         X,game.pac_man.x,Y,game.pac_man.y);
-  printf("previous_dir: %c\n",game.blinky.dir);*/
+  printf("previous_dir: %c\n",game.blinky.dir);
+  
 //----------------------------BLINKY DIRECTION---------------------------------
   define_direction(&game.blinky, 'b');
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
@@ -396,17 +574,30 @@ gboolean loop()
   move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
   define_direction(&game.pinky, 'p');
 //-----------------------------END-------------------------------------------
+
   draw(0,0,637,760);
 //---------------SCORE
   if(map[X][Y] == 2)
   {
-    map[X][Y] = 1;
+    map[X][Y] = 6;
     game.score = game.score + 10;
+    char str[42];
+    sprintf(str,"Score : %i \n",game.score);
+    
+    set_score_label(str);
   }
   if(map[X][Y] == 3)
   {
-    map[X][Y] = 1;
+    game.pac_man.color = 'b';
+    game.chase = game.chase + 125;
+    map[X][Y] = 7;
   }
+
+//----------DEAD or ALIVE
+  is_pac_man_dead();
+  if(game.live == -1)
+    restart();
+  
   //draw(game.pac_man.x - pac_man_speed, game.pac_man.y - pac_man_speed, 22 +
   //    pac_man_speed*2, 22 +pac_man_speed*2);
 //------------------------
