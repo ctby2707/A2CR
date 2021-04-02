@@ -47,8 +47,8 @@ int launchgtk()
   g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
   g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
   gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
-  gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
-  gtk_overlay_add_overlay(overlay,image);
+  //gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
+  //gtk_overlay_add_overlay(overlay,image);
   //display window and begin windows loop
 
   gtk_widget_show(window);

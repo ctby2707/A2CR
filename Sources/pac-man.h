@@ -37,6 +37,7 @@ typedef struct Game
 
 void* get_game();
 void change_game_status(int status);
+void randome_dir(Player *pl);
 void request_move(char dire);
 gboolean loop();
 #endif

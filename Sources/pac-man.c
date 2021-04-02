@@ -109,7 +109,75 @@ void change_game_status(int status)
 }
 
 
+void randome_dir(Player *pl)
+{
+  int boo = 0;
+  int X,Y;
+  pixel_To_MatCoord(pl->x,pl->y,&X,&Y);
+  if(pl->dir == 'N' && map[X-1][Y] == 0)
+    boo = 1;
+  if(pl->dir == 'S' && map[X+1][Y] == 0)
+    boo = 1;
+  if(pl->dir == 'G' && map[X][Y-1] == 0)
+    boo = 1;
+  if(pl->dir == 'D' && map[X+1][Y+1] == 0)
+    boo = 1;
+ 
+  if(boo == 1)//change of direction
+    {
+      srand(time(NULL));
+      int ran = rand()%3;
+      char newdir = pl->dir;
+      if(pl->dir == 'N')
+	{
+	  
+	
+	  if(ran == 0)
+	    newdir = 'G';
+	  if(ran == 1)
+	    newdir = 'D';
+	  if(ran == 2)
+	    newdir = 'S';
+	}
+      if(pl->dir == 'S')
+	{
+	
 
+	  if(ran == 0)
+	    newdir = 'G';
+	  if(ran == 1)
+	    newdir = 'D';
+	  if(ran == 2)
+	    newdir = 'N';
+	}
+      if(pl->dir == 'G')
+	{
+	
+	 
+	 
+	  if(ran == 0)
+	    newdir = 'N';
+	  if(ran == 1)
+	    newdir = 'D';
+	  if(ran == 2)
+	    newdir = 'S';
+	}
+      if(pl->dir == 'D')
+	{
+	 
+	 
+	
+	  if(ran == 0)
+	    newdir = 'G';
+	  if(ran == 1)
+	    newdir = 'N';
+	  if(ran == 2)
+	    newdir = 'S';
+	}
+      pl->dir = newdir;
+    }
+  
+}
 
 void respawn()
 {
@@ -204,7 +272,7 @@ void is_pac_man_dead()
   int XB;
   int YB;
   pixel_To_MatCoord(game.blinky.x, game.blinky.y, &XB, &YB);
-  if(X == XB && game.pac_man.y == YB)
+  if(X == XB && Y == YB)
     {
       boo = 1;
     }
@@ -338,7 +406,14 @@ void define_direction(Player *pl, char type)
   pixel_To_MatCoord(pl->x,pl->y,&X_mat,&Y_mat);
   int X_pm, Y_pm;
   pixel_To_MatCoord(game.pac_man.x,game.pac_man.y,&X_pm,&Y_pm);
-
+  /*
+  if(game.chase >0)
+    {
+      printf("invert coord \n");
+      X_pm = 28-X_pm;
+      Y_pm = 31-Y_pm;
+    }
+  */
   if(pl->dir == 'N')
   {
     if(type == 'b')
@@ -550,6 +625,7 @@ gboolean loop()
 //---------------------------------GIVE INFOS----------------------------------
   int X,Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
+  /*
   printf("\n---------------------NEW LOOP------------------------------\n");
   int X_mat_blinky;
   int Y_mat_blinky;
@@ -560,21 +636,37 @@ gboolean loop()
         X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
         X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);
-  
+  */
+  if(game.chase == 0)//chase mode 
+    {
 //----------------------------BLINKY DIRECTION---------------------------------
-  define_direction(&game.blinky, 'b');
-  move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
+      define_direction(&game.blinky, 'b');
+     
 //---------------------------CLYDE DIRECTION-----------------------------------
-  define_direction(&game.clyde, 'c');
-  move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+      define_direction(&game.clyde, 'c');
+     
 //---------------------------INKY DIRECTION------------------------------------
-  move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
-  define_direction(&game.inky, 'i');
+     
+      define_direction(&game.inky, 'i');
 //---------------------------PINKY DIRECTION-----------------------------------
-  move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
-  define_direction(&game.pinky, 'p');
+     
+      define_direction(&game.pinky, 'p');
 //-----------------------------END-------------------------------------------
+    }
+  else //flee mode
+    {
+      randome_dir(&game.blinky);
+      randome_dir(&game.clyde);
+      randome_dir(&game.inky);
+      randome_dir(&game.pinky);
+    }
 
+  move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
+  move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+  move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
+  move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
+
+  
   draw(0,0,637,760);
 //---------------SCORE
   if(map[X][Y] == 2)
