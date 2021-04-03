@@ -119,6 +119,18 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
   crg = cr;
   Game *game = (Game *)user_data;
   int *map = game->map;
+  int *pac_man_open;
+  int *ghost_pixel_art = game->ghost_pixel_art;
+  if (game->open == 3)
+    {
+      pac_man_open = game->pac_man_open;
+      game->open = 0;
+    }
+  else
+    {
+      pac_man_open = game->pac_man_closed;
+      game->open = game->open +1;
+    }
   for(int x = 0; x < 31; x++)
   {
     for(int y = 0; y < 28; y++)
@@ -140,28 +152,88 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
         cairo_fill(cr);
       }
     }
+    
+   
     if(game->pac_man.color == 'y')
       cairo_set_source_rgb(cr,1,1,0);//yellow
     else
       cairo_set_source_rgb(cr,0,0,0.75);//blue
+    
+    /*
+    //old pac man print
     cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
     cairo_fill(cr);
+    */
+   
+    for (int x = 0;x<7; x++)
+      {
+	for (int y = 0;y<7;y++)
+	  {
+	    if(game->pac_man.dir == 'D')
+	      {
+		if(pac_man_open[y*7+x]==0 )
+		  {
+		   
+		    cairo_rectangle(cr,game->pac_man.x+4*x,game->pac_man.y+4*y - 4,4,4);
+		    cairo_fill(cr);
+		  }
+	      }
+	    if(game->pac_man.dir == 'S')
+	      {
+		if(pac_man_open[x*7+y]==0 )
+		  {
+		   
+		    cairo_rectangle(cr,game->pac_man.x+4*x,game->pac_man.y+4*y - 4,4,4);
+		    cairo_fill(cr);
+		  }
+	      }
+	    if(game->pac_man.dir == 'N')
+	      {
+		if(pac_man_open[(x)*7+(6-y)]==0 )
+		  {
+		   
+		    cairo_rectangle(cr,game->pac_man.x+4*x,game->pac_man.y+4*y - 4,4,4);
+		    cairo_fill(cr);
+		  }
+	      }
+	    if(game->pac_man.dir == 'G')
+	      {
+		if(pac_man_open[(y)*7+(6-x)]==0)
+		  {
+		  
+		    cairo_rectangle(cr,game->pac_man.x+4*x,game->pac_man.y+4*y - 4,4,4);
+		    cairo_fill(cr);
+		  }
+	      }
+	  }
+      }
 
-    cairo_set_source_rgb(cr,1,0,0);//red
-    cairo_rectangle(cr,game->blinky.x,game->blinky.y,20,20);
-    cairo_fill(cr);
 
-    cairo_set_source_rgb(cr,1,0.5,0);//orange
-    cairo_rectangle(cr,game->clyde.x,game->clyde.y,20,20);
-    cairo_fill(cr);
+    
+    for (int x = 0;x<7; x++)
+      {
+	for (int y = 0;y<7;y++)
+	  {
+	    if(ghost_pixel_art[y*7+x]==1)
+	      {
+		cairo_set_source_rgb(cr,1,0,0);//red
+		cairo_rectangle(cr,game->blinky.x+4*x,game->blinky.y+4*y - 4,4,4);
+		cairo_fill(cr);
 
-    cairo_set_source_rgb(cr,0,0,1);//blue
-    cairo_rectangle(cr,game->inky.x,game->inky.y,20,20);
-    cairo_fill(cr);
+		cairo_set_source_rgb(cr,1,0.5,0);//orange
+		cairo_rectangle(cr,game->clyde.x+4*x,game->clyde.y+4*y - 4,4,4);
+		cairo_fill(cr);
 
-    cairo_set_source_rgb(cr,1,0.7,0.8);//pink
-    cairo_rectangle(cr,game->pinky.x,game->pinky.y,20,20);
-    cairo_fill(cr);
+		cairo_set_source_rgb(cr,0,0,1);//blue
+		cairo_rectangle(cr,game->inky.x+4*x,game->inky.y+4*y - 4,4,4);
+		cairo_fill(cr);
+
+		cairo_set_source_rgb(cr,1,0.7,0.8);//pink
+		cairo_rectangle(cr,game->pinky.x+4*x,game->pinky.y+4*y - 4,4,4);
+		cairo_fill(cr);
+	      }
+	  }
+      }
   }
   return TRUE;
 }

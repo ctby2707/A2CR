@@ -44,24 +44,47 @@ int map[31][28] ={
   {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0}, //29
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}; //30
 
-/*
-int pixel_art_pac_man[7][6]={
-  {1,1,0,0,0,1},
-  {1,0,0,0,0,0},
-  {0,0,0,0,0,1},
-  {0,0,0,0,1,1},
-  {0,0,0,0,0,1},
-  {1,0,0,0,0,0},
-  {1,1,0,0,0,1}};
-*/
+
+int pac_man_open[7][7]={
+  {1,1,0,0,0,1,1},
+  {1,0,0,1,0,0,1},
+  {0,0,0,0,0,1,1},
+  {0,0,0,0,1,1,1},
+  {0,0,0,0,0,1,1},
+  {1,0,0,0,0,0,1},
+  {1,1,0,0,0,1,1}};
+
+int pac_man_closed[7][7]={
+  {1,1,0,0,0,1,1},
+  {1,0,0,1,0,0,1},
+  {0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0},
+  {1,0,0,0,0,0,1},
+  {1,1,0,0,0,1,1}};
+
+int ghost_pixel_art[7][7]={
+  {0,0,1,1,1,0,0},
+  {0,1,1,1,1,1,0},
+  {1,1,1,1,1,1,1},
+  {1,1,0,1,0,1,1},
+  {1,1,1,1,1,1,1},
+  {1,1,1,1,1,1,1},
+  {1,0,1,0,1,0,1}};
+
+
 
 Game game =
 {
   .status = 0,//status 0 = stopped, status 1 = playing
   .map = (int*)map,
+  .pac_man_open = (int*) pac_man_open,
+  .pac_man_closed = (int*) pac_man_closed,
+  .ghost_pixel_art = (int*) ghost_pixel_art,
   .score = 0,
   .live = 3,
   .chase = 0,
+  .open = 0,
   .combo = 200,
   .pac_man =
           {
@@ -660,12 +683,12 @@ gboolean loop()
       randome_dir(&game.inky);
       randome_dir(&game.pinky);
     }
-
+  
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
   move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
   move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
   move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
-
+  
   
   draw(0,0,637,760);
 //---------------SCORE

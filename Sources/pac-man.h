@@ -24,9 +24,13 @@ typedef struct Game
 {
   int status;
   int *map;
+  int *pac_man_open;
+  int *pac_man_closed;
+  int *ghost_pixel_art;
   int score;
   int live;
   int chase;
+  int open;
   int combo;
   Pac_Man pac_man;
   Player blinky;
