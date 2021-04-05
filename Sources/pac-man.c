@@ -83,6 +83,8 @@ Game game =
   .ghost_pixel_art = (int*) ghost_pixel_art,
   .score = 0,
   .live = 3,
+  .level = 1,
+  .pacgum = 0,
   .chase = 0,
   .open = 0,
   .combo = 200,
@@ -223,6 +225,34 @@ void respawn()
   game.pinky.y = 311;
 
   sleep(2);
+}
+
+void levelup()
+{
+  
+  game.pacgum = 0;
+  game.level = game.level + 1;
+  char str[42];
+  sprintf(str,"level : %i \n",game.level); 
+  set_level_label(str);
+  for(int x = 0; x < 31; x++)
+  {
+    for(int y = 0; y < 28; y++)
+    {
+      if(map[x][y] == 6)
+      {
+        map[x][y]=2;
+        //cairo_rectangle(cr,X+9,Y+9,5,5);
+      }
+      if(map[x][y] == 7)
+      {
+        map[x][y]=3;
+        //cairo_rectangle(cr,X+4,Y+4,10,10);
+      }
+    }
+  }
+  respawn();
+  draw(0,0,637,760);
 }
 
 void restart()
@@ -630,9 +660,12 @@ void define_direction(Player *pl, char type)
 
 gboolean loop()
 {
+  
+  
   if(game.status == 0)//break loop if game is in pause status 
     return TRUE;
-  
+  if(game.pacgum >= 258)//258 = max pac gum
+    levelup();
   if(game.chase > 0)
     {
       game.chase = game.chase - 1;
@@ -694,6 +727,7 @@ gboolean loop()
 //---------------SCORE
   if(map[X][Y] == 2)
   {
+    game.pacgum = game.pacgum + 1;
     map[X][Y] = 6;
     game.score = game.score + 10;
     char str[42];
@@ -703,6 +737,7 @@ gboolean loop()
   }
   if(map[X][Y] == 3)
   {
+    game.pacgum = game.pacgum + 1;
     game.pac_man.color = 'b';
     game.chase = game.chase + 125;
     map[X][Y] = 7;

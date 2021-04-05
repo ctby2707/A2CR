@@ -16,6 +16,7 @@ GtkOverlay     *overlay;
 GtkWidget      *image;
 GtkWidget      *score_label;
 GtkWidget      *live_label;
+GtkWidget      *level_label;
 int            alreadystarted = 0;
 cairo_t        *crg;
 
@@ -36,6 +37,9 @@ int launchgtk()
   area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
   score_label = GTK_WIDGET(gtk_builder_get_object(builder,"score_label"));
   live_label = GTK_WIDGET(gtk_builder_get_object(builder,"live_label"));
+  level_label = GTK_WIDGET(gtk_builder_get_object(builder,"level_label"));
+
+  
 						   
   
   //connect widgets to respective function
@@ -91,6 +95,11 @@ void set_live_label(char* live)
 {
   gtk_label_set_text(GTK_LABEL(live_label),live);
 }
+void set_level_label(char* level)
+{
+  gtk_label_set_text(GTK_LABEL(level_label),level);
+}
+
 
 
 void draw(int x, int y, int width, int weight)

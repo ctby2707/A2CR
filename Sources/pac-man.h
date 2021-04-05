@@ -29,6 +29,8 @@ typedef struct Game
   int *ghost_pixel_art;
   int score;
   int live;
+  int level;
+  int pacgum;
   int chase;
   int open;
   int combo;

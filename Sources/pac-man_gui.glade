@@ -9,7 +9,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <child>
-          <!-- n-columns=1 n-rows=4 -->
+          <!-- n-columns=1 n-rows=5 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -68,6 +68,22 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="level_label">
+                <property name="width-request">165</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Level :   1        </property>
+                <property name="width-chars">0</property>
+                <property name="max-width-chars">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>
