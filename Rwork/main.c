@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "pathfinding.h"
+#include "pathfinding3.h"
 #include "ghost.h"
 // 2 et 6       7 et 9
 const int wall = 0;
@@ -48,20 +48,25 @@ int map[31][28] ={
 
 int main(void)
 {
-  int ax = 4;
-  int ay = 12;
-  int bx = 7;
-  int by = 7;
+  int ax = 20;
+  int ay = 1;
+  int bx = 27;
+  int by = 1;
   int next;
-  next = shortpath(map, ((ax)*28+(ay-1)), (ax*28+ay), (bx*28+by));
+  next = shortpath((int*)map, ((ax)*28+(ay+1)), (ax*28+ay), (bx*28+by));
   printf("direction = %d\n",next);
-  int g1 = clyde(175,685,map,836);
-  printf("clyde is going to : %d\n",g1);
-  int g2 = pinky(625,542,543,map,626);
-  printf("pinky is going to : %d\n",g2);
-  int g3 = inky(382,466,463,map,410);
-  printf("inky is going to : %d\n",g3);
-  int g4 = blinky(175,684,map,836);
-  printf("blinky is going to : %d\n",g4);
+  char g1 = clyde(175,685,map,147);
+  printf("clyde is going to : %c\n",g1);
+  /*char g4 = blinky(430, 122, map, 457);
+
+  printf("blinky is going to : %c\n",g4);
+
+
+  char g2 = pinky(35,119,147,map,36);
+  printf("pinky is going to : %c\n",g2);
+  char g3 = inky(382,466,463,map,410);
+  printf("inky is going to : %c\n",g3);
+  char g5 = inky(382,466,463,map,410);
+  printf("inky is going to : %c\n",g5);*/
   return 1;
 }
