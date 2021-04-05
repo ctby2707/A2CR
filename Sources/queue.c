@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "queue.h"
 
-queue* queue_push(queue* start, int val)
+queue *queue_push(queue *start, int val)
 {
- queue *q = malloc(sizeof(struct queue));
-  if(q == NULL)
-    errx(3,"Error with malloc()");
+  queue *q = malloc(sizeof(struct queue));
+  if (q == NULL)
+    errx(3, "Error with malloc()");
   q->val = val;
-  if(start == NULL)
+  if (start == NULL)
   {
     q->next = q;
   }
@@ -20,11 +20,11 @@ queue* queue_push(queue* start, int val)
   return q;
 }
 
-queue* queue_pop(queue* start, int *pval)
+queue *queue_pop(queue *start, int *pval)
 {
   struct queue *q = start->next;
   *pval = q->val;
-  if(start->next->next != start->next)
+  if (start->next->next != start->next)
   {
     start->next = q->next;
     free(q);
@@ -37,11 +37,11 @@ queue* queue_pop(queue* start, int *pval)
   }
 }
 
-void queue_empty(queue** pstart)
+void queue_empty(queue **pstart)
 {
-  queue* q = *pstart;
-  while(q != NULL)
+  queue *q = *pstart;
+  while (q != NULL)
   {
-    q = queue_pop(q,NULL);
+    q = queue_pop(q, NULL);
   }
 }

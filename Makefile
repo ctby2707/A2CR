@@ -8,7 +8,7 @@ all: Pac-Man
 Pac-Man: Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o
 	${CC} -o Pac-Man Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o ${LDLIBS}
 
-.PHONY: clean  
+.PHONY: clean
 
 clean:
 	${RM} Sources/*.o

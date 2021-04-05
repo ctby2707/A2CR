@@ -16,8 +16,8 @@ url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;7
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-  
 }
+
 h1
 {
   font-size: 20px;
@@ -49,7 +49,6 @@ h1
 .navbar .menu-list
 {
   display: inline-flex;
-  
 }
 
 .navbar .logo a
@@ -63,7 +62,7 @@ h1
 
 .menu-list li
 {
-  list-style: none;  
+  list-style: none;
 }
 
 .menu-list li a
@@ -83,13 +82,12 @@ h1
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  
+
 }
 
 .about
 {
   padding-top: 70px;
-   
 }
 
 .about .title
