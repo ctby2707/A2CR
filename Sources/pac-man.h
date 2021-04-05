@@ -8,7 +8,7 @@ typedef struct Player
   int x;
   int y;
   char dir;
-}Player;
+} Player;
 
 typedef struct Pac_Man
 {
@@ -17,8 +17,8 @@ typedef struct Pac_Man
   char dir;
   char reqdir;
   char color;
-  
-}Pac_Man;
+
+} Pac_Man;
 
 typedef struct Game
 {
@@ -39,9 +39,9 @@ typedef struct Game
   Player inky;
   Player clyde;
   Player pinky;
-}Game;
+} Game;
 
-void* get_game();
+void *get_game();
 void change_game_status(int status);
 void randome_dir(Player *pl);
 void request_move(char dire);
