@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include "pac-man.h"
 #include "GTK.h"
+#include "/home/epita/A2CR/Rwork/ghost.h"
 
 const int pac_man_speed = 6;
+const int ghost_speed = 5;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] ={
@@ -40,31 +42,43 @@ int map[31][28] ={
   {0,2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0}, //28
   {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0}, //29
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}; //30
+
+
+int pixel_art_pac_man[7][6]={
+  {1,1,0,0,0,1},
+  {1,0,0,0,0,0},
+  {0,0,0,0,0,1},
+  {0,0,0,0,1,1},
+  {0,0,0,0,0,1},
+  {1,0,0,0,0,0},
+  {1,1,0,0,0,1}};
+
+
 Game game =
 {
   .map = (int*)map,
   .score = 0,
   .pac_man =
           {
-            .x = 32,
-            .y = 47,
+            .x = 307,
+            .y = 377,
           },
-    .ghost_red =
+  .blinky =
+          {
+            .x = 296, //13 in mat
+            .y = 311, //13 in mat
+          },
+  .inky =
           {
             .x = 0,
             .y = 0,
           },
-  .ghost_blue =
+  .clyde =
           {
-            .x = 0,
-            .y = 0,
+            .x = 318, //14 in mat
+            .y = 311, //13 in mat
           },
-  .ghost_orange =
-          {
-            .x = 0,
-            .y = 0,
-          },
-  .ghost_rose =
+  .pinky =
           {
             .x = 0,
             .y = 0,
@@ -89,6 +103,49 @@ void request_move(char dire)
     dir = dire;
   }
 }
+
+void move_ghost(Player ghost,int dir)
+{
+  
+  int x;
+  int y;
+  pixel_To_MatCoord(ghost.x,ghost.y,&x,&y);
+  
+  if(dir == -28)//N
+    {
+      if(map[(x-1)*28+y]!=0)
+	{
+	  matCoord_To_Pixel(x-1,y,&ghost.x,&ghost.y);
+	  printf("moved");
+	}
+    }
+  if(dir == 28)//S
+    {
+      if(map[(x+1)*28+y]!=0)
+	{
+	  matCoord_To_Pixel(x+1,y,&ghost.x,&ghost.y);
+	  printf("moved");
+	}
+    }
+  if(dir == 1)//E
+    {
+      if(map[x*28+y+1]!=0)
+	{
+	  matCoord_To_Pixel(x,y+1,&ghost.x,&ghost.y);
+	  printf("moved");
+	}
+    }
+  if(dir == -1)//W
+    {
+      if(map[x*28+y-1]!=0)
+	{
+	  matCoord_To_Pixel(x,y-1,&ghost.x,&ghost.y);
+	  printf("moved \n");
+	}
+    }
+  printf("ghost coord : x %i ; y %i \n",ghost.x,ghost.y);
+}
+
 gboolean loop()
 {
 //------------Pac-man moves with collisions
@@ -146,6 +203,24 @@ gboolean loop()
       game.pac_man.x = game.pac_man.x + pac_man_speed;
     }
   }
+  //ghost move
+  //blinky
+  printf("tamere \n");
+  int xb;
+  int yb;
+
+  pixel_To_MatCoord(game.blinky.x,game.blinky.y,&xb,&yb);
+  
+  int blinky_dir = blinky(xb*28+yb ,X*28+Y ,map);
+  printf("blinky coord : x %i ; y %i \n",game.blinky.x,game.blinky.y);
+  printf("blinky dir : %i\n",blinky_dir);
+  move_ghost(game.blinky,blinky_dir);
+  printf("ghost moved\n");
+  printf("blinky coord : x %i ; y %i \n",game.blinky.x,game.blinky.y);
+  draw(game.blinky.x - ghost_speed, game.blinky.y - ghost_speed, 22 +
+      ghost_speed*2, 22 +ghost_speed*2);
+  printf("ghost drawn \n");
+  
 //---------------SCORE
   if(map[X][Y] == 2)
   {

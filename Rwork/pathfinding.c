@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/queue.h>
+=======
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+>>>>>>> clement.i
 #include "pathfinding.h"
 
 const int NORTH = -28;
@@ -74,6 +80,7 @@ struct queue *search_way(int map[][28],struct queue *q_last,int x,int y,int elem
     orientation[2]=0;
   if (map[x][y-1]==0 || y_prev+1==y)
     orientation[3]=0;
+<<<<<<< HEAD
   int a=0;
   int save=0;
   for (int i =0;i<4;i++)
@@ -97,6 +104,9 @@ struct queue *search_way(int map[][28],struct queue *q_last,int x,int y,int elem
       q_last->elem=-1;
     return q_last;
   }
+=======
+
+>>>>>>> clement.i
   if (orientation[0]==1)
     q_last = add_elem(q_last,elem-28, M, prev);
   if (orientation[1]==1)
@@ -125,11 +135,15 @@ int shortpath(int map[][28], int prev, int A, int B)
   q_head->elem =A;
   int elem = A;
   *(M+prev) = -1;
+<<<<<<< HEAD
   q_last = search_way(map,q_last,x,y,A,prev, M);
 
   if (q_last->elem==-1 || q_last->elem==1 || q_last->elem==28 || q_last->elem==-28)
     return q_last->elem;
 
+=======
+  q_last = search_way(map,q_last,x,y,A,A, M);
+>>>>>>> clement.i
   while ((elem != -1) && find)
   {
     if (prev==A)
