@@ -161,7 +161,7 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
     //old pac man print
     cairo_rectangle(cr,game->pac_man.x,game->pac_man.y,20,20);
     cairo_fill(cr);
-    */
+     */
 
     for (int x = 0; x < 7; x++)
     {

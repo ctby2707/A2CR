@@ -10,112 +10,112 @@ const int ghost_speed = 4;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] = {
-    // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  //0
-    {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},  //1
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //2
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //3
-    {0, 2, 2, 2, 2, 3, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 3, 2, 2, 2, 2, 0},  //4
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //5
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //6
-    {0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0},  //7
-    {0, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //8
-    {0, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //9
-    {5, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 5},  //10
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //11
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //12
-    {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //13
-    {0, 2, 2, 2, 2, 2, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 2, 2, 2, 2, 2, 0},  //14
-    {0, 1, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //15
-    {0, 1, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //16
-    {0, 1, 1, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 1, 1, 0},  //17
-    {0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0},  //18
-    {0, 0, 0, 1, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0},  //19
-    {5, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 5},  //20
-    {0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //21
-    {0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //22
-    {0, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0},  //23
-    {0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //24
-    {0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //25
-    {0, 2, 0, 0, 2, 3, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 3, 2, 0, 0, 2, 0},  //26
-    {0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0},  //27
-    {0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0},  //28
-    {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},  //29
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}; //30
+  // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  //0
+  {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},  //1
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //2
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //3
+  {0, 2, 2, 2, 2, 3, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 3, 2, 2, 2, 2, 0},  //4
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //5
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //6
+  {0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0},  //7
+  {0, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //8
+  {0, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //9
+  {5, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 5},  //10
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 4, 4, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //11
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //12
+  {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //13
+  {0, 2, 2, 2, 2, 2, 2, 0, 0, 1, 0, 4, 4, 4, 4, 4, 4, 0, 1, 0, 0, 2, 2, 2, 2, 2, 2, 0},  //14
+  {0, 1, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //15
+  {0, 1, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //16
+  {0, 1, 1, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 1, 1, 0},  //17
+  {0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0},  //18
+  {0, 0, 0, 1, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0},  //19
+  {5, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 5},  //20
+  {0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //21
+  {0, 1, 0, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 1, 0},  //22
+  {0, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0},  //23
+  {0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //24
+  {0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0},  //25
+  {0, 2, 0, 0, 2, 3, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 3, 2, 0, 0, 2, 0},  //26
+  {0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0},  //27
+  {0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0},  //28
+  {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},  //29
+  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}; //30
 
 int pac_man_open[7][7] = {
-    {1, 1, 0, 0, 0, 1, 1},
-    {1, 0, 0, 1, 0, 0, 1},
-    {0, 0, 0, 0, 0, 1, 1},
-    {0, 0, 0, 0, 1, 1, 1},
-    {0, 0, 0, 0, 0, 1, 1},
-    {1, 0, 0, 0, 0, 0, 1},
-    {1, 1, 0, 0, 0, 1, 1}};
+  {1, 1, 0, 0, 0, 1, 1},
+  {1, 0, 0, 1, 0, 0, 1},
+  {0, 0, 0, 0, 0, 1, 1},
+  {0, 0, 0, 0, 1, 1, 1},
+  {0, 0, 0, 0, 0, 1, 1},
+  {1, 0, 0, 0, 0, 0, 1},
+  {1, 1, 0, 0, 0, 1, 1}};
 
 int pac_man_closed[7][7] = {
-    {1, 1, 0, 0, 0, 1, 1},
-    {1, 0, 0, 1, 0, 0, 1},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {1, 0, 0, 0, 0, 0, 1},
-    {1, 1, 0, 0, 0, 1, 1}};
+  {1, 1, 0, 0, 0, 1, 1},
+  {1, 0, 0, 1, 0, 0, 1},
+  {0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0},
+  {1, 0, 0, 0, 0, 0, 1},
+  {1, 1, 0, 0, 0, 1, 1}};
 
 int ghost_pixel_art[7][7] = {
-    {0, 0, 1, 1, 1, 0, 0},
-    {0, 1, 1, 1, 1, 1, 0},
-    {1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 0, 1, 0, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 1, 0, 1, 0, 1}};
+  {0, 0, 1, 1, 1, 0, 0},
+  {0, 1, 1, 1, 1, 1, 0},
+  {1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 0, 1, 0, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 1, 1, 1, 1, 1},
+  {1, 0, 1, 0, 1, 0, 1}};
 
 Game game =
-    {
-        .status = 0, //status 0 = stopped, status 1 = playing
-        .map = (int *)map,
-        .pac_man_open = (int *)pac_man_open,
-        .pac_man_closed = (int *)pac_man_closed,
-        .ghost_pixel_art = (int *)ghost_pixel_art,
-        .score = 0,
-        .live = 3,
-        .level = 1,
-        .pacgum = 0,
-        .chase = 0,
-        .open = 0,
-        .combo = 200,
-        .pac_man =
-            {
-                .x = 307,
-                .y = 377,
-                .dir = 'N',
-                .reqdir = 'N',
-                .color = 'y',
-            },
-        .blinky =
-            {
-                .x = 318, //13
-                .y = 311, //14
-                .dir = 'N',
-            },
-        .inky =
-            {
-                .x = 318, //13
-                .y = 311, //14
-                .dir = 'N',
-            },
-        .clyde =
-            {
-                .x = 318, //14
-                .y = 311, //13
-                .dir = 'N',
-            },
-        .pinky =
-            {
-                .x = 318, //13
-                .y = 311, //14
-                .dir = 'N',
-            },
+{
+  .status = 0, //status 0 = stopped, status 1 = playing
+  .map = (int *)map,
+  .pac_man_open = (int *)pac_man_open,
+  .pac_man_closed = (int *)pac_man_closed,
+  .ghost_pixel_art = (int *)ghost_pixel_art,
+  .score = 0,
+  .live = 3,
+  .level = 1,
+  .pacgum = 0,
+  .chase = 0,
+  .open = 0,
+  .combo = 200,
+  .pac_man =
+  {
+    .x = 307,
+    .y = 377,
+    .dir = 'N',
+    .reqdir = 'N',
+    .color = 'y',
+  },
+  .blinky =
+  {
+    .x = 318, //13
+    .y = 311, //14
+    .dir = 'N',
+  },
+  .inky =
+  {
+    .x = 318, //13
+    .y = 311, //14
+    .dir = 'N',
+  },
+  .clyde =
+  {
+    .x = 318, //14
+    .y = 311, //13
+    .dir = 'N',
+  },
+  .pinky =
+  {
+    .x = 318, //13
+    .y = 311, //14
+    .dir = 'N',
+  },
 };
 
 //-----------------------FUNCTIONS---------------------------------------------
@@ -450,13 +450,13 @@ void define_direction(Player *pl, char type)
   int X_pm, Y_pm;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X_pm, &Y_pm);
   /*
-  if(game.chase >0)
-    {
-      printf("invert coord \n");
-      X_pm = 28-X_pm;
-      Y_pm = 31-Y_pm;
-    }
-  */
+     if(game.chase >0)
+     {
+     printf("invert coord \n");
+     X_pm = 28-X_pm;
+     Y_pm = 31-Y_pm;
+     }
+   */
   if (pl->dir == 'N')
   {
     if (type == 'b')
@@ -467,37 +467,37 @@ void define_direction(Player *pl, char type)
     {
       if (game.pac_man.dir == 'S')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                        map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'N')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                        map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'D')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                        map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'G')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                        map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
     }
     else if (type == 'i')
     {
       if (game.pac_man.dir == 'S')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                       map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'N')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                       map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'D')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                       map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
 
       if (game.pac_man.dir == 'G')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                       map, X_mat * 28 + Y_mat + 28);
+            map, X_mat * 28 + Y_mat + 28);
     }
     if (type == 'c')
     {
@@ -514,37 +514,37 @@ void define_direction(Player *pl, char type)
     {
       if (game.pac_man.dir == 'S')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                        map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'N')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                        map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'D')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                        map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'G')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                        map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
     }
     else if (type == 'i')
     {
       if (game.pac_man.dir == 'S')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                       map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'N')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                       map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'D')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                       map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
 
       if (game.pac_man.dir == 'G')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                       map, X_mat * 28 + Y_mat - 28);
+            map, X_mat * 28 + Y_mat - 28);
     }
     if (type == 'c')
     {
@@ -561,38 +561,38 @@ void define_direction(Player *pl, char type)
     {
       if (game.pac_man.dir == 'S')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                        map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'N')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                        map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'D')
 
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                        map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'G')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                        map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
     }
     else if (type == 'i')
     {
       if (game.pac_man.dir == 'S')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                       map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'N')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                       map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'D')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                       map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
 
       if (game.pac_man.dir == 'G')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                       map, X_mat * 28 + Y_mat + 1);
+            map, X_mat * 28 + Y_mat + 1);
     }
     if (type == 'c')
     {
@@ -609,37 +609,37 @@ void define_direction(Player *pl, char type)
     {
       if (game.pac_man.dir == 'S')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                        map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'N')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                        map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'D')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                        map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'G')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                        map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
     }
     else if (type == 'i')
     {
       if (game.pac_man.dir == 'S')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 28,
-                       map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'N')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
-                       map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'D')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
-                       map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
 
       if (game.pac_man.dir == 'G')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
-                       map, X_mat * 28 + Y_mat - 1);
+            map, X_mat * 28 + Y_mat - 1);
     }
     if (type == 'c')
     {
@@ -671,17 +671,17 @@ gboolean loop()
   int X, Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
   /*
-  printf("\n---------------------NEW LOOP------------------------------\n");
-  int X_mat_blinky;
-  int Y_mat_blinky;
-  pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
+     printf("\n---------------------NEW LOOP------------------------------\n");
+     int X_mat_blinky;
+     int Y_mat_blinky;
+     pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
 
   //print current coords
   printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
-        X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
-        X,game.pac_man.x,Y,game.pac_man.y);
+  X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
+  X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);
-  */
+   */
   if (game.chase == 0) //chase mode
   {
     //----------------------------BLINKY DIRECTION---------------------------------
