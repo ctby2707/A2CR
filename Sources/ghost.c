@@ -83,7 +83,7 @@ char inky(int me, int blinky, int dir_pacman, int map[][28], int prev)
     int mBp = map[Bi][Bj];
     if (map[Bi][Bj] == 0 || map[Bi][Bj] >= 4)
     {
-      while (mBp == 0 || mBp >= 4)
+      while ((Bi <31) && (mBp == 0 || mBp >= 4))
       {
         Bi += dir_value;
         Bj = a * Bi + b;

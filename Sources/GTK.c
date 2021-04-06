@@ -60,7 +60,6 @@ int launchgtk()
 
 void on_Start_clicked()
 {
-  printf("start_game \n");
   gtk_widget_set_sensitive(Pause, TRUE);
   gtk_widget_set_sensitive(Start, FALSE);
   if (alreadystarted == 0)
@@ -78,7 +77,6 @@ void on_Pause_clicked()
   gtk_widget_set_sensitive(Start, TRUE);
   gtk_widget_set_sensitive(Pause, FALSE);
   change_game_status(0);
-  printf("Pause \n");
 }
 
 void set_score_label(char *score)

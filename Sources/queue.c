@@ -42,6 +42,7 @@ void queue_empty(queue **pstart)
   queue *q = *pstart;
   while (q != NULL)
   {
-    q = queue_pop(q, NULL);
+    int vald = 0;
+    q = queue_pop(q, &vald);
   }
 }

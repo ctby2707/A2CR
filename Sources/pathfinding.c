@@ -75,7 +75,7 @@ int shortpath(int *map, int prev, int A, int B)
   while (Vect_P[dir] != A)
     dir = Vect_P[dir];
   free(Vect_P);
-  //print_matrix(Vect_P);
+  queue_empty(&q);
   return dir - A;
 }
 
