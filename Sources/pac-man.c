@@ -251,10 +251,10 @@ void restart()
   char tmp[42];
   sprintf(tmp, "Lives : %i \n", game.live);
   set_live_label(tmp);
-  game.level = 0;
+  game.level = 1;
   char lev[42];
   sprintf(lev, "Level : %i \n", game.level);
-  set_live_label(lev);
+  set_level_label(lev);
   game.score = 0;
   char str[42];
   sprintf(str, "Score : %i \n", game.score);
