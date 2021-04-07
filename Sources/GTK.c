@@ -130,7 +130,7 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
   int *map = game->map;
   int *pac_man_open;
   int *ghost_pixel_art = game->ghost_pixel_art;
-  if (game->open == 3)
+  if (game->open > 0)
     {
       pac_man_open = game->pac_man_open;
       game->open = 0;
