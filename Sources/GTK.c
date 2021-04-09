@@ -241,9 +241,9 @@ gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
   if (!is_active)
   {
     is_active = TRUE;
-    if (event->keyval == GDK_KEY_z)
+    if (event->keyval == GDK_KEY_w)
       request_move('N');
-    if (event->keyval == GDK_KEY_q)
+    if (event->keyval == GDK_KEY_a)
       request_move('G');
     if (event->keyval == GDK_KEY_s)
       request_move('S');
