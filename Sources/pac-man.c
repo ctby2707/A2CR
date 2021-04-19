@@ -64,11 +64,19 @@ int pac_man_closed[7][7] = {
 int ghost_pixel_art[7][7] = {
   {0, 0, 1, 1, 1, 0, 0},
   {0, 1, 1, 1, 1, 1, 0},
-  {1, 1, 1, 1, 1, 1, 1},
-  {1, 1, 0, 1, 0, 1, 1},
+  {1, 2, 2, 1, 2, 2, 1},
+  {1, 2, 0, 1, 2, 0, 1},
   {1, 1, 1, 1, 1, 1, 1},
   {1, 1, 1, 1, 1, 1, 1},
   {1, 0, 1, 0, 1, 0, 1}};
+
+int list_clyde[5] = {645,813,821,737,648};
+
+int list_inky[5] = {670,667,746,830,838};
+
+int list_blinky[4] = {49,133,138,54};
+
+int list_pinky[4] = {34,29,113,118};
 
 Game game =
 {
@@ -81,7 +89,9 @@ Game game =
   .live = 3,
   .level = 1,
   .pacgum = 0,
+  .hunt = 0,
   .chase = 0,
+  .scater = 16800,
   .open = 0,
   .combo = 200,
   .pac_man =
@@ -97,24 +107,32 @@ Game game =
     .x = 318, //13
     .y = 311, //14
     .dir = 'N',
+    .list = (int *) list_blinky,
+    .n = 0,
   },
   .inky =
   {
     .x = 318, //13
     .y = 311, //14
     .dir = 'N',
+    .list = (int *) list_inky,
+    .n = 0,
   },
   .clyde =
   {
     .x = 318, //14
     .y = 311, //13
     .dir = 'N',
+    .list = (int *) list_clyde,
+    .n = 0,
   },
   .pinky =
   {
     .x = 318, //13
     .y = 311, //14
     .dir = 'N',
+    .list = (int *) list_pinky,
+    .n = 0,
   },
 };
 
@@ -648,6 +666,34 @@ void define_direction(Player *pl, char type)
   }
 }
 
+void define_scater_mode(Player *pl)
+{
+  int XB, YB;
+  pixel_To_MatCoord(pl->x, pl->y, &XB, &YB);
+  
+  printf("\n go to point : %i \n",pl->list[pl->n]);
+  
+  if(pl->dir == 'N')
+   pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -28);
+  else
+    {
+      if(pl->dir == 'S')
+	pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB + 28);
+      else
+	{
+	  if(pl->dir =='G')
+	    pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -1);
+	  else
+	    pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  +1);
+	}
+    }
+  
+  if(pl->list[pl->n] == XB*28 + YB)//change the coord destination to the next point in the list
+    pl->list[pl->n] = pl->list[pl->n] + 1;
+  
+  
+}
+
 gboolean loop()
 {
 
@@ -664,13 +710,33 @@ gboolean loop()
       game.combo = 200;
     }
   }
+  if(game.chase == 0)
+    {
+      if(game.hunt>0)
+	{
+	  game.hunt = game.hunt - 1;
+	  if(game.hunt == 0)
+	    {
+	      game.scater = 168;
+	    }
+	}
+      if(game.scater>0)
+	{
+	  game.scater = game.scater - 1;
+	  if(game.scater == 0)
+	    {
+	      game.hunt = 480;
+	    }
+	}
+    }
+  
   request_move(game.pac_man.reqdir);
   move_entity(&game.pac_man.x, &game.pac_man.y, game.pac_man.dir, pac_man_speed); //pac-man
 
   //---------------------------------GIVE INFOS----------------------------------
   int X, Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
-  /*
+  
      printf("\n---------------------NEW LOOP------------------------------\n");
      int X_mat_blinky;
      int Y_mat_blinky;
@@ -681,30 +747,53 @@ gboolean loop()
   X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
   X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);
-   */
-  if (game.chase == 0) //chase mode
-  {
-    //----------------------------BLINKY DIRECTION---------------------------------
-    define_direction(&game.blinky, 'b');
+   
+  if(game.chase>0)
+    {
+      //chase mode 
+      randome_dir(&game.blinky);
+      randome_dir(&game.clyde);
+      randome_dir(&game.inky);
+      randome_dir(&game.pinky);
+    }
+  if (game.hunt > 0 && game.chase ==0) //hunt mode
+    {
+      //----------------------------BLINKY DIRECTION---------------------------------
+      define_direction(&game.blinky, 'b');
 
-    //---------------------------CLYDE DIRECTION-----------------------------------
-    define_direction(&game.clyde, 'c');
+      //---------------------------CLYDE DIRECTION-----------------------------------
+      define_direction(&game.clyde, 'c');
+    
+      //---------------------------INKY DIRECTION------------------------------------
 
-    //---------------------------INKY DIRECTION------------------------------------
+      define_direction(&game.inky, 'i');
+      //---------------------------PINKY DIRECTION-----------------------------------
 
-    define_direction(&game.inky, 'i');
-    //---------------------------PINKY DIRECTION-----------------------------------
+      define_direction(&game.pinky, 'p');
+      //-----------------------------END-------------------------------------------
+    }
+  if(game.scater > 0 && game.chase == 0)
+    {
+    
+      define_scater_mode(&game.blinky);
+      
+      define_scater_mode(&game.clyde);
+     
+      define_scater_mode(&game.inky);
+     
+      define_scater_mode(&game.pinky);
 
-    define_direction(&game.pinky, 'p');
-    //-----------------------------END-------------------------------------------
-  }
-  else //flee mode
-  {
-    randome_dir(&game.blinky);
-    randome_dir(&game.clyde);
-    randome_dir(&game.inky);
-    randome_dir(&game.pinky);
-  }
+      
+      if(game.blinky.n > 3)
+	game.blinky.n = 0;
+      if(game.clyde.n > 4)
+	game.clyde.n = 0;
+      if(game.inky.n > 4)
+	game.inky.n = 0;
+      if(game.pinky.n > 3)
+	game.pinky.n = 0;
+      
+    }
 
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
   move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);

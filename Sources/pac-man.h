@@ -8,6 +8,8 @@ typedef struct Player
   int x;
   int y;
   char dir;
+  int *list;
+  int n;
 } Player;
 
 typedef struct Pac_Man
@@ -31,7 +33,9 @@ typedef struct Game
   int live;
   int level;
   int pacgum;
+  int hunt;
   int chase;
+  int scater;
   int open;
   int combo;
   Pac_Man pac_man;

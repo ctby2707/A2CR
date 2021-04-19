@@ -228,6 +228,36 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
           cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
         }
+	if (ghost_pixel_art[y * 7 + x] == 2)
+	  {
+	    cairo_set_source_rgb(cr, 1, 1, 1); //white
+	    cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	    
+	    cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	  }
+	if (ghost_pixel_art[y * 7 + x] == 0)
+	  {
+	    cairo_set_source_rgb(cr, 0, 0, 0); //black
+	    cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	    
+	    cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	  }
       }
     }
   }
@@ -241,13 +271,13 @@ gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
   if (!is_active)
   {
     is_active = TRUE;
-    if (event->keyval == GDK_KEY_w)
+    if (event->keyval == GDK_KEY_Up)
       request_move('N');
-    if (event->keyval == GDK_KEY_a)
+    if (event->keyval == GDK_KEY_Left)
       request_move('G');
-    if (event->keyval == GDK_KEY_s)
+    if (event->keyval == GDK_KEY_Down)
       request_move('S');
-    if (event->keyval == GDK_KEY_d)
+    if (event->keyval == GDK_KEY_Right)
       request_move('D');
   }
   return TRUE;
