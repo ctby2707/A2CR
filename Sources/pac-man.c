@@ -677,7 +677,7 @@ void define_scater_mode(Player *pl)
     {
       printf("last is N \n");
       pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -28);
-      printf("new direction chosen : %c",pl->dir);
+      printf("new direction chosen : %c\n",pl->dir);
     }
   else
     {
@@ -685,7 +685,7 @@ void define_scater_mode(Player *pl)
 	{
 	  printf("last is S \n");
 	  pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB + 28);
-	  printf("new direction chosen : %c",pl->dir);
+	  printf("new direction chosen : %c\n",pl->dir);
 	}
       else
 	{
@@ -693,13 +693,13 @@ void define_scater_mode(Player *pl)
 	    {
 	      printf("last is G \n");
 	      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -1);
-	      printf("new direction chosen : %c",pl->dir);
+	      printf("new direction chosen : %c \n",pl->dir);
 	    }
 	    else
 	      {
 		printf("last is D \n");
 		pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  +1);
-		printf("new direction chosen : %c",pl->dir);
+		printf("new direction chosen : %c\n",pl->dir);
 	      }
 	}
     }
