@@ -389,10 +389,13 @@ void request_move(char dir)
 {
   int X, Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
-  if ((dir == 'N' && map[X - 1][Y] != 0) ||
-      (dir == 'S' && map[X + 1][Y] != 0) ||
-      (dir == 'G' && map[X][Y - 1] != 0) ||
-      (dir == 'D' && map[X][Y + 1] != 0))
+  int x;
+  int y;
+  matCoord_To_Pixel(X,Y,&x,&y);
+  if ((dir == 'N' && map[X - 1][Y] != 0 && (x >= game.pac_man.x-6 && x<= game.pac_man.x+6 )) ||
+      (dir == 'S' && map[X + 1][Y] != 0 && (x >= game.pac_man.x-6 && x<= game.pac_man.x+6 )) ||
+      (dir == 'G' && map[X][Y - 1] != 0 && (y >= game.pac_man.y-6 && y<= game.pac_man.y+6 )) ||
+      (dir == 'D' && map[X][Y + 1] != 0 && (y >= game.pac_man.y-6 && y<= game.pac_man.y+6 )))
   {
     game.pac_man.dir = dir;
     game.pac_man.reqdir = dir;
@@ -426,6 +429,7 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat + 1, Y_mat, &x1, &y1);
       *y = CLAMP(*y + speed, 0, y1 - 22);
+      
     }
     else
     {
@@ -439,6 +443,7 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat, Y_mat - 1, &x1, &y1);
       *x = CLAMP(*x - speed, x1 + 22, 800);
+      
     }
     else
     {
@@ -452,6 +457,8 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat, Y_mat + 1, &x1, &y1);
       *x = CLAMP(*x + speed, 0, x1 - 22);
+      
+    
     }
     else
     {
@@ -805,10 +812,8 @@ gboolean loop()
      
       define_scater_mode(&game.pinky);
 
-      printf("n = %i \n",game.blinky.n);
       if(game.blinky.n > 3)
 	{
-	  printf("reset \n");
 	  game.blinky.n = 0;
 	}
       if(game.clyde.n > 4)
