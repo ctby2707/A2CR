@@ -91,7 +91,7 @@ Game game =
   .pacgum = 0,
   .hunt = 0,
   .chase = 0,
-  .scater = 16800,
+  .scater = 16800,//set time 168 for 7 sec
   .open = 0,
   .combo = 200,
   .pac_man =
@@ -674,22 +674,42 @@ void define_scater_mode(Player *pl)
   printf("\n go to point : %i \n",pl->list[pl->n]);
   
   if(pl->dir == 'N')
-   pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -28);
+    {
+      printf("last is N \n");
+      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -28);
+      printf("new direction chosen : %c",pl->dir);
+    }
   else
     {
       if(pl->dir == 'S')
-	pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB + 28);
+	{
+	  printf("last is S \n");
+	  pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB + 28);
+	  printf("new direction chosen : %c",pl->dir);
+	}
       else
 	{
 	  if(pl->dir =='G')
-	    pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -1);
-	  else
-	    pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  +1);
+	    {
+	      printf("last is G \n");
+	      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -1);
+	      printf("new direction chosen : %c",pl->dir);
+	    }
+	    else
+	      {
+		printf("last is D \n");
+		pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  +1);
+		printf("new direction chosen : %c",pl->dir);
+	      }
 	}
     }
   
-  if(pl->list[pl->n] == XB*28 + YB)//change the coord destination to the next point in the list
-    pl->list[pl->n] = pl->list[pl->n] + 1;
+  if(pl->list[pl->n] == XB*28 + YB)
+    {
+      printf("changed go to point \n");
+      //change the coord destination to the next point in the list
+      pl->list[pl->n] = pl->list[pl->n] + 1;
+    }
   
   
 }
@@ -725,7 +745,7 @@ gboolean loop()
 	  game.scater = game.scater - 1;
 	  if(game.scater == 0)
 	    {
-	      game.hunt = 480;
+	      game.hunt = 480;//set time to 480 for 2
 	    }
 	}
     }
