@@ -70,13 +70,13 @@ int ghost_pixel_art[7][7] = {
   {1, 1, 1, 1, 1, 1, 1},
   {1, 0, 1, 0, 1, 0, 1}};
 
-int list_clyde[5] = {645,813,821,737,648};
+int list_clyde[5] = {648,645,813,821,737};
 
-int list_inky[5] = {670,667,746,830,838};
+int list_inky[5] = {667,670,838,830,746};
 
-int list_blinky[4] = {49,133,138,54};
+int list_blinky[4] = {133,138,54,49};
 
-int list_pinky[4] = {34,29,113,118};
+int list_pinky[4] = {118,113,29,34};
 
 Game game =
 {
@@ -91,7 +91,7 @@ Game game =
   .pacgum = 0,
   .hunt = 0,
   .chase = 0,
-  .scater = 16800,//set time 168 for 7 sec
+  .scater = 168,//set time 168 for 7 sec
   .open = 0,
   .combo = 200,
   .pac_man =
@@ -706,9 +706,10 @@ void define_scater_mode(Player *pl)
   
   if(pl->list[pl->n] == XB*28 + YB)
     {
-    
+      printf("changed from %i\n",pl->list[pl->n]);
       //change the coord destination to the next point in the list
-      pl->list[pl->n] = pl->list[pl->n] + 1;
+      pl->n= pl->n + 1;
+      printf("going to %i\n",pl->list[pl->n]);
     }
   
   
@@ -804,16 +805,24 @@ gboolean loop()
      
       define_scater_mode(&game.pinky);
 
-      
+      printf("n = %i \n",game.blinky.n);
       if(game.blinky.n > 3)
-	game.blinky.n = 0;
+	{
+	  printf("reset \n");
+	  game.blinky.n = 0;
+	}
       if(game.clyde.n > 4)
-	game.clyde.n = 0;
+	{
+	  game.clyde.n = 0;
+	}
       if(game.inky.n > 4)
-	game.inky.n = 0;
+	{
+	  game.inky.n = 0;
+	}
       if(game.pinky.n > 3)
-	game.pinky.n = 0;
-      
+	{
+	  game.pinky.n = 0;
+	}
     }
 
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
