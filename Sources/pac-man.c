@@ -671,42 +671,42 @@ void define_scater_mode(Player *pl)
   int XB, YB;
   pixel_To_MatCoord(pl->x, pl->y, &XB, &YB);
   
-  printf("\n go to point : %i \n",pl->list[pl->n]);
+  
   
   if(pl->dir == 'N')
     {
-      printf("last is N \n");
-      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -28);
-      printf("new direction chosen : %c\n",pl->dir);
+     
+      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +28);
+      
     }
   else
     {
       if(pl->dir == 'S')
 	{
-	  printf("last is S \n");
-	  pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB + 28);
-	  printf("new direction chosen : %c\n",pl->dir);
+	
+	  pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB - 28);
+	
 	}
       else
 	{
 	  if(pl->dir =='G')
 	    {
-	      printf("last is G \n");
-	      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB -1);
-	      printf("new direction chosen : %c \n",pl->dir);
+	    
+	      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +1);
+	      
 	    }
 	    else
 	      {
-		printf("last is D \n");
-		pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  +1);
-		printf("new direction chosen : %c\n",pl->dir);
+	
+		pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  -1);
+	
 	      }
 	}
     }
   
   if(pl->list[pl->n] == XB*28 + YB)
     {
-      printf("changed go to point \n");
+    
       //change the coord destination to the next point in the list
       pl->list[pl->n] = pl->list[pl->n] + 1;
     }
@@ -752,22 +752,23 @@ gboolean loop()
   
   request_move(game.pac_man.reqdir);
   move_entity(&game.pac_man.x, &game.pac_man.y, game.pac_man.dir, pac_man_speed); //pac-man
-
+  
   //---------------------------------GIVE INFOS----------------------------------
   int X, Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
-  
+  /*
      printf("\n---------------------NEW LOOP------------------------------\n");
      int X_mat_blinky;
      int Y_mat_blinky;
      pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
 
   //print current coords
+     
   printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
   X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
   X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);
-   
+  */
   if(game.chase>0)
     {
       //chase mode 
