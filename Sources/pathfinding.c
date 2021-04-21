@@ -34,13 +34,13 @@ int shortpath(int *map, int prev, int A, int B)
   //Check conformity of parameters
   /*if(A < 0 || A > 868)
     printf("Ghost position is not conform: A = %i\n",A);
-    if(B < 0 || B > 868)
+  if(B < 0 || B > 868)
     printf("Target position is not conform : B = %i\n",B);
-    if(map[A] == 0)
+  if(map[A] == 0)
     printf("Ghost position is wall (A = 0)\n");
-    if(map[B] == 0)
+  if(map[B] == 0)
     printf("Target position is a wall (B = 0) cheh\n");
-    if(A == B)
+  if(A == B)
     printf("A and B are the same\n");*/
   if (A == B || map[B] == 0 || map[A] == 0 || B < 0 || B > 868 || A < 0 || A > 868)
   {
