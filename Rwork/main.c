@@ -60,7 +60,7 @@ int main(void)
   printf("clyde is going here : %d\n",g1);
   int g2 = pinky(625,542,543,map);
   printf("pinky is going here : %d\n",g2);
-  int g3 = inky(382,466,463,map);
+  int g3 = inky(322,458,457,map,350 );
   printf("inky is going here : i = %d j = %d\n",g3/28,g3%28);
   return 1;
 }

@@ -37,7 +37,7 @@ int pinky (int me, int pacman, int dir_pacman, int map[][28])
   return shortpath(map, me, me, B);
 }
 
-int inky (int me, int blinky, int dir_pacman, int map[][28])
+int inky (int me, int blinky, int dir_pacman, int map[][28], int prev)
 {
   int x1 = blinky/28;
   int y1 = blinky%28;
@@ -68,17 +68,16 @@ int inky (int me, int blinky, int dir_pacman, int map[][28])
        int Bi = x2 + abs(dx)*dir_value;
        int Bj = Bi*a + b;
        B = Bi*28 + Bj;
-       Bi += dir_value;
-       Bj = Bi*a + b;
-       int Bp = Bi*28 + Bj;
        int mBp = map[Bi][Bj];
-       while (mBp != 0 && mBp != 4 && mBp != 5)
+       if (map[Bi][Bj] == 0 || map[Bi][Bj] >= 4)
        {
-	   B = Bp;
-	   Bi += dir_value;
-	   Bj = a*Bi + b;
-	   Bp = Bi*28 + Bj;
-	   mBp = map[Bi][Bj];
+       	while (mBp == 0 || mBp >= 4)
+       	{
+	   	Bi += dir_value;
+	   	Bj = a*Bi + b;
+	  	B = Bi*28 + Bj;
+	   	mBp = map[Bi][Bj];
+       	}
        }
   }
   else
@@ -90,18 +89,18 @@ int inky (int me, int blinky, int dir_pacman, int map[][28])
        int Bi = x2;
        int Bj = y2 + abs(dy)*dir_value;
        B = Bi*28 + Bj;
-       Bj += dir_value;
-       int Bp = Bi*28 + Bj;
        int mBp = map[Bi][Bj];
-       while (mBp != 0 && mBp != 4 && mBp != 5)
+       if (mBp == 0 || mBp >= 4)
        {
-	   B = Bp;
+       	while (mBp == 0 || mBp >= 4)
+       	{
 	   Bj += dir_value;
-	   Bp = Bi*28 + Bj;
+	   B = Bi*28 + Bj;
 	   mBp = map[Bi][Bj];
+       	}
        }
    }
-   return shortpath(map, me, me, B);
+   return shortpath(map, prev, me, B);
 }
 
 int GPS(int x1, int y1, int x2, int y2)
