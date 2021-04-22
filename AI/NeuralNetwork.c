@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "sigmoid.h"
 #include "neuron.h"
+#include "saverfile.h"
 
 
 int main()
@@ -52,6 +53,11 @@ int main()
 
     epoc++;  
   }
+
+  savefile("NeuralData/save_biaisweight.txt", biasweight, 10);
+  savefile("NeuralData/save_weight1.txt", biasweight, 72);
+  savefile("NeuralData/save_weight2.txt", biasweight, 24);
+
   free(input1);
   free(input2);
   free(input3);
