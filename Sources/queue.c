@@ -1,7 +1,7 @@
 #include <err.h>
 #include <stdlib.h>
 #include "queue.h"
-
+#include <stdio.h>
 queue *queue_push(queue *start, node val)
 {
   queue *q = malloc(sizeof(struct queue));
@@ -42,7 +42,22 @@ void queue_empty(queue **pstart)
   queue *q = *pstart;
   while (q != NULL)
   {
-    int vald = 0;
+    node vald;
     q = queue_pop(q, &vald);
   }
+}
+
+void queue_print(queue *q)
+{
+  queue *start = q;
+  q = q->next;
+  printf("FIN ");
+  do
+  {
+    printf("%i, ", q->val.elem);
+    q = q->next;
+  }while(q != start);
+  printf("%i, ", q->val.elem);
+  printf(" DEBUT \n");
+  return;
 }

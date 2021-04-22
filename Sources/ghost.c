@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "pathfinding.h"
+#include "a_star.h"
 #include "ghost.h"
 
 int five_ray[20] =

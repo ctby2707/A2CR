@@ -6,9 +6,10 @@ typedef struct node {
   float heur;
   int dir;
   int elem;
+  int prev;
 
 }node;
 
-int shortpath(int map, int prev, int A, int B);
+int shortpath(int *map, int prev, int A, int B);
 
 #endif

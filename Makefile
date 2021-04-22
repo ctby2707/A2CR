@@ -1,12 +1,12 @@
 CC=gcc
 
-CFLAGS= -Wall  -std=c99 -O3 -g `pkg-config --cflags gtk+-3.0`
-LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g
+CFLAGS= -Wall  -std=c99 -O3 -g -lm `pkg-config --cflags gtk+-3.0`
+LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g -lm
 
 all: Pac-Man
 
-Pac-Man: Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o
-	${CC} -o Pac-Man Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o ${LDLIBS}
+Pac-Man: Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/a_star.o Sources/queue.o
+	${CC} -o Pac-Man Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/a_star.o Sources/queue.o ${LDLIBS}
 
 .PHONY: clean
 

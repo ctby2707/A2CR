@@ -688,14 +688,14 @@ gboolean loop()
     define_direction(&game.blinky, 'b');
 
     //---------------------------CLYDE DIRECTION-----------------------------------
-    define_direction(&game.clyde, 'c');
+    //define_direction(&game.clyde, 'c');
 
     //---------------------------INKY DIRECTION------------------------------------
 
-    define_direction(&game.inky, 'i');
+    //define_direction(&game.inky, 'i');
     //---------------------------PINKY DIRECTION-----------------------------------
 
-    define_direction(&game.pinky, 'p');
+    //define_direction(&game.pinky, 'p');
     //-----------------------------END-------------------------------------------
   }
   else //flee mode
@@ -707,10 +707,10 @@ gboolean loop()
   }
 
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
-  move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+  /*move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
   move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
   move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
-
+*/
   draw(0, 0, 637, 760);
   //---------------SCORE
   if (map[X][Y] == 2)
