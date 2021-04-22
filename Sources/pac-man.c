@@ -861,9 +861,12 @@ gboolean loop()
     }
 
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
-  move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
-  move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
-  move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
+  if(game.pacgum / game.level > 5)
+    move_entity(&game.clyde.x, &game.clyde.y, game.clyde.dir, ghost_speed);
+  if(game.pacgum / game.level > 15)
+    move_entity(&game.inky.x, &game.inky.y, game.inky.dir, ghost_speed);
+  if(game.pacgum / game.level > 30)
+    move_entity(&game.pinky.x, &game.pinky.y, game.pinky.dir, ghost_speed);
 
   draw(0, 0, 637, 760);
   //---------------SCORE
