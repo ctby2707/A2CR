@@ -8,15 +8,17 @@
 
 #define NB_INPUT 12
 #define NB_NEURON_LAYER_1 6
-#define NB_NEURON_LAYER_2 4
+#define NB_NEURON_LAYER_2 6 
+#define NB_NEURON_LAYER_3 4
 
 int main()
 {
-  int nb_layer = 3;
+  int nb_layer = 4;
   int *nb_neuron = malloc(nb_layer*sizeof(int));
   nb_neuron[0] = NB_INPUT;
   nb_neuron[1] = NB_NEURON_LAYER_1;
-  nb_neuron[3] = NB_NEURON_LAYER_2;
+  nb_neuron[2] = NB_NEURON_LAYER_2;
+  nb_neuron[3] = NB_NEURON_LAYER_3;
 
   double input[] = {0.95678,
                     0.87654,
