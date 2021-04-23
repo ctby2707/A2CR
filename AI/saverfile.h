@@ -1,6 +1,6 @@
-#ifndef SIGMOID_H
-#define SIGMOID_H
+#ifndef SAVERFILE_H
+#define SAVERFILE_H
 
-double savefile (char* path double* list, int size);
+void savefile(char* path, double* list, int size);
 
 #endif
