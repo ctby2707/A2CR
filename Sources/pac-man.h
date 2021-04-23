@@ -10,6 +10,7 @@ typedef struct Player
   char dir;
   int *list;
   int n;
+  int eat;
 } Player;
 
 typedef struct Pac_Man

@@ -100,10 +100,8 @@ void draw(int x, int y, int width, int weight)
 void change_color_pac_man(char color)
 {
   Game *game = (Game *)get_game();
-  printf("tamere \n");
   if (color == 'b')
   {
-    printf("tamere \n");
     cairo_set_source_rgb(crg, 0, 0, 0.7); //blue
   }
   else
@@ -212,19 +210,35 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
       {
         if (ghost_pixel_art[y * 7 + x] == 1)
         {
-          cairo_set_source_rgb(cr, 1, 0, 0); //red
+	  if(game->blinky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0, 0); //red
+	  
           cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
-
-          cairo_set_source_rgb(cr, 1, 0.5, 0); //orange
+	  
+	  if(game->clyde.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0.5, 0); //orange
+	  
           cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
-
-          cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  
+	  if(game->inky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  
           cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
-
-          cairo_set_source_rgb(cr, 1, 0.7, 0.8); //pink
+	  
+	  if(game->pinky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0.7, 0.8); //pink
+	  
           cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
         }

@@ -109,6 +109,7 @@ Game game =
     .dir = 'N',
     .list = (int *) list_blinky,
     .n = 0,
+    .eat = 0,
   },
   .inky =
   {
@@ -117,6 +118,7 @@ Game game =
     .dir = 'N',
     .list = (int *) list_inky,
     .n = 0,
+    .eat = 0,
   },
   .clyde =
   {
@@ -125,6 +127,7 @@ Game game =
     .dir = 'N',
     .list = (int *) list_clyde,
     .n = 0,
+    .eat = 0,
   },
   .pinky =
   {
@@ -133,6 +136,7 @@ Game game =
     .dir = 'N',
     .list = (int *) list_pinky,
     .n = 0,
+    .eat = 0,
   },
 };
 
@@ -303,21 +307,25 @@ void ghost_kill(int n)
   {
     game.blinky.x = 318;
     game.blinky.y = 311;
+    game.blinky.eat = 1;
   }
   if (n == 2)
   {
     game.inky.x = 318;
     game.inky.y = 311;
+    game.inky.eat = 1;
   }
   if (n == 4)
   {
     game.clyde.x = 318;
     game.clyde.y = 311;
+    game.clyde.eat = 1;
   }
   if (n == 3)
   {
     game.pinky.x = 318;
     game.pinky.y = 311;
+    game.pinky.eat = 1;
   }
   game.score = game.score + game.combo;
   char str[42];
@@ -334,9 +342,11 @@ void is_pac_man_dead()
   int XB;
   int YB;
   pixel_To_MatCoord(game.blinky.x, game.blinky.y, &XB, &YB);
+  struct Player ghost;
   if (X == XB && Y == YB)
   {
     boo = 1;
+    ghost = game.blinky;
   }
   else
   {
@@ -346,6 +356,7 @@ void is_pac_man_dead()
     if (X == XI && Y == YI)
     {
       boo = 2;
+      ghost = game.inky;
     }
     else
     {
@@ -355,6 +366,7 @@ void is_pac_man_dead()
       if (X == XP && Y == YP)
       {
         boo = 3;
+	ghost = game.pinky;
       }
       else
       {
@@ -364,13 +376,14 @@ void is_pac_man_dead()
         if (X == XC && Y == YC)
         {
           boo = 4;
+	  ghost = game.clyde;
         }
       }
     }
   }
   if (boo > 0)
   {
-    if (game.chase == 0)
+    if (game.chase == 0 || ghost.eat == 1)
     {
       game.live = game.live - 1;
       char str[42];
@@ -777,11 +790,22 @@ gboolean loop()
   if (game.chase > 0)
   {
     game.chase = game.chase - 1;
-    if (game.chase == 0)
+    if (game.chase == 0 || (game.chase < 30 && game.chase % 2 == 0))
     {
       game.pac_man.color = 'y';
-      game.combo = 200;
+      
     }
+    else
+      game.pac_man.color = 'b';
+
+    if(game.chase == 0)
+      {
+	game.combo = 200;
+	game.blinky.eat = 0;
+	game.inky.eat = 0;
+	game.pinky.eat = 0;
+	game.clyde.eat = 0;
+      }
   }
   if(game.chase == 0)
     {
@@ -884,7 +908,7 @@ gboolean loop()
   {
     game.pacgum = game.pacgum + 1;
     game.pac_man.color = 'b';
-    game.chase = game.chase + 125;
+    game.chase = 170;
     map[X][Y] = 7;
   }
 
