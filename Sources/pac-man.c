@@ -267,6 +267,7 @@ void levelup()
 
 void restart()
 {
+  game.pacgum = 0;
   game.status = 0;
   respawn();
   game.live = 3;
