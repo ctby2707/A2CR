@@ -26,7 +26,9 @@ void generate_random_generation(int nb_child, Game *game, int type)
     randomizeNetwork(&game->AI[i]);
   }
   if(type == 0)
+  {
     generate_generation(nb_child, game);
+  }
 }
 
 void new_generation(int nb_child, Game *game)

@@ -109,7 +109,7 @@ struct Network init(int nb_layer, int *nb_neuron)
     if(i != 0)
     {
       size_weight_list = size_weight_list + (nb_neuron[i-1] * nb_neuron[i]);
-      network->nb_weights[i] = (nb_neuron[i-1] * nb_neuron[i]);
+      network->nb_weights[i-1] = (nb_neuron[i-1] * nb_neuron[i]);
     }
   }
   double *input = malloc(nb_total_neuron*sizeof(double));
@@ -297,6 +297,8 @@ void weight_set(double *weight, double x, size_t size_tab)
 {
   for(size_t i = 0; i < size_tab; i++)
   {
+    if(weight[i] == -0)
+      weight[i] = 0.000001;
     double min = weight[i] - x;
     double max = weight[i] + x;
     if (min < -1)

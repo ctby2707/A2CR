@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "saverfile.h"
+#include <err.h>
 
 void savefile (char* path, double* list, int size)
 {
@@ -8,7 +9,9 @@ void savefile (char* path, double* list, int size)
   file = fopen(path, "w");
   for (int i = 0; i < size; i++)
   {
-    fprintf(file, "%lf\n", list[i]);
+    char character[50];
+    sprintf(character, "%lf", list[i]);
+    fprintf(file, "%s\n", character);
   }
   fclose(file);
 }
@@ -22,7 +25,7 @@ void loadfile(char* path, double* list, int size)
     int e = fscanf(file, "%lf\n", &list[i]);
     if(e == 0)
     {
-      break;
+      err(3,"Impossible to read in the file %s",path);
     }
   }
   fclose(file);

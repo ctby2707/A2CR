@@ -1,6 +1,6 @@
 CC=gcc
 
-CFLAGS= -Wall  -std=c99 -O3 -g `pkg-config --cflags gtk+-3.0`
+CFLAGS= -Wall  -std=c99 -g `pkg-config --cflags gtk+-3.0`
 LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g -lm
 
 all: Pac-Man
