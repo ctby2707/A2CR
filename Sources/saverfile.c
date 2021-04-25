@@ -25,7 +25,7 @@ void loadfile(char* path, double* list, int size)
     int e = fscanf(file, "%lf\n", &list[i]);
     if(e == 0)
     {
-      err(3,"Impossible to read in the file %s",path);
+      perror("Error in loadfile(): ");
     }
   }
   fclose(file);
