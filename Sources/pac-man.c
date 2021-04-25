@@ -250,7 +250,9 @@ void respawn()
 
 void levelup()
 {
-
+  game.chase = 0;
+  game.hunt = 0;
+  game.scater = 168
   game.pacgum = 0;
   game.level = game.level + 1;
   char str[42];
@@ -295,6 +297,9 @@ void restart()
   ScoreBot = 0;
   //----------------------------------------
   //game.status = 0;
+  game.chase = 0;
+  game.hunt = 0;
+  game.scater = 168
   game.pacgum = 0;
   respawn();
   game.live = 3;
