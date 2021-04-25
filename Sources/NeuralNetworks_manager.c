@@ -4,7 +4,7 @@
 #include "NeuralNetworks_manager.h"
 #include <math.h>
 
-#define NB_INPUT 12
+#define NB_INPUT 17
 #define NB_NEURON_LAYER_1 6
 #define NB_NEURON_LAYER_2 6
 #define NB_NEURON_LAYER_3 4

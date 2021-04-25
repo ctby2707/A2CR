@@ -14,7 +14,7 @@ const int ghost_speed = 4;
 
 //-------------------------INITIALISATION-------------------------------------
 int map[31][28] = {
-// 0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7 and don't touch this line :(
+  // 0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7 and don't touch this line :(
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  //0
   {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},  //1
   {0, 2, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2, 0},  //2
@@ -252,7 +252,7 @@ void levelup()
 {
   game.chase = 0;
   game.hunt = 0;
-  game.scater = 168
+  game.scater = 168;
   game.pacgum = 0;
   game.level = game.level + 1;
   char str[42];
@@ -299,7 +299,7 @@ void restart()
   //game.status = 0;
   game.chase = 0;
   game.hunt = 0;
-  game.scater = 168
+  game.scater = 168;
   game.pacgum = 0;
   respawn();
   game.live = 3;
@@ -399,7 +399,7 @@ void is_pac_man_dead()
       if (X == XP && Y == YP)
       {
         boo = 3;
-  ghost = game.pinky;
+        ghost = game.pinky;
       }
       else
       {
@@ -409,7 +409,7 @@ void is_pac_man_dead()
         if (X == XC && Y == YC)
         {
           boo = 4;
-	  ghost = game.clyde;
+          ghost = game.clyde;
         }
       }
     }
@@ -501,8 +501,8 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat, Y_mat + 1, &x1, &y1);
       *x = CLAMP(*x + speed, 0, x1 - 22);
-      
-    
+
+
     }
     else
     {
@@ -517,23 +517,23 @@ void move_entity(int *x, int *y, char dir, int speed)
   pixel_To_MatCoord(*x, *y, &X, &Y);
 
   if((map[X][Y]==42 || map[X][Y]==44)&& dir == 'G')
+  {
+    //printf("tile value = %i in coord %i %i\n",map[X][Y],X,Y);
+    matCoord_To_Pixel(X,27,&x1,&y1);
+    *x = x1;
+    *y = y1;
+  }
+  else
+  {
+    if((map[X][Y]==43 || map[X][Y]==45)&& dir == 'D')
     {
       //printf("tile value = %i in coord %i %i\n",map[X][Y],X,Y);
-      matCoord_To_Pixel(X,27,&x1,&y1);
+      matCoord_To_Pixel(X,0,&x1,&y1);
       *x = x1;
       *y = y1;
     }
-  else
-    {
-      if((map[X][Y]==43 || map[X][Y]==45)&& dir == 'D')
-	{
-	  //printf("tile value = %i in coord %i %i\n",map[X][Y],X,Y);
-	  matCoord_To_Pixel(X,0,&x1,&y1);
-	  *x = x1;
-	  *y = y1;
-	}
-    }
-  
+  }
+
 }
 
 // execute the pathfinding function for each ghost with parameters
@@ -749,67 +749,67 @@ void define_scater_mode(Player *pl)
   pixel_To_MatCoord(pl->x, pl->y, &XB, &YB);
   //printf("dir = %c \n",pl->dir);
 
-  
+
   if(pl->list[pl->n] == XB*28 + YB)
-    {
-      //printf("changed from %i\n",pl->list[pl->n]);
-      //change the coord destination to the next point in the list
-      pl->n= pl->n + 1;
-      //printf("going to %i\n",pl->list[pl->n]);
-    }
-  
+  {
+    //printf("changed from %i\n",pl->list[pl->n]);
+    //change the coord destination to the next point in the list
+    pl->n= pl->n + 1;
+    //printf("going to %i\n",pl->list[pl->n]);
+  }
+
   if(game.blinky.n > 3)
-	{
-	  game.blinky.n = 0;
-	}
-      if(game.clyde.n > 4)
-	{
-	  game.clyde.n = 0;
-	}
-      if(game.inky.n > 4)
-	{
-	  game.inky.n = 0;
-	}
-      if(game.pinky.n > 3)
-	{
-	  game.pinky.n = 0;
-	}
-      
-  
-  
+  {
+    game.blinky.n = 0;
+  }
+  if(game.clyde.n > 4)
+  {
+    game.clyde.n = 0;
+  }
+  if(game.inky.n > 4)
+  {
+    game.inky.n = 0;
+  }
+  if(game.pinky.n > 3)
+  {
+    game.pinky.n = 0;
+  }
+
+
+
   if(pl->dir == 'N')
-    {
-     
-      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +28);
-      
-    }
+  {
+
+    pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +28);
+
+  }
   else
+  {
+    if(pl->dir == 'S')
     {
-      if(pl->dir == 'S')
-	{
-	
-	  pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB - 28);
-	
-	}
-      else
-	{
-	  if(pl->dir =='G')
-	    {
-	    
-	      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +1);
-	      
-	    }
-	    else
-	      {
-	
-		pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  -1);
-	
-	      }
-	}
+
+      pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB - 28);
+
     }
-  
-  
-  
+    else
+    {
+      if(pl->dir =='G')
+      {
+
+        pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB +1);
+
+      }
+      else
+      {
+
+        pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],map, XB * 28 + YB  -1);
+
+      }
+    }
+  }
+
+
+
 }
 
 gboolean loop()
@@ -832,39 +832,39 @@ gboolean loop()
     if (game.chase == 0 || (game.chase < 30 && game.chase % 2 == 0))
     {
       game.pac_man.color = 'y';
-      
+
     }
     else
       game.pac_man.color = 'b';
 
     if(game.chase == 0)
-      {
-	game.combo = 200;
-	game.blinky.eat = 0;
-	game.inky.eat = 0;
-	game.pinky.eat = 0;
-	game.clyde.eat = 0;
-      }
+    {
+      game.combo = 200;
+      game.blinky.eat = 0;
+      game.inky.eat = 0;
+      game.pinky.eat = 0;
+      game.clyde.eat = 0;
+    }
   }
   if(game.chase == 0)
+  {
+    if(game.hunt>0)
     {
-      if(game.hunt>0)
-	{
-	  game.hunt = game.hunt - 1;
-	  if(game.hunt == 0)
-	    {
-	      game.scater = 168;
-	    }
-	}
-      if(game.scater>0)
-	{
-	  game.scater = game.scater - 1;
-	  if(game.scater == 0)
-	    {
-	      game.hunt = 480;//set time to 480 for 2
-	    }
-	}
+      game.hunt = game.hunt - 1;
+      if(game.hunt == 0)
+      {
+        game.scater = 168;
+      }
     }
+    if(game.scater>0)
+    {
+      game.scater = game.scater - 1;
+      if(game.scater == 0)
+      {
+        game.hunt = 480;//set time to 480 for 2
+      }
+    }
+  }
   request_move(Call_Neural_Network(&game));
   request_move(game.pac_man.reqdir);
   int xprevpac =game.pac_man.x;
@@ -884,49 +884,49 @@ gboolean loop()
      pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
 
   //print current coords
-     
+
   printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
   X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
   X,game.pac_man.x,Y,game.pac_man.y);
   printf("previous_dir: %c\n",game.blinky.dir);
-  */
+   */
   if(game.chase>0)
-    {
-      //chase mode 
-      randome_dir(&game.blinky);
-      randome_dir(&game.clyde);
-      randome_dir(&game.inky);
-      randome_dir(&game.pinky);
-    }
+  {
+    //chase mode 
+    randome_dir(&game.blinky);
+    randome_dir(&game.clyde);
+    randome_dir(&game.inky);
+    randome_dir(&game.pinky);
+  }
   if (game.hunt > 0 && game.chase ==0) //hunt mode
-    {
-      //----------------------------BLINKY DIRECTION---------------------------------
-      define_direction(&game.blinky, 'b');
+  {
+    //----------------------------BLINKY DIRECTION---------------------------------
+    define_direction(&game.blinky, 'b');
 
-      //---------------------------CLYDE DIRECTION-----------------------------------
-      define_direction(&game.clyde, 'c');
-    
-      //---------------------------INKY DIRECTION------------------------------------
+    //---------------------------CLYDE DIRECTION-----------------------------------
+    define_direction(&game.clyde, 'c');
 
-      define_direction(&game.inky, 'i');
-      //---------------------------PINKY DIRECTION-----------------------------------
+    //---------------------------INKY DIRECTION------------------------------------
 
-      define_direction(&game.pinky, 'p');
-      //-----------------------------END-------------------------------------------
-    }
+    define_direction(&game.inky, 'i');
+    //---------------------------PINKY DIRECTION-----------------------------------
+
+    define_direction(&game.pinky, 'p');
+    //-----------------------------END-------------------------------------------
+  }
   if(game.scater > 0 && game.chase == 0)
-    {
-    
-      define_scater_mode(&game.blinky);
-      
-      define_scater_mode(&game.clyde);
-     
-      define_scater_mode(&game.inky);
-     
-      define_scater_mode(&game.pinky);
+  {
 
-      
-    }
+    define_scater_mode(&game.blinky);
+
+    define_scater_mode(&game.clyde);
+
+    define_scater_mode(&game.inky);
+
+    define_scater_mode(&game.pinky);
+
+
+  }
 
   move_entity(&game.blinky.x, &game.blinky.y, game.blinky.dir, ghost_speed);
   if(game.pacgum / game.level > 5)

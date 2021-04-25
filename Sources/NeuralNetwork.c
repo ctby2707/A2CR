@@ -169,7 +169,13 @@ char execute_network(struct Network *network, double *inputs)
     index = 2;
   if(network->input[nb_total_neuron+index] < network->input[nb_total_neuron+3])
     index = 3;
-
+//----------DEBUGGING FUNCTION---------------
+  /*printf("index = %d\n",index);
+  printf("N : %f\n",network->input[nb_total_neuron]);
+  printf("S : %f\n",network->input[nb_total_neuron+1]);
+  printf("G : %f\n",network->input[nb_total_neuron+2]);
+  printf("D : %f\n",network->input[nb_total_neuron+3]);
+  printf("______________________________________________\n");*/
   if(index == 0)
     return 'N';
   if(index == 1)
