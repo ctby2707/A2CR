@@ -9,11 +9,6 @@
 #include "pac-man.h"
 #include "NeuralNetworks_Detections.h"
 
-#define NB_INPUT 17
-#define NB_NEURON_LAYER_1 6
-#define NB_NEURON_LAYER_2 6
-#define NB_NEURON_LAYER_3 4
-
 #define INTERVALLE 0.1
 #define DIST 5
 
