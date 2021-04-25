@@ -8,6 +8,7 @@
 #define NB_NEURON_LAYER_1 6
 #define NB_NEURON_LAYER_2 6
 #define NB_NEURON_LAYER_3 4
+#define NB_CHILDREN_CHOOSE 2
 
 void generate_random_generation(int nb_child, Game *game, int type)
 {
@@ -47,7 +48,7 @@ void save_generation(int nb_child, Game *game)
 
   for(size_t i = 0; i < nb_child; i++)
   {
-    if(nb_choosen == nb_child/2)
+    if(nb_choosen == NB_CHILDREN_CHOOSE)
       break;
     for(size_t j = 0; j < nb_child; j++)
     {
@@ -64,20 +65,16 @@ void save_generation(int nb_child, Game *game)
 
 void generate_generation(int nb_child, Game *game)
 {
-  int file = -1;
+  int file = 0;
   for(size_t i = 0; i < nb_child; i++)
   {
-    if(i/2 != file)
-    {
-      file = i/2;
-      load_Newtwork(&game->AI[i], file);
-    }
-    else
-    {
-      load_Newtwork(&game->AI[i], file);
-      adjust_Network(&game->AI[i]);
-    }
+    if (file == NB_CHILDREN_CHOOSE)
+      file = 0;
+    load_Newtwork(&game->AI[i], file);
+    file++;
   }
+  for(size_t i = NB_CHILDREN_CHOOSE; i<nb_child;i++)
+    adjust_Network(&game->AI[i]);
 }
 
 void swap(int *xp, int *yp)

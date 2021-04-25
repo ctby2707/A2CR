@@ -33,7 +33,7 @@ char Call_Neural_Network(Game *game)
     input[4] = find_pac_gum(game->map, X*28+Y, X*28+Y-28, DIST, 2);//search pac-gum
     input[8] = find_pac_gum(game->map, X*28+Y, X*28+Y-28, DIST, 3);//super pac-gum
     input[12] = find_ghost(game->map, X*28+Y, X*28+Y-28, DIST, Xb*28+Yb,
-                          Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+        Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
   }
   else
   {
@@ -48,7 +48,7 @@ char Call_Neural_Network(Game *game)
     input[5] = find_pac_gum(game->map, X*28+Y, X*28+Y+28, DIST, 2);
     input[9] = find_pac_gum(game->map, X*28+Y, X*28+Y+28, DIST, 3);
     input[13] = find_ghost(game->map, X*28+Y, X*28+Y+28, DIST, Xb*28+Yb,
-                          Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+        Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
   }
   else
   {
@@ -63,7 +63,7 @@ char Call_Neural_Network(Game *game)
     input[6] = find_pac_gum(game->map, X*28+Y, X*28+Y-1, DIST, 2);
     input[10] = find_pac_gum(game->map, X*28+Y, X*28+Y-1, DIST, 3);
     input[14] = find_ghost(game->map, X*28+Y, X*28+Y-1, DIST, Xb*28+Yb,
-                          Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+        Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
   }
   else
   {
@@ -78,7 +78,7 @@ char Call_Neural_Network(Game *game)
     input[7] = find_pac_gum(game->map, X*28+Y, X*28+Y+1, DIST, 2);
     input[11] = find_pac_gum(game->map, X*28+Y, X*28+Y+1, DIST, 3);
     input[15] = find_ghost(game->map, X*28+Y, X*28+Y+1, DIST, Xb*28+Yb,
-                          Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+        Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
   }
   else
   {
@@ -169,13 +169,13 @@ char execute_network(struct Network *network, double *inputs)
     index = 2;
   if(network->input[nb_total_neuron+index] < network->input[nb_total_neuron+3])
     index = 3;
-//----------DEBUGGING FUNCTION---------------
+  //----------DEBUGGING FUNCTION---------------
   /*printf("index = %d\n",index);
-  printf("N : %f\n",network->input[nb_total_neuron]);
-  printf("S : %f\n",network->input[nb_total_neuron+1]);
-  printf("G : %f\n",network->input[nb_total_neuron+2]);
-  printf("D : %f\n",network->input[nb_total_neuron+3]);
-  printf("______________________________________________\n");*/
+    printf("N : %f\n",network->input[nb_total_neuron]);
+    printf("S : %f\n",network->input[nb_total_neuron+1]);
+    printf("G : %f\n",network->input[nb_total_neuron+2]);
+    printf("D : %f\n",network->input[nb_total_neuron+3]);
+    printf("______________________________________________\n");*/
   if(index == 0)
     return 'N';
   if(index == 1)
@@ -236,7 +236,7 @@ void save_Network(struct Network *network, int child)
   for(size_t i = 1; i < network->nb_layer; i++)
   {
     size_weight_list = size_weight_list + (network->nb_neuron_layer[i-1] *
-                                            network->nb_neuron_layer[i]);
+        network->nb_neuron_layer[i]);
   }//calculate the size of the weight list
   char string1[] = "NeuralData/weights0.txt";
   char string2[] = "NeuralData/biasWeights0.txt";
@@ -247,7 +247,7 @@ void save_Network(struct Network *network, int child)
 
   savefile(string1, network->weights, size_weight_list);
   savefile(string2, network->biasWeights,
-          nb_total_neuron-network->nb_neuron_layer[0]);
+      nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
 void load_Newtwork(struct Network *network, int child)
@@ -262,7 +262,7 @@ void load_Newtwork(struct Network *network, int child)
   for(size_t i = 1; i < network->nb_layer; i++)
   {
     size_weight_list = size_weight_list + (network->nb_neuron_layer[i-1] *
-                                            network->nb_neuron_layer[i]);
+        network->nb_neuron_layer[i]);
   }//calculate the size of the weight list
   char string1[] = "NeuralData/weights0.txt";
   char string2[] = "NeuralData/biasWeights0.txt";
@@ -273,7 +273,7 @@ void load_Newtwork(struct Network *network, int child)
 
   loadfile(string1, network->weights, size_weight_list);
   loadfile(string2, network->biasWeights,
-          nb_total_neuron-network->nb_neuron_layer[0]);
+      nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
 void adjust_Network(struct Network *network)
@@ -289,8 +289,8 @@ void adjust_Network(struct Network *network)
     nb_total_neuron = nb_total_neuron + network->nb_neuron_layer[i];
   }//calculate the size of the biasWeight list
 
-  weight_set(network->biasWeights, INTERVALLE, nb_total_neuron);
   weight_set(network->weights, INTERVALLE, size_weight_list);
+  weight_set(network->biasWeights, INTERVALLE, nb_total_neuron);
 }
 
 void weight_set(double *weight, double x, size_t size_tab)
