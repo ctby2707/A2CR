@@ -8,7 +8,10 @@
 #include <gobject/gvaluecollector.h>
 #include "GTK.h"
 #include "pac-man.h"
+#include <math.h>
+
 int main()
 {
+  srand(time(NULL));
   return launchgtk();
 }

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "neuron.h"
+#include "pac-man.h"
 
 struct Network {
   int nb_layer;
@@ -14,11 +15,15 @@ struct Network {
   double *biasWeights;
 };
 
-struct Network *init(int nb_layer, int *nb_neuron);
+char Call_Neural_Network(Game *game);
+struct Network init(int nb_layer, int *nb_neuron);
 char execute_network(struct Network *network, double *inputs);
 void destroy_network(struct Network *network);
 void randomizeNetwork(struct Network *network);
-void save_Network(struct Network *network);
+void save_Network(struct Network *network, int child);
+void load_Newtwork(struct Network *network, int child);
+void weight_set(double *weight, double x, size_t size_tab);
+void adjust_Network(struct Network *network);
 
 #endif
 

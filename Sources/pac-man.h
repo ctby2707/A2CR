@@ -39,6 +39,11 @@ typedef struct Game
   int scater;
   int open;
   int combo;
+  int isFirstGame;
+  struct Network *AI;
+  int generation;
+  int index;
+  int *scoreAI;
   Pac_Man pac_man;
   Player blinky;
   Player inky;

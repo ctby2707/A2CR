@@ -4,6 +4,10 @@
 #include "pac-man.h"
 #include "GTK.h"
 #include "ghost.h"
+#include "NeuralNetworks_manager.h"
+#include "NeuralNetwork.h"
+#define NB_CHILD 10
+#define RANDOM_GEN 0
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
@@ -78,6 +82,8 @@ int list_blinky[4] = {133,138,54,49};
 
 int list_pinky[4] = {118,113,29,34};
 
+int ScoreBot = 0;
+
 Game game =
 {
   .status = 0, //status 0 = stopped, status 1 = playing
@@ -94,6 +100,11 @@ Game game =
   .scater = 168,//set time 168 for 7 sec
   .open = 0,
   .combo = 200,
+  .isFirstGame = 1,
+  .AI = NULL,
+  .index = 0,
+  .generation = 0,
+  .scoreAI = NULL,
   .pac_man =
   {
     .x = 307,
@@ -234,7 +245,7 @@ void respawn()
   game.pinky.x = 318;
   game.pinky.y = 311;
 
-  sleep(2);
+  //sleep(2);
 }
 
 void levelup()
@@ -267,7 +278,23 @@ void levelup()
 
 void restart()
 {
-  game.status = 0;
+  //-------------AI part--------------------
+  game.scoreAI[game.index] = game.score + ScoreBot;
+  printf("Score : %i\n",game.scoreAI[game.index]);
+  printf("--------------------\n");
+  game.index++;
+  if(game.index == NB_CHILD)
+  {
+    new_generation(NB_CHILD,&game);
+    game.index = 0;
+    game.generation++;
+  }
+  printf("--------------------\n");
+  printf("Generation : %i\n",game.generation);
+  printf("Child : %i\n",game.index);
+  ScoreBot = 0;
+  //----------------------------------------
+  //game.status = 0;
   respawn();
   game.live = 3;
   char tmp[42];
@@ -298,7 +325,7 @@ void restart()
     }
   }
   draw(0, 0, 637, 760);
-  on_Pause_clicked();
+  //on_Pause_clicked();
 }
 
 void ghost_kill(int n)
@@ -366,7 +393,7 @@ void is_pac_man_dead()
       if (X == XP && Y == YP)
       {
         boo = 3;
-	ghost = game.pinky;
+  ghost = game.pinky;
       }
       else
       {
@@ -442,7 +469,6 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat + 1, Y_mat, &x1, &y1);
       *y = CLAMP(*y + speed, 0, y1 - 22);
-      
     }
     else
     {
@@ -456,7 +482,6 @@ void move_entity(int *x, int *y, char dir, int speed)
       int x1, y1;
       matCoord_To_Pixel(X_mat, Y_mat - 1, &x1, &y1);
       *x = CLAMP(*x - speed, x1 + 22, 800);
-      
     }
     else
     {
@@ -783,6 +808,14 @@ void define_scater_mode(Player *pl)
 
 gboolean loop()
 {
+  if(game.isFirstGame == 1)
+  {
+    generate_random_generation(NB_CHILD, &game, RANDOM_GEN);
+    game.isFirstGame = 0;
+    printf("--------------------\n");
+    printf("Generation : %i\n",game.generation);
+    printf("Child : %i\n",game.index);
+  }
   if (game.status == 0) //break loop if game is in pause status
     return TRUE;
   if (game.pacgum >= 258) //258 = max pac gum
@@ -826,10 +859,15 @@ gboolean loop()
 	    }
 	}
     }
-  
+  request_move(Call_Neural_Network(&game));
   request_move(game.pac_man.reqdir);
+  int xprevpac =game.pac_man.x;
+  int yprevpac =game.pac_man.y;
   move_entity(&game.pac_man.x, &game.pac_man.y, game.pac_man.dir, pac_man_speed); //pac-man
-  
+  if(game.pac_man.y != yprevpac || game.pac_man.x != xprevpac)
+  {
+    ScoreBot++;
+  }
   //---------------------------------GIVE INFOS----------------------------------
   int X, Y;
   pixel_To_MatCoord(game.pac_man.x, game.pac_man.y, &X, &Y);
@@ -922,3 +960,4 @@ gboolean loop()
   //------------------------
   return TRUE;
 }
+

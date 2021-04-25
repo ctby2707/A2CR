@@ -45,8 +45,8 @@ int launchgtk()
   g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
   g_signal_connect(area, "draw", G_CALLBACK(on_draw), get_game());
-  g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
-  g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
+  //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
+  //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
   //gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
   //gtk_overlay_add_overlay(overlay,image);
@@ -64,7 +64,7 @@ void on_Start_clicked()
   gtk_widget_set_sensitive(Start, FALSE);
   if (alreadystarted == 0)
   {
-    g_timeout_add(41, loop, NULL);
+    g_timeout_add(10, loop, NULL);
     change_game_status(1);
     alreadystarted = 1;
   }
@@ -279,7 +279,8 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 }
 //--------------Input Functions----------------------------------------------
 
-gboolean is_active = FALSE;
+/*gboolean is_active = FALSE; INPUT FUNCTIONS KEY
+
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
   if (!is_active)
@@ -300,7 +301,7 @@ gboolean on_key_release(GtkWidget *widget, GdkEventKey *event, gpointer user_dat
 {
   is_active = FALSE;
   return TRUE;
-}
+}*/
 
 //--------------Conversion Functions------------------------------------------
 void matCoord_To_Pixel(int x, int y, int *X, int *Y)
