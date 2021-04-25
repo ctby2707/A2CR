@@ -958,7 +958,7 @@ gboolean loop()
 
   //----------DEAD or ALIVE
   is_pac_man_dead();
-  if (game.live == -1)
+  if (game.live == 0)
     restart();
 
   //draw(game.pac_man.x - pac_man_speed, game.pac_man.y - pac_man_speed, 22 +
