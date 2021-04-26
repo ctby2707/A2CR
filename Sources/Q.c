@@ -79,7 +79,7 @@ void adjust_Q_tab(int reward)
     Q_tab[state*4+action_choosen]);
   if(time_s == 1000)
   {
-    savefile ("NeuralData/Q_tab.txt", Q_tab, 868*4);
+    //savefile ("NeuralData/Q_tab.txt", Q_tab, 868*4);
     time_s = 0;
   }
 }
