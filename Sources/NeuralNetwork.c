@@ -9,7 +9,7 @@
 #include "pac-man.h"
 #include "NeuralNetworks_Detections.h"
 
-#define INTERVALLE 0.1
+#define INTERVALLE 0.001
 #define DIST 5
 
 char Call_Neural_Network(Game *game)

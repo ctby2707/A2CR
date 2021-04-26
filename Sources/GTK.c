@@ -114,7 +114,7 @@ void change_color_pac_man(char color)
 gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
   crg = cr;
-  Game *game = (Game *)user_data;
+  Game *game = get_game();
   int *map = game->map;
   int *pac_man_open;
   int *ghost_pixel_art = game->ghost_pixel_art;

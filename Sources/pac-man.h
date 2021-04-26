@@ -17,6 +17,8 @@ typedef struct Pac_Man
 {
   int x;
   int y;
+  int X;
+  int Y;
   char dir;
   char reqdir;
   char color;
@@ -31,6 +33,7 @@ typedef struct Game
   int *pac_man_closed;
   int *ghost_pixel_art;
   int score;
+  int prevScore;
   int live;
   int level;
   int pacgum;
@@ -51,7 +54,8 @@ typedef struct Game
   Player pinky;
 } Game;
 
-void *get_game();
+void init_game();
+Game *get_game();
 void change_game_status(int status);
 void randome_dir(Player *pl);
 void request_move(char dire);

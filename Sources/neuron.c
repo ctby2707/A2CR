@@ -3,19 +3,16 @@
 #include "sigmoid.h"
 #include "neuron.h"
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+
 double output(struct Neuron N)
 {
-  double forsig = 0;
-  double *in = N.input;
-  double *we = N.weight;
+  double somme = 0;
   for (long i = 0; i < N.size; i++)
   {
-    forsig += *in * *we;
-    in++;
-    we++;
+    somme += N.input[i] * N.weight[i];
   }
-  forsig += *N.biasWeight;
-  double out = sigmoid(forsig);
-  return out;
+  somme  += *N.biasWeight;
+  return MAX(0,somme);
 }
 

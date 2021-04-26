@@ -9,9 +9,11 @@
 #include "GTK.h"
 #include "pac-man.h"
 #include <math.h>
-
+#include "Q.h"
 int main()
 {
+  init_Qlearning();
+  init_game();
   srand(time(NULL));
   return launchgtk();
 }
