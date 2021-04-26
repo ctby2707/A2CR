@@ -247,7 +247,7 @@ void save_Network(struct Network *network, int child)
 
   //savefile(string1, network->weights, size_weight_list);
   //savefile(string2, network->biasWeights,
-      nb_total_neuron-network->nb_neuron_layer[0]);
+  //    nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
 void load_Newtwork(struct Network *network, int child)
