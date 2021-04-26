@@ -245,8 +245,8 @@ void save_Network(struct Network *network, int child)
   string1[18] = nb[0];
   string2[22] = nb[0];
 
-  savefile(string1, network->weights, size_weight_list);
-  savefile(string2, network->biasWeights,
+  //savefile(string1, network->weights, size_weight_list);
+  //savefile(string2, network->biasWeights,
       nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
