@@ -237,16 +237,16 @@ void save_Network(struct Network *network, int child)
     size_weight_list = size_weight_list + (network->nb_neuron_layer[i-1] *
         network->nb_neuron_layer[i]);
   }//calculate the size of the weight list
-  char string1[] = "NeuralData/weights0.txt";
-  char string2[] = "NeuralData/biasWeights0.txt";
+  char string1[] = "Data/NeuralData/weights0.txt";
+  char string2[] = "Data/NeuralData/biasWeights0.txt";
   char nb[] = "0";
   sprintf(nb, "%d", child);
-  string1[18] = nb[0];
-  string2[22] = nb[0];
+  string1[23] = nb[0];
+  string2[27] = nb[0];
 
-  //savefile(string1, network->weights, size_weight_list);
-  //savefile(string2, network->biasWeights,
-  //    nb_total_neuron-network->nb_neuron_layer[0]);
+  savefile(string1, network->weights, size_weight_list);
+  savefile(string2, network->biasWeights,
+      nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
 void load_Newtwork(struct Network *network, int child)
@@ -263,12 +263,12 @@ void load_Newtwork(struct Network *network, int child)
     size_weight_list = size_weight_list + (network->nb_neuron_layer[i-1] *
         network->nb_neuron_layer[i]);
   }//calculate the size of the weight list
-  char string1[] = "NeuralData/weights0.txt";
-  char string2[] = "NeuralData/biasWeights0.txt";
+  char string1[] = "Data/NeuralData/weights0.txt";
+  char string2[] = "Data/NeuralData/biasWeights0.txt";
   char nb[] = "0";
   sprintf(nb, "%d", child);
-  string1[18] = nb[0];
-  string2[22] = nb[0];
+  string1[23] = nb[0];
+  string2[27] = nb[0];
 
   loadfile(string1, network->weights, size_weight_list);
   loadfile(string2, network->biasWeights,

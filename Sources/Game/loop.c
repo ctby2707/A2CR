@@ -17,10 +17,12 @@
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
 
+void set_score(Game *game);
+
 gboolean loop()
 {
   Game *game = get_game();
-  if(game->isFirstGame == 1)
+  if(game->isFirstGame == 1) // first start of the game
   {
     generate_random_generation(NB_CHILD, game, RANDOM_GEN);
     game->isFirstGame = 0;
@@ -29,10 +31,13 @@ gboolean loop()
     printf("Child : %i\n",game->index);
     request_move(game, Call_Neural_Network(game));
   }
+
   if (game->status == 0) //break loop if game is in pause status
     return TRUE;
+
   if (game->pacgum >= 258) //258 = max pac gum
-    levelup(game);
+    levelup(game);// pac-man has finished the level
+
   if (game->chase > 0)
   {
     game->chase = game->chase - 1;
@@ -72,7 +77,6 @@ gboolean loop()
       }
     }
   }
-  request_move(game, Call_Neural_Network(game));
 
   /*Q learning
   if(IS_Q_ACTIVATED == 1)
@@ -85,27 +89,12 @@ gboolean loop()
     //printf("%c\n",dir);
     request_move(dir);
   }*/
-
-
-
+  request_move(game, Call_Neural_Network(game)); // call the neural Network
   request_move(game, game->pac_man.reqdir);
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
-  //---------------------------------GIVE INFOS----------------------------------
-  int X, Y;
-  pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
-  /*
-     printf("\n---------------------NEW LOOP------------------------------\n");
-     int X_mat_blinky;
-     int Y_mat_blinky;
-     pixel_To_MatCoord(game.blinky.x, game.blinky.y, &X_mat_blinky, &Y_mat_blinky);
 
-  //print current coords
 
-  printf("blinky coord:\n  x :%i(%i);\n  y:%i(%i);\npac man coord\n  x:%i(%i);\n  y:%i(%i);\n",
-  X_mat_blinky,game.blinky.x, Y_mat_blinky, game.blinky.y,
-  X,game.pac_man.x,Y,game.pac_man.y);
-  printf("previous_dir: %c\n",game.blinky.dir);
-   */
+  //----------------------------GHOSTS MANAGEMENT------------------------------
   if(game->chase>0)
   {
     //chase mode 
@@ -114,34 +103,22 @@ gboolean loop()
     randome_dir(game, &game->inky);
     randome_dir(game, &game->pinky);
   }
+
   if (game->hunt > 0 && game->chase ==0 && GHOSTS_ACTIVATED == 1) //hunt mode
   {
-    //----------------------------BLINKY DIRECTION---------------------------------
     define_direction(&game->blinky, 'b', game);
-
-    //---------------------------CLYDE DIRECTION-----------------------------------
     define_direction(&game->clyde, 'c', game);
-
-    //---------------------------INKY DIRECTION------------------------------------
-
     define_direction(&game->inky, 'i', game);
-    //---------------------------PINKY DIRECTION-----------------------------------
-
     define_direction(&game->pinky, 'p', game);
-    //-----------------------------END-------------------------------------------
   }
+
   if(game->scater > 0 && game->chase == 0)
   {
 
     define_scater_mode(game, &game->blinky);
-
     define_scater_mode(game, &game->clyde);
-
     define_scater_mode(game, &game->inky);
-
     define_scater_mode(game, &game->pinky);
-
-
   }
   if(GHOSTS_ACTIVATED == 1)
   {
@@ -154,8 +131,22 @@ gboolean loop()
       move_entity(game, &game->pinky.x, &game->pinky.y, game->pinky.dir, ghost_speed);
   }
 
+  //Score management
+  set_score(game);
+
+  //Lives pac-man management
+  is_pac_man_dead(game);
+  if (game->live == 0)
+    restart(game, NB_CHILD);
+
   draw(0, 0, 637, 760);
-  //---------------SCORE
+  return TRUE;
+}
+
+void set_score(Game *game)
+{
+  int X, Y;
+  pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   if (game->map[X*28+Y] == 2)
   {
     game->pacgum = game->pacgum + 1;
@@ -173,14 +164,4 @@ gboolean loop()
     game->chase = 170;
     game->map[X*28+Y] = 7;
   }
-
-  //----------DEAD or ALIVE
-  is_pac_man_dead(game);
-  if (game->live == 0)
-    restart(game, NB_CHILD);
-
-  //draw(game.pac_man.x - pac_man_speed, game.pac_man.y - pac_man_speed, 22 +
-  //    pac_man_speed*2, 22 +pac_man_speed*2);
-  //------------------------
-  return TRUE;
 }
