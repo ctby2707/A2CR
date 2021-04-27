@@ -1,14 +1,14 @@
 TARGET ?= Pac-Man
 SRC_DIRS ?= ./Sources
 
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+SRCS := $(shell find $(SRC_DIRS) -name *.c)
 OBJS := $(addsuffix .o,$(basename $(SRCS)))
 DEPS := $(OBJS:.o=.d)
 
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP `pkg-config --cflags gtk+-3.0`
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP `pkg-config --cflags gtk+-3.0` -lm -g
 LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g -lm
 
 $(TARGET): $(OBJS)
@@ -26,6 +26,6 @@ help:
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGET) $(OBJS) $(DEPS)
+	$(RM) $(TARGET) $(OBJS) $(DEPS) $(shell find $(SRC_DIRS) -name *.gch)
 
 -include $(DEPS)

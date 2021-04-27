@@ -1,6 +1,5 @@
 #include "NeuralNetwork.h"
 #include <stdlib.h>
-#include "pac-man.h"
 #include "NeuralNetworks_manager.h"
 #include <math.h>
 

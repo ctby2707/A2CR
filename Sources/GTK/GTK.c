@@ -2,7 +2,10 @@
 #include <string.h>
 #include <unistd.h>
 #include "GTK.h"
-#include "pac-man.h"
+#include "game_init.h"
+#include "game_events.h"
+#include "loop.h"
+#include "main.h"
 
 //GTK global Variable
 
@@ -24,7 +27,7 @@ int launchgtk()
 {
   gtk_init(NULL, NULL);
 
-  builder = gtk_builder_new_from_file("Sources/pac-man_gui.glade");
+  builder = gtk_builder_new_from_file("Data/pac-man_gui.glade");
   window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
 
   //initisation of widgets
@@ -44,7 +47,7 @@ int launchgtk()
   g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
   g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-  g_signal_connect(area, "draw", G_CALLBACK(on_draw), get_game());
+  g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
   //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
   //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
@@ -60,23 +63,25 @@ int launchgtk()
 
 void on_Start_clicked()
 {
+  Game *game = get_game();
   gtk_widget_set_sensitive(Pause, TRUE);
   gtk_widget_set_sensitive(Start, FALSE);
   if (alreadystarted == 0)
   {
     g_timeout_add(10, loop, NULL);
-    change_game_status(1);
+    change_game_status(game, 1);
     alreadystarted = 1;
   }
   else
-    change_game_status(1);
+    change_game_status(game, 1);
 }
 
 void on_Pause_clicked()
 {
+  Game *game = get_game();
   gtk_widget_set_sensitive(Start, TRUE);
   gtk_widget_set_sensitive(Pause, FALSE);
-  change_game_status(0);
+  change_game_status(game, 0);
 }
 
 void set_score_label(char *score)

@@ -1,5 +1,5 @@
-#ifndef PACMAN_H
-#define PACMAN_H
+#ifndef GAME_INIT_H
+#define GAME_INIT_H
 
 #include <gtk/gtk.h>
 #include "GTK.h"
@@ -54,10 +54,6 @@ typedef struct Game
   Player pinky;
 } Game;
 
-void init_game();
-Game *get_game();
-void change_game_status(int status);
-void randome_dir(Player *pl);
-void request_move(char dire);
-gboolean loop();
+Game *init_game();
+
 #endif

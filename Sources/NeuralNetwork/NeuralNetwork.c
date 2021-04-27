@@ -6,7 +6,6 @@
 #include "neuron.h"
 #include "saverfile.h"
 #include "NeuralNetwork.h"
-#include "pac-man.h"
 #include "NeuralNetworks_Detections.h"
 
 #define INTERVALLE 0.001

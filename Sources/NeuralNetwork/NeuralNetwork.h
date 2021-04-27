@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include "neuron.h"
-#include "pac-man.h"
+#include "game_init.h"
 
 struct Network {
   int nb_layer;

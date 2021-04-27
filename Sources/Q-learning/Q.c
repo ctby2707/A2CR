@@ -1,4 +1,3 @@
-#include "ghost.h"
 #include <stdlib.h>
 #include <math.h>
 #include "saverfile.h"

@@ -7,13 +7,20 @@
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
 #include "GTK.h"
-#include "pac-man.h"
+#include "game_init.h"
 #include <math.h>
 #include "Q.h"
+
+Game *game;
+
+Game *get_game()
+{
+  return game;
+}
 int main()
 {
+  game = init_game();
   init_Qlearning();
-  init_game();
   srand(time(NULL));
   return launchgtk();
 }

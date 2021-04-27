@@ -4,31 +4,7 @@
 #include <err.h>
 #include "queue.h"
 #include "pathfinding.h"
-void print_matrix(int *M) //!!!debbuging function!!!
-{
-  //int *k=M;
-  for (int i = 0; i < 868; i++)
-  {
-    printf("%d,", M[i]);
-    if (M[i] % 100 != M[i])
-      printf(" ");
-    else
-    {
-      if (M[i] < 0)
-        printf("  ");
-      else
-      {
-        if (M[i] % 10 != M[i])
-          printf("  ");
-        else
-          printf("   ");
-      }
-    }
-    if ((i + 1) % 28 == 0 && i > 0)
-      printf("\n");
-  }
-  printf("\n\n\n");
-}
+
 int shortpath(int *map, int prev, int A, int B)
 {
   //Check conformity of parameters
@@ -42,8 +18,9 @@ int shortpath(int *map, int prev, int A, int B)
     printf("Target position is a wall (B = 0) cheh\n");
   if(A == B)
     printf("A and B are the same\n");*/
+
   if (A == B || map[B] == 0 || map[A] == 0 || B < 0 || B > 868 || A < 0 || A > 868)
-  {
+  {//error management
     if (map[A - 28] != 0)
       return -28;
     if (map[A + 28] != 0)
@@ -102,6 +79,7 @@ queue *enqueue_child(queue *q, int s, int *map, int *Vect_P)
     Vect_P[s + 1] = s;
     q = queue_push(q, s + 1);
   }
+
   //teleporters
   if(map[s] == 42 && Vect_P[307] == 0)
   {
