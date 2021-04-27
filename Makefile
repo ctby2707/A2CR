@@ -1,17 +1,31 @@
-CC=gcc
+TARGET ?= Pac-Man
+SRC_DIRS ?= ./Sources
 
-CFLAGS= -Wall  -std=c99 -g `pkg-config --cflags gtk+-3.0`
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+OBJS := $(addsuffix .o,$(basename $(SRCS)))
+DEPS := $(OBJS:.o=.d)
+
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP `pkg-config --cflags gtk+-3.0`
 LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g -lm
 
-all: Pac-Man
+$(TARGET): $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS)
 
-Pac-Man: Sources/NeuralNetwork.o Sources/NeuralNetworks_Detections.o Sources/saverfile.o Sources/sigmoid.o Sources/neuron.o Sources/NeuralNetworks_manager.o Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o Sources/Q.o
-	${CC} -o Pac-Man Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o Sources/NeuralNetwork.o Sources/NeuralNetworks_Detections.o Sources/saverfile.o Sources/sigmoid.o Sources/neuron.o Sources/NeuralNetworks_manager.o Sources/Q.o ${LDLIBS}
+help:
+	@echo "Usage: {Action}[_{Target}]"
+	@echo ""
+	@echo "if no {Target} is specify apply {Action} to all {Target}"
+	@echo ""
+	@echo "Action: "
+	@echo "- help: show this help"
+	@echo "- clean: remove all the bin and object files"
+	@echo "- : build the project"
 
 .PHONY: clean
-
 clean:
-	${RM} Sources/*.o
-	${RM} Sources/*.d
-	${RM} Pac-Man
-# END
+	$(RM) $(TARGET) $(OBJS) $(DEPS)
+
+-include $(DEPS)
