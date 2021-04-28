@@ -13,6 +13,7 @@ GtkWidget *window;
 GtkWidget *fixed1;
 GtkWidget *Start;
 GtkWidget *Pause;
+GtkWidget *Qactivate;
 GtkDrawingArea *area;
 GtkBuilder *builder;
 GtkOverlay *overlay;
@@ -36,6 +37,7 @@ int launchgtk()
   overlay = GTK_OVERLAY(gtk_overlay_new());
   Start = GTK_WIDGET(gtk_builder_get_object(builder, "Start"));
   Pause = GTK_WIDGET(gtk_builder_get_object(builder, "Pause"));
+  Qactivate = GTK_WIDGET(gtk_builder_get_object(builder, "Qactivate"));
   image = GTK_WIDGET(gtk_builder_get_object(builder, "image"));
   area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
   score_label = GTK_WIDGET(gtk_builder_get_object(builder, "score_label"));
@@ -46,6 +48,7 @@ int launchgtk()
 
   g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
   g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
+  g_signal_connect(Qactivate, "clicked", G_CALLBACK(on_Qactivate_clicked), NULL);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
   g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
   //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
@@ -82,6 +85,29 @@ void on_Pause_clicked()
   gtk_widget_set_sensitive(Start, TRUE);
   gtk_widget_set_sensitive(Pause, FALSE);
   change_game_status(game, 0);
+}
+
+void on_Qactivate_clicked()
+{
+  Game *game = get_game();
+  if(game->Qactivated == 0)
+    {
+      respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+      
+      char *label = "Disable Q learning";
+      gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+      game->Qactivated = 1;
+      
+    }
+  else
+    {
+      respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+      
+      char *label = "Enable Q learning";
+      gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+      game->Qactivated = 0;
+      
+    }
 }
 
 void set_score_label(char *score)

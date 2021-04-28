@@ -22,6 +22,7 @@ typedef struct Pac_Man
   char dir;
   char reqdir;
   char color;
+  int lasttile;
 
 } Pac_Man;
 
@@ -47,6 +48,7 @@ typedef struct Game
   int generation;
   int index;
   int *scoreAI;
+  int Qactivated;
   Pac_Man pac_man;
   Player blinky;
   Player inky;

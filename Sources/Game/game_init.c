@@ -85,6 +85,7 @@ Game *init_game(){
   game->pac_man.dir = 'N';
   game->pac_man.reqdir = 'N';
   game->pac_man.color = 'y';
+  game->pac_man.lasttile = 464;
   game->status = 0; //status 0 = stopped, status 1 = playing
   game->map = (int *)map;
   game->pac_man_open = (int *)pac_man_open;
@@ -105,6 +106,7 @@ Game *init_game(){
   game->index = 0;
   game->generation = 0;
   game->scoreAI = NULL;
+  game->Qactivated = 0;
   game->blinky = *blinky;
   game->blinky.x = 318; //13
   game->blinky.y = 311; //14

@@ -10,6 +10,7 @@
 int launchgtk();
 void on_Start_clicked();
 void on_Pause_clicked();
+void on_Qactivate_clicked();
 void set_score_label(char *score);
 void set_live_label(char *live);
 void set_level_label(char *level);

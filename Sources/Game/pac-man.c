@@ -74,10 +74,10 @@ void request_move(Game *game, char dir)
   int x;
   int y;
   matCoord_To_Pixel(X,Y,&x,&y);
-  if ((dir == 'N' && game->map[(X - 1)*28+Y] != 0 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'S' && game->map[(X + 1)*28+Y] != 0 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'G' && game->map[X*28+Y - 1] != 0 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
-      (dir == 'D' && game->map[X*28+Y + 1] != 0 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
+  if ((dir == 'N' && game->map[(X - 1)*28+Y] != 0 && dir == 'N' && game->map[(X - 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'S' && game->map[(X + 1)*28+Y] != 0 && dir == 'S' && game->map[(X + 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'G' && game->map[X*28+Y - 1] != 0 && dir == 'G' && game->map[X*28+Y - 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
+      (dir == 'D' && game->map[X*28+Y + 1] != 0&& dir == 'D' && game->map[X*28+Y + 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
   {
     game->pac_man.dir = dir;
     game->pac_man.reqdir = dir;
