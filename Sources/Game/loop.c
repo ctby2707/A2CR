@@ -89,7 +89,8 @@ gboolean loop()
     //printf("%c\n",dir);
     request_move(dir);
   }*/
-  request_move(game, Call_Neural_Network(game)); // call the neural Network
+  if(game->pac_man.dir == game->pac_man.reqdir)
+    request_move(game, Call_Neural_Network(game)); // call the neural Network
   request_move(game, game->pac_man.reqdir);
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
 
