@@ -15,13 +15,13 @@ void init_Qlearning()
   Q_tab = calloc(4*868,sizeof(double));
   vitesse_apprentissage = 0.85;
   facteur_actualisation = 0.99;
-  exploration = 40; // pourecntage de chance qu'il fasse une direction random
+  exploration = 80; // pourecntage de chance qu'il fasse une direction random
 }
 
 char execute_Qlearning(int cur_state)
 {
   int random = rand() % 100;
-  state = cur_state;
+  state = cur_state;//pas utilisé
   if(random < exploration)
   {
     action_choosen = rand() % 4;
@@ -46,7 +46,7 @@ char execute_Qlearning(int cur_state)
         max = Q_tab[cur_state*4+i];
       }
     }
-    action_choosen = -1;
+    action_choosen = -1;//inutile
     action_choosen = rand() % 4;
     if(index == 0)
       return 'N';
@@ -69,13 +69,13 @@ void adjust_Q_tab(int reward)
   {
     if(Q_tab[state*4+i] > max)
     {
-    max = Q_tab[state*4+i];
+      max = Q_tab[state*4+i];
     }
     time_s++;
   }
   Q_tab[state*4+action_choosen] = Q_tab[state*4+action_choosen] +
     vitesse_apprentissage*(reward +  facteur_actualisation* max -
-    Q_tab[state*4+action_choosen]);
+        Q_tab[state*4+action_choosen]);
   if(time_s == 1000)
   {
     savefile ("Data/Q_tab.txt", Q_tab, 868*4);

@@ -28,10 +28,10 @@ gboolean loop()
     game->isFirstGame = 0;
     if(game->Qactivated == 0)
     {
-    printf("--------------------\n");
-    printf("Generation : %i\n",game->generation);
-    printf("Child : %i\n",game->index);
-    request_move(game, Call_Neural_Network(game));
+      printf("--------------------\n");
+      printf("Generation : %i\n",game->generation);
+      printf("Child : %i\n",game->index);
+      request_move(game, Call_Neural_Network(game));
     }
   }
 
@@ -84,7 +84,7 @@ gboolean loop()
   int Y = game->pac_man.Y;
   if(game->Qactivated == 1)
   {//Q learning
-    
+
     adjust_Q_tab(Score);
     int X_pc, Y_pc;
     pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_pc, &Y_pc);
@@ -93,11 +93,11 @@ gboolean loop()
     else
       Score = 0;
     if(X*28+Y == game->pac_man.lasttile)
-      {
-	char dir = execute_Qlearning(X_pc*28+Y_pc);
-	if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
-	  request_move(game, dir);
-      }
+    {
+      char dir = execute_Qlearning(X_pc*28+Y_pc);
+      if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
+        request_move(game, dir);
+    }
   }
   if(game->Qactivated == 0)
     request_move(game, Call_Neural_Network(game)); // call the neural Network
