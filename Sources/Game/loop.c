@@ -12,11 +12,12 @@
 
 #define NB_CHILD 10
 #define RANDOM_GEN 1
-#define GHOSTS_ACTIVATED 1
+int Q_ACTIVATED =  1;
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
 
+int Score = 0; // Score of the Q-learning // debbuging
 void set_score(Game *game);
 
 gboolean loop()
@@ -26,10 +27,13 @@ gboolean loop()
   {
     generate_random_generation(NB_CHILD, game, RANDOM_GEN);
     game->isFirstGame = 0;
+    if(Q_ACTIVATED == 0)
+    {
     printf("--------------------\n");
     printf("Generation : %i\n",game->generation);
     printf("Child : %i\n",game->index);
     request_move(game, Call_Neural_Network(game));
+    }
   }
 
   if (game->status == 0) //break loop if game is in pause status
@@ -77,19 +81,26 @@ gboolean loop()
       }
     }
   }
-
-  /*Q learning
-  if(IS_Q_ACTIVATED == 1)
-  {
-    adjust_Q_tab(game->score-game->prevScore);
-    game->prevScore = game->score;
+  int X = game->pac_man.X;
+  int Y = game->pac_man.Y;
+  if(Q_ACTIVATED == 1 && (game->pac_man.dir == game->pac_man.reqdir ||
+                  (game->pac_man.reqdir == 'N' && game->map[(X - 1)*28+Y] == 0)||
+                  (game->pac_man.reqdir == 'S' && game->map[(X + 1)*28+Y] == 0)||
+                  (game->pac_man.reqdir == 'G' && game->map[X*28+(Y-1)] == 0)||
+                  (game->pac_man.reqdir == 'D' && game->map[X*28+(Y+1)] == 0)))
+  {//Q learning
+    adjust_Q_tab(Score);
     int X_pc, Y_pc;
     pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_pc, &Y_pc);
+    if(game->pac_man.X != X_pc || game->pac_man.Y != Y_pc)
+      Score = 1;
+    else
+      Score = 0;
     char dir = execute_Qlearning(X_pc*28+Y_pc);
-    //printf("%c\n",dir);
-    request_move(dir);
-  }*/
-  if(game->pac_man.dir == game->pac_man.reqdir)
+    printf("%c\n",dir);
+    request_move(game, dir);
+  }
+  if(Q_ACTIVATED == 0 &&  game->pac_man.dir == game->pac_man.reqdir)
     request_move(game, Call_Neural_Network(game)); // call the neural Network
   request_move(game, game->pac_man.reqdir);
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
@@ -105,7 +116,7 @@ gboolean loop()
     randome_dir(game, &game->pinky);
   }
 
-  if (game->hunt > 0 && game->chase ==0 && GHOSTS_ACTIVATED == 1) //hunt mode
+  if (game->hunt > 0 && game->chase ==0 && Q_ACTIVATED == 0) //hunt mode
   {
     define_direction(&game->blinky, 'b', game);
     define_direction(&game->clyde, 'c', game);
@@ -121,7 +132,7 @@ gboolean loop()
     define_scater_mode(game, &game->inky);
     define_scater_mode(game, &game->pinky);
   }
-  if(GHOSTS_ACTIVATED == 1)
+  if(Q_ACTIVATED == 0)
   {
     move_entity(game, &game->blinky.x, &game->blinky.y, game->blinky.dir, ghost_speed);
     if(game->pacgum / game->level > 5)
@@ -138,7 +149,7 @@ gboolean loop()
   //Lives pac-man management
   is_pac_man_dead(game);
   if (game->live == 0)
-    restart(game, NB_CHILD);
+    restart(game, NB_CHILD, Q_ACTIVATED);
 
   draw(0, 0, 637, 760);
   return TRUE;

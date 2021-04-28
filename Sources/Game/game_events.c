@@ -2,22 +2,25 @@
 #include "NeuralNetworks_manager.h"
 #include "game_events.h"
 
-void restart(Game *game, int nb_child)
+void restart(Game *game, int nb_child, int Q_activated)
 {
-  //-------------AI part--------------------
-  game->scoreAI[game->index] = game->score;
-  printf("Score : %i\n",game->scoreAI[game->index]);
-  printf("--------------------\n");
-  game->index++;
-  if(game->index == nb_child)
+  if(Q_activated == 0)
   {
-    new_generation(nb_child,game);
-    game->index = 0;
-    game->generation++;
+    //-------------AI part--------------------
+    game->scoreAI[game->index] = game->score;
+   printf("Score : %i\n",game->scoreAI[game->index]);
+    printf("--------------------\n");
+    game->index++;
+    if(game->index == nb_child)
+    {
+      new_generation(nb_child,game);
+      game->index = 0;
+      game->generation++;
+    }
+    printf("--------------------\n");
+    printf("Generation : %i\n",game->generation);
+    printf("Child : %i\n",game->index);
   }
-  printf("--------------------\n");
-  printf("Generation : %i\n",game->generation);
-  printf("Child : %i\n",game->index);
   //----------------------------------------
   //game.status = 0;
   game->chase = 0;
