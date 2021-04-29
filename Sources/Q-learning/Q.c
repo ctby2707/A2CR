@@ -14,7 +14,7 @@ int time_s = 0;
 void init_Qlearning()
 {
   Q_tab = calloc(4*868,sizeof(double));
-  //loadfile("Data/Q_tab.txt", Q_tab, 868*4);
+  loadfile("Data/Q_tab.txt", Q_tab, 868*4);
   vitesse_apprentissage = 0.85;
   facteur_actualisation = 0.99;
   exploration = 80; // pourcentage de chance qu'il fasse une direction random
@@ -26,7 +26,16 @@ char execute_Qlearning(Game *game, int cur_state)
   state = cur_state;
   if(random < exploration)
   {
-    char rest = 'N';
+    char dir = game->pac_man.dir;
+    char rest = game->pac_man.dir;
+    if (dir == 'N')
+      dir = 'S';
+    else if (dir == 'G')
+      dir = 'D';
+    else if (dir == 'S')
+      dir = 'N';
+    else if(dir =='D')
+      dir='G';
     do{
       action_choosen = rand() % 4;
       if(action_choosen == 0)
@@ -37,7 +46,7 @@ char execute_Qlearning(Game *game, int cur_state)
         rest = 'G';
       if(action_choosen == 3)
         rest = 'D';
-    }while(rest == game->pac_man.dir);
+    }while(rest == dir);
     return rest;
   }
   else

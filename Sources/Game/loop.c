@@ -96,12 +96,12 @@ gboolean loop()
     {
       char dir = execute_Qlearning(game, X_pc*28+Y_pc);
       if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
-        request_move(game, dir);
+        game->pac_man.reqdir = dir;
     }
   }
   if(game->Qactivated == 0)
     request_move(game, Call_Neural_Network(game)); // call the neural Network
-  //request_move(game, game->pac_man.reqdir);// redondant call of function
+  request_move(game, game->pac_man.reqdir);// redondant call of function
   game->pac_man.lasttile = X*28 + Y;
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
 

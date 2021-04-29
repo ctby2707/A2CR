@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "saverfile.h"
 #include <err.h>
+#include <string.h>
 
 void savefile (char* path, double* list, int size)
 {
@@ -12,9 +13,14 @@ void savefile (char* path, double* list, int size)
     char character[50];
     sprintf(character, "%lf", list[i]);
     if (character[1] == ',')
-      character[1] == '.';
+    {
+      character[1] = '.';
+    }
+    if (character[2] == ',')
+      character[2] = '.';
     fprintf(file, "%s\n", character);
   }
+
   fclose(file);
 }
 
