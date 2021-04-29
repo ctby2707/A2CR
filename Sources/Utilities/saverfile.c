@@ -11,6 +11,8 @@ void savefile (char* path, double* list, int size)
   {
     char character[50];
     sprintf(character, "%lf", list[i]);
+    if (character[1] == ',')
+      character[1] == '.';
     fprintf(file, "%s\n", character);
   }
   fclose(file);

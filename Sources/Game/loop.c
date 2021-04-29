@@ -94,7 +94,7 @@ gboolean loop()
       Score = 0;
     if(X*28+Y == game->pac_man.lasttile)
     {
-      char dir = execute_Qlearning(X_pc*28+Y_pc);
+      char dir = execute_Qlearning(game, X_pc*28+Y_pc);
       if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
         request_move(game, dir);
     }
