@@ -4,6 +4,7 @@
 
 void restart(Game *game, int nb_child, int Q_activated)
 {
+  printf("Score : %i\n",game->score);
   if(Q_activated == 0)
   {
     //-------------AI part--------------------
