@@ -68,8 +68,6 @@ char inky(int me, int blinky, int dir_pacman, int *map, int prev)
     }
   }
   int res = shortpath((int *)map, prev, me, B);
-  char NSGD(int res)
-{
   if (res == -28)
     return 'N';
   if (res == 28)
@@ -79,5 +77,4 @@ char inky(int me, int blinky, int dir_pacman, int *map, int prev)
   if (res == 1)
     return 'D';
   return 'N';
-}
 }
