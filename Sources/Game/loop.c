@@ -86,7 +86,7 @@ gboolean loop()
   if(game->Qactivated == 1)
   {//Q learning
 
-    /*adjust_Q_tab(Score);
+    adjust_Q_tab(Score);
     int X_pc, Y_pc;
     pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_pc, &Y_pc);
     if(game->pac_man.X != X_pc || game->pac_man.Y != Y_pc)
@@ -98,9 +98,10 @@ gboolean loop()
       char dir = execute_Qlearning(game, X_pc*28+Y_pc);
       if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
         game->pac_man.reqdir = dir;
-    }*/
-    request_move(game, Naif_Agent(game));
+    }
   }
+  if(game->Qactivated == 3)
+    request_move(game, Naif_Agent(game));
   if(game->Qactivated == 0)
     request_move(game, Call_Neural_Network(game)); // call the neural Network
   request_move(game, game->pac_man.reqdir);// redondant call of function
@@ -125,7 +126,7 @@ gboolean loop()
     define_scater_mode(game, &game->pinky);
   }
 
-  if (game->hunt > 0 && game->chase ==0) //&&game->Qactivated == 0) //hunt mode
+  if (game->hunt > 0 && game->chase ==0 &&game->Qactivated != 1) //hunt mode
   {
     define_direction(&game->blinky, 'b', game);
     define_direction(&game->clyde, 'c', game);
@@ -141,7 +142,7 @@ gboolean loop()
     define_scater_mode(game, &game->inky);
     define_scater_mode(game, &game->pinky);
   }
-  if(1)//game->Qactivated == 0)
+  if(game->Qactivated != 1)
   {
     move_entity(game, &game->blinky.x, &game->blinky.y, game->blinky.dir, ghost_speed);
     if(game->pacgum / game->level > 5)
