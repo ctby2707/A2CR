@@ -94,18 +94,29 @@ void on_Qactivate_clicked()
     {
       respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
       
-      char *label = "Disable Q learning";
+      char *label = "Q learning enable";
       gtk_button_set_label(GTK_BUTTON(Qactivate),label);
       game->Qactivated = 1;
       
     }
-  else
+  else 
     {
-      respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
-      
-      char *label = "Enable Q learning";
-      gtk_button_set_label(GTK_BUTTON(Qactivate),label);
-      game->Qactivated = 0;
+      if(game->Qactivated == 1)
+	{
+	  respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+	  
+	  char *label = "Agent enable";
+	  gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+	  game->Qactivated = 3;
+	}
+      else
+	{
+	  respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+	  
+	  char *label = "AI enable";
+	  gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+	  game->Qactivated = 0;
+	}
       
     }
 }
