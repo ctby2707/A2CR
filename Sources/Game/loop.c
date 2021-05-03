@@ -111,11 +111,18 @@ gboolean loop()
   //----------------------------GHOSTS MANAGEMENT------------------------------
   if(game->chase>0)
   {
-    //chase mode 
+    //chase mode
+    /*
     randome_dir(game, &game->blinky);
     randome_dir(game, &game->clyde);
     randome_dir(game, &game->inky);
     randome_dir(game, &game->pinky);
+    */
+
+    define_scater_mode(game, &game->blinky);
+    define_scater_mode(game, &game->clyde);
+    define_scater_mode(game, &game->inky);
+    define_scater_mode(game, &game->pinky);
   }
 
   if (game->hunt > 0 && game->chase ==0) //&&game->Qactivated == 0) //hunt mode
