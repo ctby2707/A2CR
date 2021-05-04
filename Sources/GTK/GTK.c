@@ -23,44 +23,55 @@ GtkWidget *live_label;
 GtkWidget *level_label;
 int alreadystarted = 0;
 cairo_t *crg;
+int No_interface = 0;//CHANGE TO DISABLE INTERFACE 0 = interface enable others is interface disabled
 
 int launchgtk()
 {
+  
   gtk_init(NULL, NULL);
+  if(No_interface == 0)
+    {
+      builder = gtk_builder_new_from_file("Data/pac-man_gui.glade");
+      window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
 
-  builder = gtk_builder_new_from_file("Data/pac-man_gui.glade");
-  window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+      //initisation of widgets
 
-  //initisation of widgets
+      fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
+      overlay = GTK_OVERLAY(gtk_overlay_new());
+      Start = GTK_WIDGET(gtk_builder_get_object(builder, "Start"));
+      Pause = GTK_WIDGET(gtk_builder_get_object(builder, "Pause"));
+      Qactivate = GTK_WIDGET(gtk_builder_get_object(builder, "Qactivate"));
+      image = GTK_WIDGET(gtk_builder_get_object(builder, "image"));
+      area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
+      score_label = GTK_WIDGET(gtk_builder_get_object(builder, "score_label"));
+      live_label = GTK_WIDGET(gtk_builder_get_object(builder, "live_label"));
+      level_label = GTK_WIDGET(gtk_builder_get_object(builder, "level_label"));
 
-  fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
-  overlay = GTK_OVERLAY(gtk_overlay_new());
-  Start = GTK_WIDGET(gtk_builder_get_object(builder, "Start"));
-  Pause = GTK_WIDGET(gtk_builder_get_object(builder, "Pause"));
-  Qactivate = GTK_WIDGET(gtk_builder_get_object(builder, "Qactivate"));
-  image = GTK_WIDGET(gtk_builder_get_object(builder, "image"));
-  area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
-  score_label = GTK_WIDGET(gtk_builder_get_object(builder, "score_label"));
-  live_label = GTK_WIDGET(gtk_builder_get_object(builder, "live_label"));
-  level_label = GTK_WIDGET(gtk_builder_get_object(builder, "level_label"));
-
-  //connect widgets to respective function
-
-  g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
-  g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
-  g_signal_connect(Qactivate, "clicked", G_CALLBACK(on_Qactivate_clicked), NULL);
-  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-  g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
-  //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
-  //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
-  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-  //gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
-  //gtk_overlay_add_overlay(overlay,image);
-  //display window and begin windows loop
-
-  gtk_widget_show(window);
-
-  gtk_main();
+      //connect widgets to respective function
+      
+      g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
+      g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
+      g_signal_connect(Qactivate, "clicked", G_CALLBACK(on_Qactivate_clicked), NULL);
+      g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+      g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
+      //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
+      //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
+      gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+      //gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
+      //gtk_overlay_add_overlay(overlay,image);
+      //display window and begin windows loop
+      
+      gtk_widget_show(window);
+      
+      gtk_main();
+    }
+  else
+    {
+      while(1)
+	{
+	  loop();
+	}
+    }
   return EXIT_SUCCESS;
 }
 
@@ -123,20 +134,24 @@ void on_Qactivate_clicked()
 
 void set_score_label(char *score)
 {
-  gtk_label_set_text(GTK_LABEL(score_label), score);
+  if(No_interface == 0)
+    gtk_label_set_text(GTK_LABEL(score_label), score);
 }
 void set_live_label(char *live)
 {
-  gtk_label_set_text(GTK_LABEL(live_label), live);
+  if(No_interface == 0)
+    gtk_label_set_text(GTK_LABEL(live_label), live);
 }
 void set_level_label(char *level)
 {
-  gtk_label_set_text(GTK_LABEL(level_label), level);
+  if(No_interface == 0)
+    gtk_label_set_text(GTK_LABEL(level_label), level);
 }
 
 void draw(int x, int y, int width, int weight)
 {
-  gtk_widget_queue_draw_area(GTK_WIDGET(area), x, y, width, weight);
+  if(No_interface == 0)
+    gtk_widget_queue_draw_area(GTK_WIDGET(area), x, y, width, weight);
 }
 
 void change_color_pac_man(char color)

@@ -16,7 +16,7 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
-
+int No_interface_loop = 0;//ENABLE OR DISABLE INTERFACE           0 = INTERFACE ON
 int Score = 0; // Score of the Q-learning // debbuging
 void set_score(Game *game);
 
@@ -36,7 +36,7 @@ gboolean loop()
     }
   }
 
-  if (game->status == 0) //break loop if game is in pause status
+  if (game->status == 0 && No_interface_loop==0) //break loop if game is in pause status
     return TRUE;
 
   if (game->pacgum >= 258) //258 = max pac gum
@@ -113,17 +113,18 @@ gboolean loop()
   if(game->chase>0)
   {
     //chase mode
-    /*
+    
     randome_dir(game, &game->blinky);
     randome_dir(game, &game->clyde);
     randome_dir(game, &game->inky);
     randome_dir(game, &game->pinky);
-    */
-
+    
+    /*
     define_scater_mode(game, &game->blinky);
     define_scater_mode(game, &game->clyde);
     define_scater_mode(game, &game->inky);
     define_scater_mode(game, &game->pinky);
+    */
   }
 
   if (game->hunt > 0 && game->chase ==0 &&game->Qactivated != 1) //hunt mode

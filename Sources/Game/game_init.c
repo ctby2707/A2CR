@@ -106,7 +106,7 @@ Game *init_game(){
   game->index = 0;
   game->generation = 0;
   game->scoreAI = NULL;
-  game->Qactivated = 0;
+  game->Qactivated = 0; //modify this line to change of mode 0 = AI mode, 1 = Qlearning, 3 = Agent (why the hell 3 ? well ask alexandre) 
   game->blinky = *blinky;
   game->blinky.x = 318; //13
   game->blinky.y = 311; //14
