@@ -1,6 +1,6 @@
 #include "game_init.h"
 #include "chase.h"
-
+#include "random.h"
 void chase(Game *game)
 {
   randome_dir(game, &game->blinky);
@@ -59,7 +59,7 @@ void randome_dir(Game *game,Player *pl)
   if (boo == 1) //change of direction
   {
     srand(time(NULL));
-    int ran = rand() % 3;
+    int ran = random_int(3);
     char newdir = pl->dir;
     if (pl->dir == 'N')
     {
