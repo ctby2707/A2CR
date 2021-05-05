@@ -30,12 +30,12 @@ char execute_Qlearning(Game *game, int cur_state)
     char rest = game->pac_man.dir;
     if (dir == 'N')
       dir = 'S';
-    else if (dir == 'G')
-      dir = 'D';
+    else if (dir == 'W')
+      dir = 'E';
     else if (dir == 'S')
       dir = 'N';
-    else if(dir =='D')
-      dir='G';
+    else if(dir =='E')
+      dir='W';
     do{
       action_choosen = rand() % 4;
       if(action_choosen == 0)
@@ -43,9 +43,9 @@ char execute_Qlearning(Game *game, int cur_state)
       if(action_choosen == 1)
         rest = 'S';
       if(action_choosen == 2)
-        rest = 'G';
+        rest = 'W';
       if(action_choosen == 3)
-        rest = 'D';
+        rest = 'E';
     }while(rest == dir);
     return rest;
   }
@@ -67,11 +67,11 @@ char execute_Qlearning(Game *game, int cur_state)
     if(index == 1)
       return 'S';
     if(index == 2)
-      return 'G';
+      return 'W';
     if(index == 3)
-      return 'D';
+      return 'E';
   }
-  return 'D';
+  return 'E';
 }
 
 void adjust_Q_tab(int reward)

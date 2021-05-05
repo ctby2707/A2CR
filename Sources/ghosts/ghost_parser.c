@@ -4,7 +4,7 @@
 #include "pinky.h"
 #include "clyde.h"
 
-void define_direction(Player *pl, char type, Game *game)
+void define_direction(Ghost *pl, char type, Game *game)
 {
   int X_mat, Y_mat;
   pixel_To_MatCoord(pl->x, pl->y, &X_mat, &Y_mat);
@@ -34,11 +34,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat + 28);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat + 28);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat + 28);
     }
@@ -52,11 +52,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat + 28);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat + 28);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat + 28);
     }
@@ -81,11 +81,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat - 28);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat - 28);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat - 28);
     }
@@ -99,11 +99,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat - 28);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat - 28);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat - 28);
     }
@@ -128,12 +128,12 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat + 1);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
 
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat + 1);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat + 1);
     }
@@ -147,11 +147,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat + 1);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat + 1);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat + 1);
     }
@@ -176,11 +176,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat - 1);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat - 1);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = pinky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat - 1);
     }
@@ -194,11 +194,11 @@ void define_direction(Player *pl, char type, Game *game)
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 28,
             game->map, X_mat * 28 + Y_mat - 1);
 
-      if (game->pac_man.dir == 'D')
+      if (game->pac_man.dir == 'E')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm + 1,
             game->map, X_mat * 28 + Y_mat - 1);
 
-      if (game->pac_man.dir == 'G')
+      if (game->pac_man.dir == 'W')
         pl->dir = inky(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, X_pm * 28 + Y_pm - 1,
             game->map, X_mat * 28 + Y_mat - 1);
     }

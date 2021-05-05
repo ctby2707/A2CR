@@ -1,7 +1,7 @@
 #include "game_init.h"
 #include "blinky.h"
 
-void define_scater_mode(Game *game, Player *pl)
+void define_scater_mode(Game *game, Ghost *pl)
 {
 
   int XB, YB;
@@ -52,7 +52,7 @@ void define_scater_mode(Game *game, Player *pl)
     }
     else
     {
-      if(pl->dir =='G')
+      if(pl->dir =='W')
       {
 
         pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],game->map, XB * 28 + YB +1);

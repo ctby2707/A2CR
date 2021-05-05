@@ -73,8 +73,8 @@ char inky(int me, int blinky, int dir_pacman, int *map, int prev)
   if (res == 28)
     return 'S';
   if (res == -1)
-    return 'G';
+    return 'W';
   if (res == 1)
-    return 'D';
+    return 'E';
   return 'N';
 }

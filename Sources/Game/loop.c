@@ -1,40 +1,21 @@
 #include "GTK.h"
 #include "game_init.h"
 #include "main.h"
-#include "NeuralNetworks_manager.h"
 #include "NeuralNetwork.h"
 #include "pac-man.h"
 #include "game_events.h"
-#include "Q.h"
 #include "chase.h"
 #include "ghost_parser.h"
 #include "scatter.h"
-#include "Naif_Agent.h"
-
-#define NB_CHILD 10
-#define RANDOM_GEN 1
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
 int No_interface_loop = 0;//ENABLE OR DISABLE INTERFACE           0 = INTERFACE ON
-int Score = 0; // Score of the Q-learning // debbuging
 void set_score(Game *game);
 
 gboolean loop()
 {
   Game *game = get_game();
-  if(game->isFirstGame == 1) // first start of the game
-  {
-    generate_random_generation(NB_CHILD, game, RANDOM_GEN);
-    game->isFirstGame = 0;
-    if(game->Qactivated == 0)
-    {
-      printf("--------------------\n");
-      printf("Generation : %i\n",game->generation);
-      printf("Child : %i\n",game->index);
-      request_move(game, Call_Neural_Network(game));
-    }
-  }
 
   if (game->status == 0 && No_interface_loop==0) //break loop if game is in pause status
     return TRUE;
@@ -81,53 +62,35 @@ gboolean loop()
       }
     }
   }
-  int X = game->pac_man.X;
-  int Y = game->pac_man.Y;
-  if(game->Qactivated == 1)
-  {//Q learning
+  //game->pac_man.lasttile = X*28 + Y;
+  game->reward = 0;
+  int x = game->pac_man.x;
+  int y = game->pac_man.y;
 
-    adjust_Q_tab(Score);
-    int X_pc, Y_pc;
-    pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_pc, &Y_pc);
-    if(game->pac_man.X != X_pc || game->pac_man.Y != Y_pc)
-      Score = 1;
-    else
-      Score = 0;
-    if(X*28+Y == game->pac_man.lasttile)
-    {
-      char dir = execute_Qlearning(game, X_pc*28+Y_pc);
-      if(dir != game->pac_man.reqdir || dir != game->pac_man.dir)
-        game->pac_man.reqdir = dir;
-    }
-  }
-  if(game->Qactivated == 3)
-    request_move(game, Naif_Agent(game));
-  if(game->Qactivated == 0)
-    request_move(game, Call_Neural_Network(game)); // call the neural Network
-  request_move(game, game->pac_man.reqdir);// redondant call of function
-  game->pac_man.lasttile = X*28 + Y;
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
 
+  if (game->pac_man.x != x || game->pac_man.y != y)
+    game->reward++;
 
   //----------------------------GHOSTS MANAGEMENT------------------------------
   if(game->chase>0)
   {
     //chase mode
-    
+
     randome_dir(game, &game->blinky);
     randome_dir(game, &game->clyde);
     randome_dir(game, &game->inky);
     randome_dir(game, &game->pinky);
-    
+
     /*
-    define_scater_mode(game, &game->blinky);
-    define_scater_mode(game, &game->clyde);
-    define_scater_mode(game, &game->inky);
-    define_scater_mode(game, &game->pinky);
-    */
+       define_scater_mode(game, &game->blinky);
+       define_scater_mode(game, &game->clyde);
+       define_scater_mode(game, &game->inky);
+       define_scater_mode(game, &game->pinky);
+     */
   }
 
-  if (game->hunt > 0 && game->chase ==0 &&game->Qactivated != 1) //hunt mode
+  if (game->hunt > 0 && game->chase ==0 ) //hunt mode
   {
     define_direction(&game->blinky, 'b', game);
     define_direction(&game->clyde, 'c', game);
@@ -143,16 +106,6 @@ gboolean loop()
     define_scater_mode(game, &game->inky);
     define_scater_mode(game, &game->pinky);
   }
-  if(game->Qactivated != 1)
-  {
-    move_entity(game, &game->blinky.x, &game->blinky.y, game->blinky.dir, ghost_speed);
-    if(game->pacgum / game->level > 5)
-      move_entity(game, &game->clyde.x, &game->clyde.y, game->clyde.dir, ghost_speed);
-    if(game->pacgum / game->level > 15)
-      move_entity(game, &game->inky.x, &game->inky.y, game->inky.dir, ghost_speed);
-    if(game->pacgum / game->level > 30)
-      move_entity(game, &game->pinky.x, &game->pinky.y, game->pinky.dir, ghost_speed);
-  }
 
   //Score management
   set_score(game);
@@ -160,7 +113,7 @@ gboolean loop()
   //Lives pac-man management
   is_pac_man_dead(game);
   if (game->live == 0)
-    restart(game, NB_CHILD, game->Qactivated);
+    restart(game);
 
   draw(0, 0, 637, 760);
   return TRUE;
@@ -168,13 +121,15 @@ gboolean loop()
 
 void set_score(Game *game)
 {
-  int X, Y;
+  int X = 0;
+  int Y = 0;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   if (game->map[X*28+Y] == 2)
   {
     game->pacgum = game->pacgum + 1;
     game->map[X*28+Y] = 6;
     game->score = game->score + 10;
+    game->reward = game->reward + 10;
     char str[42];
     sprintf(str, "Score : %i \n", game->score);
 

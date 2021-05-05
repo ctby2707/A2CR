@@ -36,13 +36,14 @@ void ghost_kill(Game *game, int n)
     game->pinky.eat = 1;
   }
   game->score = game->score + game->combo;
+  game->reward += game->combo;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
   set_score_label(str);
   game->combo = game->combo * 2;
 }
 
-void randome_dir(Game *game,Player *pl)
+void randome_dir(Game *game, Ghost *pl)
 {
   int boo = 0;
   int X, Y;

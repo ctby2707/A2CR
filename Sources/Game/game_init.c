@@ -72,10 +72,10 @@ int list_pinky[4] = {118,113,29,34};
 
 Game *init_game(){
   Game *game = malloc(sizeof(Game));
-  Player *blinky = malloc(sizeof(Player));
-  Player *inky = malloc(sizeof(Player));
-  Player *clyde = malloc(sizeof(Player));
-  Player *pinky = malloc(sizeof(Player));
+  Ghost *blinky = malloc(sizeof(Ghost));
+  Ghost *inky = malloc(sizeof(Ghost));
+  Ghost *clyde = malloc(sizeof(Ghost));
+  Ghost *pinky = malloc(sizeof(Ghost));
   Pac_Man *pac_man = malloc(sizeof(Pac_Man));
   game->pac_man = *pac_man;
   game->pac_man.x = 307;
@@ -92,21 +92,15 @@ Game *init_game(){
   game->pac_man_closed = (int *)pac_man_closed;
   game->ghost_pixel_art = (int *)ghost_pixel_art;
   game->score = 0;
-  game->prevScore = 0;
   game->live = 3;
   game->level = 1;
   game->pacgum = 0;
+  game->reward = 0;
   game->hunt = 0;
   game->chase = 0;
   game->scater = 168;//set time 168 for 7 sec
   game->open = 0;
   game->combo = 200;
-  game->isFirstGame = 1;
-  game->AI = NULL;
-  game->index = 0;
-  game->generation = 0;
-  game->scoreAI = NULL;
-  game->Qactivated = 0; //modify this line to change of mode 0 = AI mode, 1 = Qlearning, 3 = Agent (why the hell 3 ? well ask alexandre) 
   game->blinky = *blinky;
   game->blinky.x = 318; //13
   game->blinky.y = 311; //14

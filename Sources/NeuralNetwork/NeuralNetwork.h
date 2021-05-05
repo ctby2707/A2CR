@@ -15,15 +15,12 @@ struct Network {
   double *biasWeights;
 };
 
-char Call_Neural_Network(Game *game);
 struct Network init(int nb_layer, int *nb_neuron);
-char execute_network(struct Network *network, double *inputs);
+char execute_network(struct Network *network, int *inputs, double *value);
 void destroy_network(struct Network *network);
 void randomizeNetwork(struct Network *network);
-void save_Network(struct Network *network, int child);
-void load_Newtwork(struct Network *network, int child);
-void weight_set(double *weight, double x, size_t size_tab);
-void adjust_Network(struct Network *network);
+void save_Network(struct Network *network);
+void load_Newtwork(struct Network *network);
 
 #endif
 

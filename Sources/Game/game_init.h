@@ -3,7 +3,7 @@
 
 #include <gtk/gtk.h>
 #include "GTK.h"
-typedef struct Player
+typedef struct Ghost
 {
   int x;
   int y;
@@ -11,7 +11,7 @@ typedef struct Player
   int *list;
   int n;
   int eat;
-} Player;
+} Ghost;
 
 typedef struct Pac_Man
 {
@@ -34,7 +34,6 @@ typedef struct Game
   int *pac_man_closed;
   int *ghost_pixel_art;
   int score;
-  int prevScore;
   int live;
   int level;
   int pacgum;
@@ -43,17 +42,12 @@ typedef struct Game
   int scater;
   int open;
   int combo;
-  int isFirstGame;
-  struct Network *AI;
-  int generation;
-  int index;
-  int *scoreAI;
-  int Qactivated;
+  int reward;
   Pac_Man pac_man;
-  Player blinky;
-  Player inky;
-  Player clyde;
-  Player pinky;
+  Ghost blinky;
+  Ghost inky;
+  Ghost clyde;
+  Ghost pinky;
 } Game;
 
 Game *init_game();

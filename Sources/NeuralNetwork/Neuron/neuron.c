@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "sigmoid.h"
 #include "neuron.h"
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))

@@ -21,11 +21,11 @@ int find_ghosts(int *map, int pos, char dir, int b, int i, int c, int p)
   {
     Vect_P[pos+28] = -1;
   }
-  if(pos-1 > 0 && dir != 'G' && map[pos-1] != 0)
+  if(pos-1 > 0 && dir != 'W' && map[pos-1] != 0)
   {
     Vect_P[pos-1] = -1;
   }
-  if(pos+1 < 868 && dir != 'D' && map[pos+1] != 0)
+  if(pos+1 < 868 && dir != 'E' && map[pos+1] != 0)
   {
     Vect_P[pos+1] = -1;
   }

@@ -19,8 +19,8 @@ char Naif_Agent(Game *game)
   int dir[4];
   dir[0] = find_ghosts(game->map, X*28+Y, 'N', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
   dir[1] = find_ghosts(game->map, X*28+Y, 'S', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
-  dir[2] = find_ghosts(game->map, X*28+Y, 'G', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
-  dir[3] = find_ghosts(game->map, X*28+Y, 'D', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+  dir[2] = find_ghosts(game->map, X*28+Y, 'W', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
+  dir[3] = find_ghosts(game->map, X*28+Y, 'E', Xb*28+Yb, Xi*28+Yi, Xc*28+Yc, Xp*28+Yp);
 
   if(game->chase != 0)
   {
@@ -29,9 +29,9 @@ char Naif_Agent(Game *game)
     if(dir[1] == 1)
       return 'S';
     if(dir[2] == 1)
-      return 'G';
+      return 'W';
     if(dir[3] == 1)
-      return 'D';
+      return 'E';
   }
 
   int res = find_close_pac_gum(game->map, X*28+Y, dir);
@@ -40,8 +40,8 @@ char Naif_Agent(Game *game)
   if (res == 28)
     return 'S';
   if (res == -1)
-    return 'G';
+    return 'W';
   if (res == 1)
-    return 'D';
+    return 'E';
   return 'N';
 }

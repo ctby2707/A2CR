@@ -4,7 +4,7 @@
 #include "game_init.h"
 
 void change_game_status(Game *game, int status);
-void restart(Game *game, int nb_child, int Q_activated);
+void restart(Game *game);
 void respawn(Game *game);
 void levelup(Game *game);
 

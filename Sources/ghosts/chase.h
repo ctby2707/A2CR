@@ -5,6 +5,6 @@
 
 void chase(Game *game);
 void ghost_kill(Game *game, int n);
-void randome_dir(Game *game,Player *pl);
+void randome_dir(Game *game,Ghost *pl);
 
 #endif

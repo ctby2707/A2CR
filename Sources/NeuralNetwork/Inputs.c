@@ -6,8 +6,8 @@
 #define REWARD_GHOST -10
 #define REWARD_PATH 1
 #define REWARD_PACGUM 10
-#define REWARD_SUPERPACGUM 100
 #define REWARD_WALL 0
+#define REWARD_FRUIT 100
 
 int *init_inputs(Game *game)
 {
@@ -39,12 +39,12 @@ int *init_inputs(Game *game)
       {
         /*if (game->map[lidar_point] == 0) // useless because calloc but more explicit 
           lidar[i*11+j] = REWARD_WALL;*/
-        if (game->map[lidar_point] == 1)
+        if (game->map[lidar_point] == 1 || game->map[lidar_point] == 42 ||
+            game->map[lidar_point] == 43 || game->map[lidar_point] == 44 ||
+            game->map[lidar_point] == 45)
           lidar[i*11+j] += REWARD_PATH;
-        if (game->map[lidar_point] == 2)
+        if (game->map[lidar_point] == 2 || game->map[lidar_point] == 3)
           lidar[i*11+j] += REWARD_PACGUM;
-        if (game->map[lidar_point] == 3)
-          lidar[i*11+j] += REWARD_SUPERPACGUM;
 
         if (x_blinky * 28 + y_blinky == begin + lidar_point)
           lidar[i*11+j] += REWARD_GHOST;
@@ -54,6 +54,9 @@ int *init_inputs(Game *game)
           lidar[i*11+j] += REWARD_GHOST;
         if (x_clyde * 28 + y_clyde == begin + lidar_point)
           lidar[i*11+j] += REWARD_GHOST;
+        /*if (game->fruit == begin + lidar_point)
+          lidar[i*11+j] += REWARD_FRUIT;
+         */
       }
       lidar_point++;
     }
