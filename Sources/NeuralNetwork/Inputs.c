@@ -4,6 +4,7 @@
 #include "GTK.h"
 
 #define REWARD_GHOST -10
+#define REWARD_GHOST_CHASE 200
 #define REWARD_PATH 1
 #define REWARD_PACGUM 10
 #define REWARD_WALL 0
@@ -45,15 +46,42 @@ int *init_inputs(Game *game)
           lidar[i*11+j] += REWARD_PATH;
         if (game->map[lidar_point] == 2 || game->map[lidar_point] == 3)
           lidar[i*11+j] += REWARD_PACGUM;
+        if (game->chase > 0)
+        {
+          int reward = REWARD_GHOST_CHASE;
 
-        if (x_blinky * 28 + y_blinky == begin + lidar_point)
-          lidar[i*11+j] += REWARD_GHOST;
-        if (x_inky * 28 + y_inky == begin + lidar_point)
-          lidar[i*11+j] += REWARD_GHOST;
-        if (x_pinky * 28 + y_pinky == begin + lidar_point)
-          lidar[i*11+j] += REWARD_GHOST;
-        if (x_clyde * 28 + y_clyde == begin + lidar_point)
-          lidar[i*11+j] += REWARD_GHOST;
+          if (x_blinky * 28 + y_blinky == begin + lidar_point)
+          {
+            lidar[i*11+j] += reward;
+            reward *= 2;
+          }
+          if (x_inky * 28 + y_inky == begin + lidar_point)
+          {
+            lidar[i*11+j] += reward;
+            reward *= 2;
+          }
+          if (x_pinky * 28 + y_pinky == begin + lidar_point)
+          {
+            lidar[i*11+j] += reward;
+            reward *= 2;
+          }
+          if (x_clyde * 28 + y_clyde == begin + lidar_point)
+          {
+            lidar[i*11+j] += reward;
+            reward *= 2;
+          }
+        }
+        else
+        {
+          if (x_blinky * 28 + y_blinky == begin + lidar_point)
+            lidar[i*11+j] += REWARD_GHOST;
+          if (x_inky * 28 + y_inky == begin + lidar_point)
+            lidar[i*11+j] += REWARD_GHOST;
+          if (x_pinky * 28 + y_pinky == begin + lidar_point)
+            lidar[i*11+j] += REWARD_GHOST;
+          if (x_clyde * 28 + y_clyde == begin + lidar_point)
+            lidar[i*11+j] += REWARD_GHOST;
+        }
         /*if (game->fruit == begin + lidar_point)
           lidar[i*11+j] += REWARD_FRUIT;
          */

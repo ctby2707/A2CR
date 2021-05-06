@@ -63,14 +63,10 @@ gboolean loop()
     }
   }
   //game->pac_man.lasttile = X*28 + Y;
-  game->reward = 0;
   int x = game->pac_man.x;
   int y = game->pac_man.y;
 
   move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
-
-  if (game->pac_man.x != x || game->pac_man.y != y)
-    game->reward++;
 
   //----------------------------GHOSTS MANAGEMENT------------------------------
   if(game->chase>0)

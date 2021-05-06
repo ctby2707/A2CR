@@ -46,3 +46,15 @@ void Batch_empty(queue_b **pstart)
     q = Batch_pop(q, &vald);
   }
 }
+
+int Batch_len(queue_b *start)
+{
+  queue_b *q = start;
+  int len;
+  do
+  {
+    len++;
+    q = q->next;
+  }while(q != start);
+  return len;
+}

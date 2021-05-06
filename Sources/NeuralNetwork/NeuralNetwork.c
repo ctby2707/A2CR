@@ -5,7 +5,8 @@
 #include "neuron.h"
 #include "saverfile.h"
 #include "NeuralNetwork.h"
-
+#include "GTK.h"
+#include "loop.h"
 
 struct Network init(int nb_layer, int *nb_neuron)
 {
@@ -54,8 +55,9 @@ struct Network init(int nb_layer, int *nb_neuron)
   }
   return *network;
 }
-char execute_network(struct Network *network, int *inputs, double *value)
+char execute_network(struct Network *network, int *inputs, double *value, Game *game)
 {
+
   //enter the input
   for(int i = 0; i < network->nb_neuron_layer[0]; i++)
   {
