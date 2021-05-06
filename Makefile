@@ -1,19 +1,31 @@
-CC=gcc
+TARGET ?= Pac-Man
+SRC_DIRS ?= ./Sources
 
-CFLAGS= -Wall  -std=c99 -O3 -g `pkg-config --cflags gtk+-3.0`
-LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g
+SRCS := $(shell find $(SRC_DIRS) -name *.c)
+OBJS := $(addsuffix .o,$(basename $(SRCS)))
+DEPS := $(OBJS:.o=.d)
 
-all: Pac-Man
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-Pac-Man: Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o
-	${CC} -o Pac-Man Sources/main.o Sources/GTK.o Sources/pac-man.o Sources/ghost.o Sources/pathfinding.o Sources/queue.o ${LDLIBS}
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP `pkg-config --cflags gtk+-3.0` -lm -g
+LDLIBS= `pkg-config --libs gtk+-3.0` -MMD -g -lm
 
-.PHONY: clean  
+$(TARGET): $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS)
 
+help:
+	@echo "Usage: {Action}[_{Target}]"
+	@echo ""
+	@echo "if no {Target} is specify apply {Action} to all {Target}"
+	@echo ""
+	@echo "Action: "
+	@echo "- help: show this help"
+	@echo "- clean: remove all the bin and object files"
+	@echo "- : build the project"
+
+.PHONY: clean
 clean:
-	${RM} Sources/*.o
-	${RM} Sources/*.d
-	${RM} Rwork/*.o
-	${RM} Rwork/*.d
-	${RM} Pac-Man
-# END
+	$(RM) $(TARGET) $(OBJS) $(DEPS) $(shell find $(SRC_DIRS) -name *.gch)
+
+-include $(DEPS)
