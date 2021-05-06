@@ -4,7 +4,7 @@
 typedef struct Batch
 {
   int *cur_state;
-  int *actions;
+  int actions;
   int reward;
   int *next_state;
 }Batch;

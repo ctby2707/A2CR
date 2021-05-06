@@ -125,7 +125,7 @@ void set_score(Game *game)
     game->pacgum = game->pacgum + 1;
     game->map[X*28+Y] = 6;
     game->score = game->score + 10;
-    game->reward = game->reward + 10;
+    game->reward += 10;
     char str[42];
     sprintf(str, "Score : %i \n", game->score);
 
@@ -133,6 +133,7 @@ void set_score(Game *game)
   }
   if (game->map[X*28+Y] == 3)
   {
+    game->reward += 15;
     game->pacgum = game->pacgum + 1;
     game->pac_man.color = 'b';
     game->chase = 170;

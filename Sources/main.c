@@ -10,6 +10,7 @@
 #include "game_init.h"
 #include <math.h>
 #include "Q.h"
+#include "train.h"
 
 Game *game;
 
@@ -20,7 +21,8 @@ Game *get_game()
 int main()
 {
   game = init_game();
-  init_Qlearning();
   srand(time(NULL));
-  return launchgtk();
+  //return launchgtk();
+  deep_init();
+  train(game);
 }

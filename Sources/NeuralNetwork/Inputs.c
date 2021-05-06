@@ -3,11 +3,12 @@
 #include "game_init.h"
 #include "GTK.h"
 
-#define REWARD_GHOST -10
+#define REWARD_GHOST -9
 #define REWARD_GHOST_CHASE 200
 #define REWARD_PATH 1
-#define REWARD_PACGUM 10
-#define REWARD_WALL 0
+#define REWARD_PACGUM 11
+#define REWARD_WALL -50
+#define REWARD_SUPERPACGUM 16
 #define REWARD_FRUIT 100
 
 int *init_inputs(Game *game)
@@ -38,14 +39,15 @@ int *init_inputs(Game *game)
       if (lidar_point >= 0 && lidar_point <= 868
           && pos_pacman - 5 - y > 0 && pos_pacman + 5 + y < 28)//check if the point is in the map
       {
-        /*if (game->map[lidar_point] == 0) // useless because calloc but more explicit 
-          lidar[i*11+j] = REWARD_WALL;*/
+        if (game->map[lidar_point] == 0)
+          lidar[i*11+j] = REWARD_WALL;
         if (game->map[lidar_point] == 1 || game->map[lidar_point] == 42 ||
             game->map[lidar_point] == 43 || game->map[lidar_point] == 44 ||
             game->map[lidar_point] == 45)
           lidar[i*11+j] += REWARD_PATH;
-        if (game->map[lidar_point] == 2 || game->map[lidar_point] == 3)
-          lidar[i*11+j] += REWARD_PACGUM;
+        if (game->map[lidar_point] == 2)
+          lidar[i*11+j] += REWARD_SUPERPACGUM;
+        if (game->map[lidar_point] == 3)
         if (game->chase > 0)
         {
           int reward = REWARD_GHOST_CHASE;

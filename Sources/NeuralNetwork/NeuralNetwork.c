@@ -55,7 +55,8 @@ struct Network init(int nb_layer, int *nb_neuron)
   }
   return *network;
 }
-char execute_network(struct Network *network, int *inputs, double *value, Game *game)
+
+char execute_network(struct Network *network, int *inputs,int index_val, double *value, Game *game)
 {
 
   //enter the input
@@ -94,7 +95,7 @@ char execute_network(struct Network *network, int *inputs, double *value, Game *
     printf("G : %f\n",network->input[nb_total_neuron+2]);
     printf("D : %f\n",network->input[nb_total_neuron+3]);
     printf("______________________________________________\n");*/
-  *value = network->input[nb_total_neuron+index];
+  *value = network->input[nb_total_neuron+index_val];
   if(index == 0)
     return 'N';
   if(index == 1)
