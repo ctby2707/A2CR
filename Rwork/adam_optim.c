@@ -1,29 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "adam_opti.h"
+#include "adam_optim.h"
 
-void update(struct* AdamOpti, int t, double* w, double* b, double* dw, double* db)
+void initAdamOpti(struct AdamOpti *adam)
+{
+  adam->m_dw =0;
+  adam->m_db =0;
+  adam->v_dw =0;
+  adam->v_db =0;
+  adam->beta1 = 0.9;
+  adam->beta2 = 0.999;
+  adam->eta = 0.01;
+  adam->epsi = 0.000000001;
+}
+
+void update(struct AdamOpti *adam, double t, double* w, double* b, double* dw, double* db)
 {
   //momentum beta 1//
   //weights//
-  AdamOpti->m_dw = AdamOpti->beta1 * AdamOtpi->m_dw + (1-AdamOpti->beta1) * *dw;
+  adam->m_dw = adam->beta1 * adam->m_dw + (1 - adam->beta1) * *dw;
   //biases//
-  AdamOpti->m_db = AdamOpti->beta1 * AdamOtpi->m_db + (1-AdamOpti->beta1) * *db;
+  adam->m_db = adam->beta1 * adam->m_db + (1 - adam->beta1) * *db;
 
   //rms beta 2//
   //weights//
-  AdamOpti->v_dw = AdamOpti->beta2 * AdamOtpi->v_dw + (1-AdamOpti->beta2) * (*dw)**2;
+  adam->v_dw = adam->beta2 * adam->v_dw + (1 - adam->beta2) * pow((*dw), 2);
   //biases//
-  AdamOpti->v_db = AdamOpti->beta2 * AdamOtpi->v_db + (1-AdamOpti->beta2) * *db;
+  adam->v_db = adam->beta2 * adam->v_db + (1 - adam->beta2) * *db;
 
   //bias correction//
-  double m_dw_c = AdamOpti->m_dw / (1-((AdamOpti->beta1)**t));
-  double m_db_c = AdamOpti->m_db / (1-((AdamOpti->beta1)**t));
-  double v_dw_c = AdamOpti->v_dw / (1-((AdamOpti->beta2)**t));
-  double v_db_c = AdamOpti->v_db / (1-((AdamOpti->beta2)**t));
+  double m_dw_c = adam->m_dw / (1 - pow((adam->beta1), t));
+  double m_db_c = adam->m_db / (1 - pow((adam->beta1), t));
+  double v_dw_c = adam->v_dw / (1 - pow((adam->beta2), t));
+  double v_db_c = adam->v_db / (1 - pow((adam->beta2), t));
 
   //update//
-  *w = *w - AdamOpti->eta * (m_dw_c / (sqrt(v_dw_c) + AdamOpti->espi));
-  *b = *b - AdamOpti->eta * (m_db_c / (sqrt(v_db_c) + AdamOpti->espi));
+  *w = *w - adam->eta * (m_dw_c / (sqrt(v_dw_c) + adam->epsi));
+  *b = *b - adam->eta * (m_db_c / (sqrt(v_db_c) + adam->epsi));
 }

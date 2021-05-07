@@ -3,16 +3,21 @@
 
 struct AdamOpti
 {
-  double m_dw = 0;
-  double m_db = 0;
-  double v_dw = 0;
-  double v_db = 0;
-  double beta1 = 0.9;
-  double beta2 = 0.999;
-  double eta = 0.01;
-  double epsi = 0.000000001;
+  double m_dw;
+  double m_db;
+  double v_dw;
+  double v_db;
+  double beta1;
+  double beta2;
+  double eta;
+  double epsi;
 };
 
-void update(struct* AdamOpti, int t, double* w, double* b, double* dw, double* db);
+
+void initAdamOpti(struct AdamOpti *adam);
+
+
+void update(struct AdamOpti *adam, double t, double* w, double* b, double* dw, double* db);
+
 
 #endif
