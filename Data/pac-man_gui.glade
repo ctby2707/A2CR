@@ -88,7 +88,7 @@
             </child>
             <child>
               <object class="GtkButton" id="Qactivate">
-                <property name="label" translatable="yes">AI enable</property>
+                <property name="label" translatable="yes">Enable Q learning</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>

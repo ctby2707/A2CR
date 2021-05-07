@@ -10,7 +10,6 @@
 #include "game_init.h"
 #include <math.h>
 #include "Q.h"
-#include "train.h"
 
 Game *game;
 

@@ -24,6 +24,7 @@ GtkWidget *live_label;
 GtkWidget *level_label;
 int alreadystarted = 0;
 cairo_t *crg;
+<<<<<<< HEAD
 int No_interface = 1;//CHANGE TO DISABLE INTERFACE 0 = interface enable others is interface disabled
 
 int launchgtk()
@@ -72,6 +73,46 @@ int launchgtk()
       loop();
     }
   }
+=======
+
+int launchgtk()
+{
+  gtk_init(NULL, NULL);
+
+  builder = gtk_builder_new_from_file("Data/pac-man_gui.glade");
+  window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+
+  //initisation of widgets
+
+  fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
+  overlay = GTK_OVERLAY(gtk_overlay_new());
+  Start = GTK_WIDGET(gtk_builder_get_object(builder, "Start"));
+  Pause = GTK_WIDGET(gtk_builder_get_object(builder, "Pause"));
+  Qactivate = GTK_WIDGET(gtk_builder_get_object(builder, "Qactivate"));
+  image = GTK_WIDGET(gtk_builder_get_object(builder, "image"));
+  area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "area"));
+  score_label = GTK_WIDGET(gtk_builder_get_object(builder, "score_label"));
+  live_label = GTK_WIDGET(gtk_builder_get_object(builder, "live_label"));
+  level_label = GTK_WIDGET(gtk_builder_get_object(builder, "level_label"));
+
+  //connect widgets to respective function
+
+  g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
+  g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
+  g_signal_connect(Qactivate, "clicked", G_CALLBACK(on_Qactivate_clicked), NULL);
+  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
+  //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
+  //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
+  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  //gtk_overlay_add_overlay(overlay,GTK_WIDGET(area));
+  //gtk_overlay_add_overlay(overlay,image);
+  //display window and begin windows loop
+
+  gtk_widget_show(window);
+
+  gtk_main();
+>>>>>>> remi
   return EXIT_SUCCESS;
 }
 
@@ -98,6 +139,7 @@ void on_Pause_clicked()
   change_game_status(game, 0);
 }
 
+<<<<<<< HEAD
 void set_score_label(char *score)
 {
   if(No_interface == 0)
@@ -112,12 +154,52 @@ void set_level_label(char *level)
 {
   if(No_interface == 0)
     gtk_label_set_text(GTK_LABEL(level_label), level);
+=======
+void on_Qactivate_clicked()
+{
+  Game *game = get_game();
+  if(game->Qactivated == 0)
+    {
+      respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+      
+      char *label = "Disable Q learning";
+      gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+      game->Qactivated = 1;
+      
+    }
+  else
+    {
+      respawn(game);//just to reset pos of ghost and pac-man, could also use restart but too munch parameters and i'm lazy
+      
+      char *label = "Enable Q learning";
+      gtk_button_set_label(GTK_BUTTON(Qactivate),label);
+      game->Qactivated = 0;
+      
+    }
+}
+
+void set_score_label(char *score)
+{
+  gtk_label_set_text(GTK_LABEL(score_label), score);
+}
+void set_live_label(char *live)
+{
+  gtk_label_set_text(GTK_LABEL(live_label), live);
+}
+void set_level_label(char *level)
+{
+  gtk_label_set_text(GTK_LABEL(level_label), level);
+>>>>>>> remi
 }
 
 void draw(int x, int y, int width, int weight)
 {
+<<<<<<< HEAD
   if(No_interface == 0)
     gtk_widget_queue_draw_area(GTK_WIDGET(area), x, y, width, weight);
+=======
+  gtk_widget_queue_draw_area(GTK_WIDGET(area), x, y, width, weight);
+>>>>>>> remi
 }
 
 void change_color_pac_man(char color)
@@ -188,7 +270,11 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
     {
       for (int y = 0; y < 7; y++)
       {
+<<<<<<< HEAD
         if (game->pac_man.dir == 'E')
+=======
+        if (game->pac_man.dir == 'D')
+>>>>>>> remi
         {
           if (pac_man_open[y * 7 + x] == 0)
           {
@@ -215,7 +301,11 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
             cairo_fill(cr);
           }
         }
+<<<<<<< HEAD
         if (game->pac_man.dir == 'W')
+=======
+        if (game->pac_man.dir == 'G')
+>>>>>>> remi
         {
           if (pac_man_open[(y)*7 + (6 - x)] == 0)
           {
@@ -233,6 +323,7 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
       {
         if (ghost_pixel_art[y * 7 + x] == 1)
         {
+<<<<<<< HEAD
           if(game->blinky.eat == 0 && game->chase > 0)
             cairo_set_source_rgb(cr, 0, 0, 1); //blue
           else
@@ -295,6 +386,70 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
           cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
           cairo_fill(cr);
         }
+=======
+	  if(game->blinky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0, 0); //red
+	  
+          cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
+          cairo_fill(cr);
+	  
+	  if(game->clyde.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0.5, 0); //orange
+	  
+          cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
+          cairo_fill(cr);
+	  
+	  if(game->inky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  
+          cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
+          cairo_fill(cr);
+	  
+	  if(game->pinky.eat == 0 && game->chase > 0)
+	    cairo_set_source_rgb(cr, 0, 0, 1); //blue
+	  else
+	    cairo_set_source_rgb(cr, 1, 0.7, 0.8); //pink
+	  
+          cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
+          cairo_fill(cr);
+        }
+	if (ghost_pixel_art[y * 7 + x] == 2)
+	  {
+	    cairo_set_source_rgb(cr, 1, 1, 1); //white
+	    cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	    
+	    cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	  }
+	if (ghost_pixel_art[y * 7 + x] == 0)
+	  {
+	    cairo_set_source_rgb(cr, 0, 0, 0); //black
+	    cairo_rectangle(cr, game->blinky.x + 4 * x, game->blinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->clyde.x + 4 * x, game->clyde.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	    
+	    cairo_rectangle(cr, game->inky.x + 4 * x, game->inky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+
+	    cairo_rectangle(cr, game->pinky.x + 4 * x, game->pinky.y + 4 * y - 4, 4, 4);
+	    cairo_fill(cr);
+	  }
+>>>>>>> remi
       }
     }
   }
@@ -304,6 +459,7 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
 /*gboolean is_active = FALSE; INPUT FUNCTIONS KEY
 
+<<<<<<< HEAD
   gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
   {
   if (!is_active)
@@ -325,6 +481,29 @@ gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
   is_active = FALSE;
   return TRUE;
   }*/
+=======
+gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  if (!is_active)
+  {
+    is_active = TRUE;
+    if (event->keyval == GDK_KEY_Up)
+      request_move('N');
+    if (event->keyval == GDK_KEY_Left)
+      request_move('G');
+    if (event->keyval == GDK_KEY_Down)
+      request_move('S');
+    if (event->keyval == GDK_KEY_Right)
+      request_move('D');
+  }
+  return TRUE;
+}
+gboolean on_key_release(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  is_active = FALSE;
+  return TRUE;
+}*/
+>>>>>>> remi
 
 //--------------Conversion Functions------------------------------------------
 void matCoord_To_Pixel(int x, int y, int *X, int *Y)
