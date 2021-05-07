@@ -49,12 +49,15 @@ void Batch_empty(queue_b **pstart)
 
 int Batch_len(queue_b *start)
 {
+  if(start == NULL)
+    return 0;
   queue_b *q = start;
-  int len;
+  int len = 0;
   do
   {
     len++;
     q = q->next;
   }while(q != start);
+
   return len;
 }

@@ -7,6 +7,7 @@
 #include "NeuralNetwork.h"
 #include "GTK.h"
 #include "loop.h"
+#include "random.h"
 
 struct Network init(int nb_layer, int *nb_neuron)
 {
@@ -79,7 +80,7 @@ char execute_network(struct Network *network, int *inputs,int index_val, double 
   int nb_total_neuron = 0;
   for(size_t i = 0; i < (network->nb_layer-1); i++)
   {
-    nb_total_neuron = nb_total_neuron + network->nb_neuron_layer[i];
+    nb_total_neuron += network->nb_neuron_layer[i];
   }
   int index = 0;
   if(network->input[nb_total_neuron+index] < network->input[nb_total_neuron+1])
@@ -88,13 +89,6 @@ char execute_network(struct Network *network, int *inputs,int index_val, double 
     index = 2;
   if(network->input[nb_total_neuron+index] < network->input[nb_total_neuron+3])
     index = 3;
-  //----------DEBUGGING FUNCTION---------------
-  /*printf("index = %d\n",index);
-    printf("N : %f\n",network->input[nb_total_neuron]);
-    printf("S : %f\n",network->input[nb_total_neuron+1]);
-    printf("G : %f\n",network->input[nb_total_neuron+2]);
-    printf("D : %f\n",network->input[nb_total_neuron+3]);
-    printf("______________________________________________\n");*/
   *value = network->input[nb_total_neuron+index_val];
   if(index == 0)
     return 'N';
@@ -127,8 +121,8 @@ void randomizeNetwork(struct Network *network)
   for(size_t i = 0; i < size_weight_list; i++)
   {
     double range = 2;
-    double div = RAND_MAX / range;
-    network->weights[i] = -1 + (rand() / div);
+    double div = 123456789 / range;
+    network->weights[i] = -1 + (random_int(123456789) / div);
   }
   int nb_total_neuron = 0;
   for(size_t i = 1; i < network->nb_layer; i++)
@@ -139,8 +133,8 @@ void randomizeNetwork(struct Network *network)
   for(size_t i = 0; i < nb_total_neuron; i++)
   {
     double range = 2;
-    double div = RAND_MAX / range;
-    network->biasWeights[i] = -1 + (rand() / div);
+    double div = 123456789 / range;
+    network->biasWeights[i] = -1 + (random_int(123456789) / div);
   }
 }
 

@@ -74,10 +74,10 @@ void request_move(Game *game, char dir)
   int x;
   int y;
   matCoord_To_Pixel(X,Y,&x,&y);
-  if ((dir == 'N' && game->map[(X - 1)*28+Y] != 0 && dir == 'N' && game->map[(X - 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'S' && game->map[(X + 1)*28+Y] != 0 && dir == 'S' && game->map[(X + 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'W' && game->map[X*28+Y - 1] != 0 && dir == 'W' && game->map[X*28+Y - 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
-      (dir == 'E' && game->map[X*28+Y + 1] != 0&& dir == 'E' && game->map[X*28+Y + 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
+  if ((dir == 'N' /*&& game->map[(X - 1)*28+Y] != 0*/ && dir == 'N' /*&& game->map[(X - 1)*28+Y] != 4*/ && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'S' /*&& game->map[(X + 1)*28+Y] != 0 */&& dir == 'S' /*&& game->map[(X + 1)*28+Y] != 4 */&& (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'W' /*&& game->map[X*28+Y - 1] != 0*/ && dir == 'W' /*&& game->map[X*28+Y - 1] != 4 */&& (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
+      (dir == 'E' /*&& game->map[X*28+Y + 1] != 0*/ && dir == 'E' && game->map[X*28+Y + 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
   {
     game->pac_man.dir = dir;
     game->pac_man.reqdir = dir;
@@ -85,7 +85,17 @@ void request_move(Game *game, char dir)
   else
     game->pac_man.reqdir = dir;
 }
-
+void move_pac_man(Game *game, int *x, int *y, char dir, int speed)
+{
+  if (dir == 'N')
+    *y = *y - speed;
+  if (dir == 'S')
+    *y = *y + speed;
+  if (dir == 'W')
+    *x = *x - speed;
+  if(dir == 'E')
+    *x = *x + speed;
+}
 //modify the coords of each entity
 void move_entity(Game *game, int *x, int *y, char dir, int speed)
 {

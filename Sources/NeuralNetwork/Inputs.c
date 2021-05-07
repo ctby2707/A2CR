@@ -2,6 +2,7 @@
 #include <math.h>
 #include "game_init.h"
 #include "GTK.h"
+#include "main.h"
 
 #define REWARD_GHOST -9
 #define REWARD_GHOST_CHASE 200
@@ -11,8 +12,9 @@
 #define REWARD_SUPERPACGUM 16
 #define REWARD_FRUIT 100
 
-int *init_inputs(Game *game)
+int *init_inputs()
 {
+  Game *game = get_game();
   int x_blinky = 0;
   int y_blinky = 0;
   pixel_To_MatCoord(game->blinky.x, game->blinky.y, &x_blinky, &y_blinky);
@@ -26,48 +28,54 @@ int *init_inputs(Game *game)
   int y_clyde = 0;
   pixel_To_MatCoord(game->clyde.x, game->clyde.y, &x_clyde, &y_clyde);
 
-  int pos_pacman = (game->pac_man.X) * 28 + game->pac_man.Y;
-  int begin = pos_pacman - (28 * 5) - 5;
-  int end = pos_pacman + (28 * 5) + 5;
-  int lidar_point = pos_pacman - (28 * 5) - 5;
+  int X_pc = 0;
+  int Y_pc = 0;
+  pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_pc, &Y_pc);
+  int pos_pacman = X_pc * 28 + Y_pc;
+  int map_point = pos_pacman -5 - (5 * 28);
+
   int *lidar = calloc(11*11,sizeof(int));
   for (size_t i = 0; i < 11; i++)
   {
     for (size_t j = 0; j < 11; j++)
     {
-      int y = lidar_point % 28;
-      if (lidar_point >= 0 && lidar_point <= 868
-          && pos_pacman - 5 - y > 0 && pos_pacman + 5 + y < 28)//check if the point is in the map
+      if(map_point < 0 || map_point > 868)
       {
-        if (game->map[lidar_point] == 0)
+        lidar[i*11+j] = -1;
+      }
+      else
+      {
+        if (game->map[map_point] == 0 || game->map[map_point] == 4)
           lidar[i*11+j] = REWARD_WALL;
-        if (game->map[lidar_point] == 1 || game->map[lidar_point] == 42 ||
-            game->map[lidar_point] == 43 || game->map[lidar_point] == 44 ||
-            game->map[lidar_point] == 45)
+        if (game->map[map_point] == 1 || game->map[map_point] == 42 ||
+            game->map[map_point] == 43 || game->map[map_point] == 44 ||
+            game->map[map_point] == 45 || game->map[map_point] == 7 ||
+            game->map[map_point] == 6)
           lidar[i*11+j] += REWARD_PATH;
-        if (game->map[lidar_point] == 2)
+        if (game->map[map_point] == 2)
+          lidar[i*11+j] += REWARD_PACGUM;
+        if (game->map[map_point] == 3)
           lidar[i*11+j] += REWARD_SUPERPACGUM;
-        if (game->map[lidar_point] == 3)
         if (game->chase > 0)
         {
           int reward = REWARD_GHOST_CHASE;
 
-          if (x_blinky * 28 + y_blinky == begin + lidar_point)
+          if (x_blinky * 28 + y_blinky == map_point)
           {
             lidar[i*11+j] += reward;
             reward *= 2;
           }
-          if (x_inky * 28 + y_inky == begin + lidar_point)
+          if (x_inky * 28 + y_inky == map_point)
           {
             lidar[i*11+j] += reward;
             reward *= 2;
           }
-          if (x_pinky * 28 + y_pinky == begin + lidar_point)
+          if (x_pinky * 28 + y_pinky == map_point)
           {
             lidar[i*11+j] += reward;
             reward *= 2;
           }
-          if (x_clyde * 28 + y_clyde == begin + lidar_point)
+          if (x_clyde * 28 + y_clyde == map_point)
           {
             lidar[i*11+j] += reward;
             reward *= 2;
@@ -75,21 +83,22 @@ int *init_inputs(Game *game)
         }
         else
         {
-          if (x_blinky * 28 + y_blinky == begin + lidar_point)
+          if (x_blinky * 28 + y_blinky == map_point)
             lidar[i*11+j] += REWARD_GHOST;
-          if (x_inky * 28 + y_inky == begin + lidar_point)
+          if (x_inky * 28 + y_inky == map_point)
             lidar[i*11+j] += REWARD_GHOST;
-          if (x_pinky * 28 + y_pinky == begin + lidar_point)
+          if (x_pinky * 28 + y_pinky == map_point)
             lidar[i*11+j] += REWARD_GHOST;
-          if (x_clyde * 28 + y_clyde == begin + lidar_point)
+          if (x_clyde * 28 + y_clyde == map_point)
             lidar[i*11+j] += REWARD_GHOST;
         }
         /*if (game->fruit == begin + lidar_point)
           lidar[i*11+j] += REWARD_FRUIT;
          */
       }
-      lidar_point++;
+      map_point++;
     }
+    map_point += 28 - 11;
   }
   return lidar;
 }

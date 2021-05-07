@@ -6,6 +6,7 @@
 #include "game_events.h"
 #include "loop.h"
 #include "main.h"
+#include "train.h"
 
 //GTK global Variable
 
@@ -23,7 +24,7 @@ GtkWidget *live_label;
 GtkWidget *level_label;
 int alreadystarted = 0;
 cairo_t *crg;
-int No_interface = 0;//CHANGE TO DISABLE INTERFACE 0 = interface enable others is interface disabled
+int No_interface = 1;//CHANGE TO DISABLE INTERFACE 0 = interface enable others is interface disabled
 
 int launchgtk()
 {

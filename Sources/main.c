@@ -22,7 +22,6 @@ int main()
 {
   game = init_game();
   srand(time(NULL));
-  //return launchgtk();
   deep_init();
-  train(game);
+  train();
 }

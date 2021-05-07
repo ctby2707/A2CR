@@ -112,7 +112,7 @@ void define_direction(Ghost *pl, char type, Game *game)
       pl->dir = clyde(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, game->map, X_mat * 28 + Y_mat - 28);
     }
   }
-  else if (pl->dir == 'G')
+  else if (pl->dir == 'W')
   {
     if (type == 'b')
     {
@@ -160,7 +160,7 @@ void define_direction(Ghost *pl, char type, Game *game)
       pl->dir = clyde(X_mat * 28 + Y_mat, X_pm * 28 + Y_pm, game->map, X_mat * 28 + Y_mat + 1);
     }
   }
-  else if (pl->dir == 'D')
+  else if (pl->dir == 'E')
   {
     if (type == 'b')
     {

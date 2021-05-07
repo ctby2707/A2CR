@@ -19,7 +19,7 @@ int shortpath(int *map, int prev, int A, int B)
   if(A == B)
     printf("A and B are the same\n");*/
 
-  if (A == B || map[B] == 0 || map[A] == 0 || B < 0 || B > 868 || A < 0 || A > 868)
+  if (A == B || B < 0 || B > 868 || A < 0 || A > 868 || map[B] == 0 || map[A] == 0)
   {//error management
     if (map[A - 28] != 0)
       return -28;

@@ -10,13 +10,12 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
-int No_interface_loop = 0;//ENABLE OR DISABLE INTERFACE           0 = INTERFACE ON
+int No_interface_loop = 1;//ENABLE OR DISABLE INTERFACE           0 = INTERFACE ON
 void set_score(Game *game);
 
 gboolean loop()
 {
   Game *game = get_game();
-
   if (game->status == 0 && No_interface_loop==0) //break loop if game is in pause status
     return TRUE;
 
@@ -66,7 +65,7 @@ gboolean loop()
   int x = game->pac_man.x;
   int y = game->pac_man.y;
 
-  move_entity(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
+  move_pac_man(game, &game->pac_man.x, &game->pac_man.y, game->pac_man.dir, pac_man_speed); //pac-man
 
   //----------------------------GHOSTS MANAGEMENT------------------------------
   if(game->chase>0)
