@@ -68,7 +68,7 @@ void train()
   Game *game = get_game();
   int len_batch = Batch_len(batchs);
   Batch batch;
-  for(int i = 0; i<150; i++)
+  for(int i = 0; i<10000; i++)
   {
     int *inputs = init_inputs();
     char action = pick_action(game, inputs);

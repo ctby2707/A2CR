@@ -52,11 +52,7 @@ void define_scater_mode(Game *game, Ghost *pl)
     }
     else
     {
-<<<<<<< HEAD
       if(pl->dir =='W')
-=======
-      if(pl->dir =='G')
->>>>>>> remi
       {
 
         pl->dir = blinky(XB * 28 + YB, pl->list[pl->n],game->map, XB * 28 + YB +1);

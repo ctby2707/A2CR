@@ -68,10 +68,7 @@ void respawn(Game *game)
 
 void levelup(Game *game)
 {
-<<<<<<< HEAD
-  //printf("nb pacgum = %d\n",game->pacgum);
-=======
->>>>>>> remi
+ //printf("nb pacgum = %d\n",game->pacgum);
   game->chase = 0;
   game->hunt = 0;
   game->scater = 168;

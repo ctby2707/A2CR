@@ -92,31 +92,15 @@ Game *init_game(){
   game->pac_man_closed = (int *)pac_man_closed;
   game->ghost_pixel_art = (int *)ghost_pixel_art;
   game->score = 0;
-<<<<<<< HEAD
   game->live = 3;
   game->level = 1;
   game->pacgum = 0;
   game->reward = 0;
-=======
-  game->prevScore = 0;
-  game->live = 3;
-  game->level = 1;
-  game->pacgum = 0;
->>>>>>> remi
   game->hunt = 0;
   game->chase = 0;
   game->scater = 168;//set time 168 for 7 sec
   game->open = 0;
   game->combo = 200;
-<<<<<<< HEAD
-=======
-  game->isFirstGame = 1;
-  game->AI = NULL;
-  game->index = 0;
-  game->generation = 0;
-  game->scoreAI = NULL;
-  game->Qactivated = 0;
->>>>>>> remi
   game->blinky = *blinky;
   game->blinky.x = 318; //13
   game->blinky.y = 311; //14
