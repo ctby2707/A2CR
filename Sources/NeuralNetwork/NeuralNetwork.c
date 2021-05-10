@@ -2,9 +2,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <math.h>
+#include "NeuralNetwork.h"
 #include "neuron.h"
 #include "saverfile.h"
-#include "NeuralNetwork.h"
 #include "GTK.h"
 #include "loop.h"
 #include "random.h"
@@ -43,16 +43,20 @@ struct Network init(int nb_layer, int *nb_neuron)
   network->neuron_list = neuron_list;
 
   int bias = 0;
+  int bias2 = 0;
   for(size_t i = 1; i < nb_layer; i++)
   {
     for(size_t j = 0; j < nb_neuron[i]; j++)
     {
       network->neuron_list[j+bias].size = nb_neuron[i-1];
-      network->neuron_list[j+bias].input = network->input + bias;
+      network->neuron_list[j+bias].input = network->input + bias2;
       network->neuron_list[j+bias].weight = network->weights + j*nb_neuron[i-1] + bias;
       network->neuron_list[j+bias].biasWeight = network->biasWeights + j + bias;
+      network->neuron_list[j+bias].layer = i;
+      network->neuron_list[j+bias].nb = j;
     }
     bias = bias + nb_neuron[i];
+    bias2 += nb_neuron[i-1];
   }
   return *network;
 }
@@ -73,7 +77,14 @@ char execute_network(struct Network *network, int *inputs,int index_val, double 
   {
     for(size_t j = 0; j < network->nb_neuron_layer[i]; j++)
     {
-      network->input[j+bias+network->nb_neuron_layer[0]] = output(network->neuron_list[j+bias]);
+      if(i != network->nb_layer - 1)
+      {
+        network->input[j+bias+network->nb_neuron_layer[0]] = output(network->neuron_list[j+bias]);
+      }
+      else
+      {
+        network->input[j+bias+network->nb_neuron_layer[0]] = output_last(network->neuron_list[j+bias]);
+      }
     }
     bias = bias + network->nb_neuron_layer[i];
   }

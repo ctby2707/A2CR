@@ -2,7 +2,7 @@
 #define NEURALNETWORK_H
 
 #include <stddef.h>
-#include "neuron.h"
+//#include "neuron.h"
 #include "game_init.h"
 
 struct Network {

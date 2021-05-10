@@ -10,12 +10,13 @@
 #include "random.h"
 #include "train.h"
 #include "main.h"
+#include "backpropagation.h"
 
 #define NB_BATCHS 10000
 
 struct Network network;
 queue_b *batchs;
-int epsilon = 1;
+double epsilon = 100;
 
 int layer[] = {121, 60, 20, 4};
 
@@ -51,14 +52,20 @@ char pick_action(Game *game, int *inputs)
   return 'E';
 }
 
-double get_loss(Game *game, int *next_state, int rewards, int index, int *state)
+double get_loss(Game *game, Batch *batch, double *derivate_loss)
 {
   double value = 0;
-  execute_network(&network, next_state, index, &value, game);//get the value of the next state
-  value = value * 0.99 +(double) rewards; //we assume that gamma is 0.99
+  double q_next = 0;
+  execute_network(&network, batch->next_state, batch->actions, &q_next, game);//get the value of the next state
   double q_cur;
-  execute_network(&network, state, index, &q_cur, game);
-  return pow(value - q_cur, 2);
+  execute_network(&network, batch->cur_state, batch->actions, &q_cur, game);
+
+  *derivate_loss = 2 * (q_cur - ((double) batch->reward + 0.99 * q_next));
+
+  if(*derivate_loss < -100 || *derivate_loss > 100)
+    printf("2(%lf - %lf * 0.99 + %i) = %lf \n", q_cur,q_next, batch->reward, *derivate_loss);
+
+  return pow(q_cur - ((double) batch->reward + 0.99 * q_next), 2);
 
 }
 void print_matrix(int *M);
@@ -68,47 +75,68 @@ void train()
   Game *game = get_game();
   int len_batch = Batch_len(batchs);
   Batch batch;
-  for(int i = 0; i<10000; i++)
+  double loss = -1;
+  int moyenne_reward = 0;
+  int moyenne_loss = 0;
+  for(int episode = 0; episode < 10000; episode++)
   {
-    int *inputs = init_inputs();
-    char action = pick_action(game, inputs);
-    int ind_action = 0;
-    if (action == 'N')
-      ind_action = 0;
-    if (action == 'S')
-      ind_action = 1;
-    if (action == 'W')
-      ind_action = 2;
-    if (action == 'E')
-      ind_action = 3;
-
-    execute_game(game, action);
-
-    batch.cur_state = inputs;
-    batch.actions = ind_action;
-    batch.reward = game->reward;
-    inputs = init_inputs(game);
-    batch.next_state = inputs;
-
-    if (Batch_len(batchs) == NB_BATCHS)
-      Batch_pop(batchs, NULL);
-    batchs = Batch_push(batchs, batch);
-  }
-  double loss = 0;
-  int max_len = Batch_len(batchs);
-  for (int j=0; j < 32; j++)
-  {
-    Batch choosen_b;
-    int random_number = random_int(max_len);
-    for(int h = 0; h < random_number; h++)
+    for(int i = 0; i<100; i++)
     {
-      batchs = Batch_pop(batchs, &choosen_b);
-      batchs = Batch_push(batchs, choosen_b);
+      int *inputs = init_inputs();
+      char action = pick_action(game, inputs);
+      int ind_action = 0;
+      if (action == 'N')
+        ind_action = 0;
+      if (action == 'S')
+        ind_action = 1;
+      if (action == 'W')
+        ind_action = 2;
+      if (action == 'E')
+        ind_action = 3;
+
+      execute_game(game, action);
+
+      batch.cur_state = inputs;
+      batch.actions = ind_action;
+      batch.reward = game->reward;
+      inputs = init_inputs(game);
+      batch.next_state = inputs;
+      len_batch = Batch_len(batchs);
+      if (Batch_len(batchs) == NB_BATCHS)
+      {
+        struct Batch tmp;
+        Batch_pop(batchs, &tmp);
+      }
+      batchs = Batch_push(batchs, batch);
     }
-    loss += get_loss(game, choosen_b.next_state, choosen_b.reward, choosen_b.actions, choosen_b.cur_state);
+    loss = 0;
+    double derivate_loss = 0;
+    int max_len = Batch_len(batchs);
+    for (int j=0; j < 32; j++)
+    {
+      Batch choosen_b;
+      int random_number = random_int(max_len);
+      for(int h = 0; h < random_number; h++)
+      {
+        batchs = Batch_pop(batchs, &choosen_b);
+        batchs = Batch_push(batchs, choosen_b);
+      }
+      loss = get_loss(game, &choosen_b, &derivate_loss);
+      moyenne_loss += loss;
+      moyenne_reward += choosen_b.reward;
+      backpropagation(&network, batch.cur_state, batch.actions, derivate_loss);
+    }
+    if(episode % 5 == 0)
+    {
+      printf("moyenne des récompenses : %i\n", moyenne_reward/(32*5));
+      printf("moyenne des pertes : %i\n", moyenne_loss/(32*5));
+      printf("__________________________________\n");
+      moyenne_reward = 0;
+      moyenne_loss = 0;
+      epsilon -= 0.0001;
+      save_Network(&network);
+    }
   }
-  loss = loss/32;
-  printf("loss = %lf\n",loss);
 }
 
 
