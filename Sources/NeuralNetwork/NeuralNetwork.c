@@ -11,14 +11,14 @@
 
 struct Network init(int nb_layer, int *nb_neuron)
 {
-  struct Network *network = malloc(sizeof(struct Network));
+  struct Network *network = calloc(1,sizeof(struct Network));
   network->nb_layer = nb_layer;
   network->nb_neuron_layer = nb_neuron;
 
   int nb_total_neuron = 0;
   int size_weight_list = 0;
 
-  int *nb_weights = malloc((nb_layer-1)*sizeof(int));
+  int *nb_weights = calloc((nb_layer-1),sizeof(int));
   network->nb_weights = nb_weights; //list of nb weight for each layers
 
   for(size_t i = 0; i < nb_layer; i++)
@@ -30,33 +30,35 @@ struct Network init(int nb_layer, int *nb_neuron)
       network->nb_weights[i-1] = (nb_neuron[i-1] * nb_neuron[i]);
     }
   }
-  double *input = malloc(nb_total_neuron*sizeof(double));
+  double *input = calloc(nb_total_neuron,sizeof(double));
   network->input = input;
 
-  double *weights = malloc(size_weight_list*sizeof(double));
+  double *weights = calloc(size_weight_list,sizeof(double));
   network->weights = weights;
 
-  double *biasWeights = malloc((nb_total_neuron - nb_neuron[0])*sizeof(double));
+  double *biasWeights = calloc((nb_total_neuron - nb_neuron[0]),sizeof(double));
   network->biasWeights = biasWeights;
 
-  struct Neuron *neuron_list = malloc((nb_total_neuron - nb_neuron[0])*sizeof(struct Neuron));
+  struct Neuron *neuron_list = calloc((nb_total_neuron - nb_neuron[0]),sizeof(struct Neuron));
   network->neuron_list = neuron_list;
 
   int bias = 0;
   int bias2 = 0;
+  int bias3 = 0;
   for(size_t i = 1; i < nb_layer; i++)
   {
     for(size_t j = 0; j < nb_neuron[i]; j++)
     {
       network->neuron_list[j+bias].size = nb_neuron[i-1];
       network->neuron_list[j+bias].input = network->input + bias2;
-      network->neuron_list[j+bias].weight = network->weights + j*nb_neuron[i-1] + bias;
+      network->neuron_list[j+bias].weight = network->weights + j*nb_neuron[i-1] + bias3;
       network->neuron_list[j+bias].biasWeight = network->biasWeights + j + bias;
       network->neuron_list[j+bias].layer = i;
       network->neuron_list[j+bias].nb = j;
     }
     bias = bias + nb_neuron[i];
     bias2 += nb_neuron[i-1];
+    bias3 += nb_neuron[i-1]*nb_neuron[i];
   }
   return *network;
 }
@@ -79,11 +81,12 @@ char execute_network(struct Network *network, int *inputs,int index_val, double 
     {
       if(i != network->nb_layer - 1)
       {
-        network->input[j+bias+network->nb_neuron_layer[0]] = output(network->neuron_list[j+bias]);
+        network->input[j+bias+network->nb_neuron_layer[0]] = relu_activation(network->neuron_list[j+bias]);
       }
       else
       {
-        network->input[j+bias+network->nb_neuron_layer[0]] = output_last(network->neuron_list[j+bias]);
+        network->input[j+bias+network->nb_neuron_layer[0]] = linear_activation(network->neuron_list[j+bias]);
+      //printf("output = %lf\n",network->input[j+bias+network->nb_neuron_layer[0]]);
       }
     }
     bias = bias + network->nb_neuron_layer[i];
@@ -137,6 +140,7 @@ void randomizeNetwork(struct Network *network)
     double range = 2;
     double div = 123456789 / range;
     network->weights[i] = -1 + (random_int(123456789) / div);
+    //printf("network->weights[%ld] = %lf\n",i,network->weights[i]);
   }
   int nb_total_neuron = 0;
   for(size_t i = 1; i < network->nb_layer; i++)

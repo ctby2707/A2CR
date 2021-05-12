@@ -2,26 +2,44 @@
 #include <stdlib.h>
 #include "NeuralNetwork.h"
 #include "neuron.h"
-//#define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
-double output(struct Neuron N)
+
+//#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+double aggregation (struct Neuron N)
 {
-  double somme = 0;
-  for (long i = 0; i < N.size; i++)
-  {
-    somme += N.input[i] * N.weight[i];
-  }
-  somme  += *N.biasWeight;
-  return MAX(0,somme);
+  double sum = 0;
+  for (size_t i = 0; i < N.size; i++)
+    sum += N.input[i] * N.weight[i];
+  return sum;
 }
 
-double output_last(struct Neuron N)
+double linear_activation (struct Neuron N)
 {
-  double somme = 0;
-  for (long i = 0; i < N.size; i++)
-    somme += N.input[i] * N.weight[i];
-  somme  += *N.biasWeight;
-  return somme;
+  double x = aggregation(N);
+  return x + *N.biasWeight;
+}
+
+double derivate_linear()
+{
+  return 1;
+}
+
+double relu_activation (struct Neuron N)
+{
+  double x = aggregation(N) + *N.biasWeight;
+  if (x >= 0)
+    return x;
+  else
+    return 0;
+}
+
+double derivate_relu(struct Neuron N)
+{
+  double x = aggregation(N) + *N.biasWeight;
+  if (x >= 0)
+    return 1;
+  else
+    return 0;
 }
 
 double delta_last(struct Neuron *N, double derivate_loss)

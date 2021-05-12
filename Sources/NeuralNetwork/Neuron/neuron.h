@@ -4,14 +4,18 @@
 
 struct Neuron
 {
-  long size;
+  size_t size;
   double *input;
   double *weight;
   double *biasWeight;
   int layer;
   int nb;
 };
-
+double aggregation(struct Neuron N);
+double linear_activation(struct Neuron N);
+double derivate_linear();
+double relu_activation(struct Neuron N);
+double derivate_relu(struct Neuron N);
 double output(struct Neuron N);
 double output_last(struct Neuron N);
 double delta_last(struct Neuron *N, double derivate_loss);

@@ -7,6 +7,8 @@ typedef struct Batch
   int actions;
   int reward;
   int *next_state;
+  double q_target;
+  double q;
 }Batch;
 
 typedef struct queue_b

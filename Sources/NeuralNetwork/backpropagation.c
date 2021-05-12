@@ -8,7 +8,7 @@ double learning_rate = 0.003;
 
 
 
-void backpropagation(struct Network *network, int *inputs, int outpute, double derivate_loss)
+void backpropagation(struct Network *network, int *inputs, int out, double derivate_loss)
 {
   //------------------------PROPAGATION----------------------------------------
   for(int i = 0; i < network->nb_neuron_layer[0]; i++)
@@ -22,11 +22,11 @@ void backpropagation(struct Network *network, int *inputs, int outpute, double d
     {
       if(i != network->nb_layer - 1)
       {
-        network->input[j+bias+network->nb_neuron_layer[0]] = output(network->neuron_list[j+bias]);
+        network->input[j+bias+network->nb_neuron_layer[0]] = relu_activation(network->neuron_list[j+bias]);
       }
       else
       {
-        network->input[j+bias+network->nb_neuron_layer[0]] = output_last(network->neuron_list[j+bias]);
+        network->input[j+bias+network->nb_neuron_layer[0]] = linear_activation(network->neuron_list[j+bias]);
       }
     }
     bias = bias + network->nb_neuron_layer[i];
@@ -43,16 +43,16 @@ void backpropagation(struct Network *network, int *inputs, int outpute, double d
   {
     nb_total_neuron += network->nb_neuron_layer[i];
   }
-  last_delta[outpute] = delta_last(&network->neuron_list[nb_total_neuron+outpute], derivate_loss);
+  last_delta[out] = delta_last(&network->neuron_list[nb_total_neuron+out], derivate_loss);
   for(size_t i = 0; i < 4; i++)
   {
     update(&network->neuron_list[60 +20 + i], last_delta[i], learning_rate);
   }
 
   /*printf("output layer : [");
-  for(int i = 0; i < network->nb_neuron_layer[network->nb_layer-1]; i++)
+    for(int i = 0; i < network->nb_neuron_layer[network->nb_layer-1]; i++)
     printf("%lf, ",last_delta[i]);
-  printf("]\n");*/
+    printf("]\n");*/
 
   double delta_layer_3[20];
   for(size_t i = 0; i < 20; i++)
@@ -62,10 +62,10 @@ void backpropagation(struct Network *network, int *inputs, int outpute, double d
   }
 
   /*printf("layer 3: [");
-  for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 20; i++)
     printf("%lf, ",delta_layer_3[i]);
-  printf("]\n");
-  return;*/
+    printf("]\n");
+    return;*/
 
   double delta_layer_2[60];
   for(size_t i = 0; i < 60; i++)
@@ -75,8 +75,8 @@ void backpropagation(struct Network *network, int *inputs, int outpute, double d
   }
 
   /*printf("layer 2: [");
-  for(int i = 0; i < 60; i++)
+    for(int i = 0; i < 60; i++)
     printf("%lf, ",delta_layer_2[i]);
-  printf("]\n");*/
+    printf("]\n");*/
 
 }
