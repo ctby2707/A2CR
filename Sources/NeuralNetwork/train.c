@@ -20,6 +20,8 @@ double epsilon = 100;
 
 int layer[] = {121, 60, 20, 4};
 
+
+//initialize the network
 void deep_init()
 {
   network = init(4, layer);
@@ -27,6 +29,9 @@ void deep_init()
   save_Network(&network);
 }
 
+
+//Choose a random action or execute the network
+//It return the direction choosen (N, S, W, E)
 char pick_action(Game *game, int *inputs)
 {
   int random =  random_int(100);
@@ -52,31 +57,36 @@ char pick_action(Game *game, int *inputs)
   return 'E';
 }
 
-double derivate_loss(Batch batch)
+
+// return the value of the derivate of the cost function
+double derivate_cost(Batch batch)
 {
   return 2 * (batch.q_target - batch.q);
 }
 
-double get_loss(Batch batch)
+
+// return the value of the cost function (MSE)
+double cost(Batch batch)
 {
   return pow((batch.q_target - batch.q), 2);
 }
 
+
+//Update the queue by adding new batchs
 void update_batch(Game *game)
 {
-  //update 100 batch
-  for(int i = 0; i < 100; i++)
+  for(size_t i = 0; i < 100; i++)
   {
     Batch batch;
     char cardinals[] = {'N','S','W','E'};
     int *inputs = init_inputs();
     char action = pick_action(game, inputs);
     int ind_action = 0;
-    for (size_t i = 0; i < 4; i++)
+    for (size_t j = 0; j < 4; j++)
     {
       //get the index of the choosen action
-      if (action = cardinals[i])
-        ind_action = i;
+      if (action = cardinals[j])
+        ind_action = j;
     }
 
     execute_game(game, action);
@@ -84,7 +94,6 @@ void update_batch(Game *game)
     execute_network(&network, batch.cur_state, ind_action, &batch.q, game);
 
     batch.actions = ind_action;
-
     batch.reward = game->reward;
 
     inputs = init_inputs(game);
@@ -93,7 +102,7 @@ void update_batch(Game *game)
     batch.q_target *= 0.99;
     batch.q_target += batch.reward;
 
-    //stoppe the number of batch to 10000
+    //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
     {
       struct Batch tmp;
@@ -102,6 +111,7 @@ void update_batch(Game *game)
     batchs = Batch_push(batchs, batch);
   }
 }
+
 
 void train()
 {
@@ -127,12 +137,14 @@ void train()
       batchs = Batch_push(batchs, choosen_b);
     }
 
-    loss = get_loss(choosen_b);
-    average_loss += loss;
-    average_reward += choosen_b.reward;
-    backpropagation(&network, batch.cur_state, batch.actions, derivate_loss);
+    loss = cost(choosen_b);
+    derivate_loss = derivate_cost(choosen_b);
+
+    backpropagation(&network, choosen_b.cur_state, choosen_b.actions, derivate_loss);
 
     //diplay average reward and average loss every 5 episodes
+    average_loss += loss;
+    average_reward += choosen_b.reward;
     if(episode % 5 == 0)
     {
       printf("moyenne des récompenses : %i\n", average_reward/5);

@@ -13,7 +13,7 @@ typedef struct Batch
 
 typedef struct queue_b
 {
-    struct Batch val;
+    struct Batch *val;
 
     struct queue_b *next;
 } queue_b;
