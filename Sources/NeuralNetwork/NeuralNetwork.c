@@ -173,13 +173,13 @@ void save_Network(struct Network *network)
 
   char string1[] = "Data/NeuralData/weights.txt";
   char string2[] = "Data/NeuralData/biasWeights.txt";
-
+  savefile("input.txt", network->input, 121 + 60 + 20 + 4);
   savefile(string1, network->weights, size_weight_list);
   savefile(string2, network->biasWeights,
       nb_total_neuron-network->nb_neuron_layer[0]);
 }
 
-void load_Newtwork(struct Network *network)
+void load_Network(struct Network *network)
 {
   int nb_total_neuron = 0;
   for(size_t i = 0; i < network->nb_layer; i++)

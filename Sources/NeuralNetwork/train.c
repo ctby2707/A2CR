@@ -25,8 +25,7 @@ int layer[] = {121, 60, 20, 4};
 void deep_init()
 {
   network = init(4, layer);
-  randomizeNetwork(&network);
-  save_Network(&network);
+  load_Network(&network);
 }
 
 
@@ -61,14 +60,23 @@ char pick_action(Game *game, int *inputs)
 // return the value of the derivate of the cost function
 double derivate_cost(Batch batch)
 {
-  return 2 * (batch.q_target - batch.q);
+  if((batch.q - batch.q_target) < 1 && (batch.q - batch.q_target) > -1)
+    return (batch.q - batch.q_target);
+  else
+    if((batch.q - batch.q_target) < 0)
+      return -1;
+    else
+      return 1;
 }
 
 
 // return the value of the cost function (MSE)
 double cost(Batch batch)
 {
-  return pow((batch.q_target - batch.q), 2);
+  if((batch.q - batch.q_target) < 1 && (batch.q - batch.q_target) > -1)
+    return 0.5*pow((batch.q - batch.q_target), 2);
+  else
+    return abs(batch.q - batch.q_target) - 0.5;
 }
 
 
@@ -100,7 +108,7 @@ void update_batch(Game *game)
     batch.next_state = inputs;
     execute_network(&network, batch.next_state, ind_action, &batch.q_target, game);
     batch.q_target *= 0.99;
-    batch.q_target += batch.reward;
+    batch.q_target = batch.reward; //!!! Debbuging : juste give the reward
 
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
@@ -118,12 +126,12 @@ void train()
   Game *game = get_game();
   int len_batch = Batch_len(batchs);
   Batch batch;
-  double loss = -1;
+  double loss = 0;
   int average_reward = 0;
-  int average_loss = 0;
+  double average_loss = 0;
   for(int episode = 0; episode < 10000; episode++)
   {
-    loss = 0;
+    loss = 3;
     double derivate_loss = 0;
 
     update_batch(game);
@@ -137,18 +145,26 @@ void train()
       batchs = Batch_push(batchs, choosen_b);
     }
 
-    loss = cost(choosen_b);
-    derivate_loss = derivate_cost(choosen_b);
+    average_loss += loss;
 
-    backpropagation(&network, choosen_b.cur_state, choosen_b.actions, derivate_loss);
+    do //reajust weights until the result is good
+    {
+      execute_network(&network, choosen_b.cur_state, choosen_b.actions, &choosen_b.q, game);
+      printf("%d = %lf\n", choosen_b.reward, choosen_b.q);
+      loss = cost(choosen_b);
+      derivate_loss = derivate_cost(choosen_b);
+
+      backpropagation(&network, choosen_b.cur_state, choosen_b.actions, derivate_loss);
+    }while(loss > 0.5);
+
+     printf("%d = %lf\n", choosen_b.reward, choosen_b.q);
 
     //diplay average reward and average loss every 5 episodes
-    average_loss += loss;
     average_reward += choosen_b.reward;
-    if(episode % 5 == 0)
+    if(episode % 5 == 0 && episode != 0)
     {
-      printf("moyenne des récompenses : %i\n", average_reward/5);
-      printf("moyenne des pertes : %i\n", average_loss/5);
+      //printf("moyenne des récompenses : %i\n", average_reward/5);
+      printf("moyenne des pertes : %lf\n", average_loss/5);
       printf("__________________________________\n");
       average_reward = 0;
       average_loss = 0;
@@ -169,7 +185,7 @@ int execute_game(Game *game, char action)
   int Y_cur = 0;
   do
   {
-    loop();
+    loop(0);
     pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_cur, &Y_cur);
     if(X_cur < 0 || Y_cur < 0 || X_cur > 31 || Y_cur > 28)
     {

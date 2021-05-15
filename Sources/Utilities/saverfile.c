@@ -10,7 +10,7 @@ void savefile (char* path, double* list, int size)
   file = fopen(path, "w");
   for (int i = 0; i < size; i++)
   {
-    char character[50];
+    char character[100];
     sprintf(character, "%lf", list[i]);
     if (character[1] == ',')
     {

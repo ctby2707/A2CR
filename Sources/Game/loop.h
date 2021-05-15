@@ -1,6 +1,6 @@
 #ifndef LOOP_H
 #define LOOP_H
 
-gboolean loop();
+gboolean loop(int interface_on);
 
 #endif

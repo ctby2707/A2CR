@@ -10,14 +10,11 @@
 
 const int pac_man_speed = 6;
 const int ghost_speed = 4;
-int No_interface_loop = 1;//ENABLE OR DISABLE INTERFACE           0 = INTERFACE ON
-void set_score(Game *game);
+void set_score(Game *game, int interface_on);
 
-gboolean loop()
+gboolean loop(int interface_on)
 {
   Game *game = get_game();
-  if (game->status == 0 && No_interface_loop==0) //break loop if game is in pause status
-    return TRUE;
 
   if (game->pacgum >= 258) //258 = max pac gum
     levelup(game);// pac-man has finished the level
@@ -103,18 +100,19 @@ gboolean loop()
   }
 
   //Score management
-  set_score(game);
+  set_score(game, interface_on);
 
   //Lives pac-man management
   is_pac_man_dead(game);
   if (game->live == 0)
     restart(game);
 
-  draw(0, 0, 637, 760);
+  if(interface_on == 1)
+    draw(0, 0, 637, 760);
   return TRUE;
 }
 
-void set_score(Game *game)
+void set_score(Game *game, int interface_on)
 {
   int X = 0;
   int Y = 0;
@@ -128,7 +126,8 @@ void set_score(Game *game)
     char str[42];
     sprintf(str, "Score : %i \n", game->score);
 
-    set_score_label(str);
+    if(interface_on == 1)
+      set_score_label(str);
   }
   if (game->map[X*28+Y] == 3)
   {

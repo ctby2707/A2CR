@@ -4,7 +4,6 @@
 #include "neuron.h"
 
 
-//#define MAX(x, y) (((x) > (y)) ? (x) : (y))
 double aggregation (struct Neuron N)
 {
   double sum = 0;
@@ -49,9 +48,9 @@ double delta_last(struct Neuron *N, double derivate_loss)
 
 double delta(struct Network *network, struct Neuron *N, double *next_delta, int size_next_layer, int nb_neuron_prev, int nb)
 {
-  derivate_activation = derivate_relu(N);
+  double derivate_activation = derivate_relu(*N);
 
-  somme = 0;
+  double somme = 0;
   for (long i = 0; i < size_next_layer; i++)
   {
     somme += network->neuron_list[nb_neuron_prev+i].weight[nb] * next_delta[i];
@@ -63,7 +62,9 @@ void update(struct Neuron *N, double deltat, double learning_rate)
 {
   for(int i = 0; i < N->size; i++)
   {
-    N->weight[i] -= deltat*N->input[i]*learning_rate;
+    if(abs(N->weight[i] - deltat*N->input[i]*learning_rate) <= 100)
+      N->weight[i] -= deltat*N->input[i]*learning_rate;
   }
-  *N->biasWeight -= deltat*learning_rate;
+  if(abs(*N->biasWeight - deltat*learning_rate) <= 100)
+    *N->biasWeight -= deltat*learning_rate;
 }

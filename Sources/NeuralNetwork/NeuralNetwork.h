@@ -20,7 +20,7 @@ char execute_network(struct Network *network, int *inputs,int index_val, double 
 void destroy_network(struct Network *network);
 void randomizeNetwork(struct Network *network);
 void save_Network(struct Network *network);
-void load_Newtwork(struct Network *network);
+void load_Network(struct Network *network);
 
 #endif
 
