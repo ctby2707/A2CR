@@ -118,10 +118,10 @@ void set_score(Game *game, int interface_on)
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   if (game->map[X*28+Y] == 2)
   {
-    game->pacgum = game->pacgum + 1;
+    game->pacgum += 1;
     game->map[X*28+Y] = 6;
-    game->score = game->score + 10;
-    game->reward += 1;
+    game->score += 10;
+    game->reward += 10;
     char str[42];
     sprintf(str, "Score : %i \n", game->score);
 
@@ -130,8 +130,8 @@ void set_score(Game *game, int interface_on)
   }
   if (game->map[X*28+Y] == 3)
   {
-    game->reward += 2;
-    game->pacgum = game->pacgum + 1;
+    game->reward += 15;
+    game->pacgum += 1;
     game->pac_man.color = 'b';
     game->chase = 170;
     game->map[X*28+Y] = 7;

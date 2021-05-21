@@ -26,7 +26,7 @@ void deep_init()
 
 //Choose a random action or execute the network
 //It return the direction choosen (N, S, W, E)
-char pick_action(Game *game, double *inputs)
+int pick_action(Game *game, double *inputs)
 {
   int random =  random_int(100);
   int res = 0;
@@ -46,39 +46,42 @@ char pick_action(Game *game, double *inputs)
         out = output[i];
       }
     }
-  }
+  }/*
   if(res == 0)
     return 'N';
   if(res == 1)
     return 'S';
-  if(res == 2)
-    return 'W';
-  return 'E';
+  if(res == 3)
+    return 'E';
+  return 'W';*/
+  return res;
 }
 
+void print_batch(Batch *batch);
 //Update the queue by adding new batchs
 void update_batch(Game *game)
 {
   for(size_t i = 0; i < 100; i++)
   {
     Batch batch;
-    char cardinals[] = {'N','S','W','E'};
+    //char cardinals[] = {'N','S','W','E'};
     double *inputs = init_inputs();
-    char action = pick_action(game, inputs);
-    int ind_action = 0;
-    for (size_t j = 0; j < 4; j++)
+    int action = pick_action(game, inputs);
+    //int ind_action = 0;
+    /*for (size_t j = 0; j < 4; j++)
     {
       //get the index of the choosen action
       if (action = cardinals[j])
         ind_action = j;
-    }
+    }*/
 
     execute_game(game, action);
     batch.cur_state = inputs;
 
-    batch.actions = ind_action;
+    batch.actions = action;
     batch.reward = game->reward;
-
+      print_batch(&batch);
+printf("\n");
     inputs = init_inputs(game);
     batch.next_state = inputs;
 
@@ -95,7 +98,6 @@ void update_batch(Game *game)
     batchs = Batch_push(batchs, batch);
   }
 }
-
 
 void train()
 {
@@ -121,6 +123,7 @@ void train()
         batchs = Batch_push(batchs, choosen_b);
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
+      return;
     }
     printf("perte = %lf\n", choosen_b.reward - choosen_b.q);
   }
@@ -131,7 +134,7 @@ void train()
   genann_free(network);
 }
 
-int execute_game(Game *game, char action)
+int execute_game(Game *game, int action)
 {
   game->reward = 0;
   request_move(game, action);
@@ -157,4 +160,23 @@ int execute_game(Game *game, char action)
   if(game->map[X_cur * 28 + Y_cur] == 0 || game->map[X_cur * 28 + Y_cur] == 4)
     game->reward += -50;
 
+}
+
+void print_matrix(double *M)
+{
+  //double *k=M;
+  for (int i =0;i<121;i++)
+  {
+    printf("%d, ",(int)*(M+i));
+    if ((i+1)%11==0 && i>0)
+      printf("\n");
+  }
+  printf("\n\n\n");
+}
+
+void print_batch(Batch *batch)
+{
+  print_matrix(batch->cur_state);
+  printf("Action = %d\n",batch->actions);
+  printf("Rexard = %d\n",batch->reward);
 }

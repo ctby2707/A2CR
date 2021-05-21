@@ -4,12 +4,12 @@
 #include "GTK.h"
 #include "main.h"
 
-#define REWARD_GHOST -5
-#define REWARD_GHOST_CHASE 10
+#define REWARD_GHOST -9
+#define REWARD_GHOST_CHASE 200
 #define REWARD_PATH 1
-#define REWARD_PACGUM 2
-#define REWARD_WALL -10
-#define REWARD_SUPERPACGUM 3
+#define REWARD_PACGUM 11
+#define REWARD_WALL -50
+#define REWARD_SUPERPACGUM 16
 #define REWARD_FRUIT 100
 
 double *init_inputs()
@@ -45,8 +45,10 @@ double *init_inputs()
       }
       else
       {
+        if (i==5 && j==5)
+          lidar[i*11+j] = 10000;
         if (game->map[map_point] == 0 || game->map[map_point] == 4)
-          lidar[i*11+j] = REWARD_WALL;
+          lidar[i*11+j] += REWARD_WALL;
         if (game->map[map_point] == 1 || game->map[map_point] == 42 ||
             game->map[map_point] == 43 || game->map[map_point] == 44 ||
             game->map[map_point] == 45 || game->map[map_point] == 7 ||
