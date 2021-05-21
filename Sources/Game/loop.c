@@ -102,9 +102,9 @@ gboolean loop(int interface_on)
   set_score(game, interface_on);
 
   //Lives pac-man management
-  is_pac_man_dead(game);
+  is_pac_man_dead(game, interface_on);
   if (game->live == 0)
-    restart(game);
+    restart(game, interface_on);
 
   if(interface_on == 1)
     draw(0, 0, 637, 760);

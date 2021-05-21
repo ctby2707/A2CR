@@ -1,7 +1,7 @@
 #include "game_init.h"
 #include "game_events.h"
 
-void restart(Game *game)
+void restart(Game *game, int interface_on)
 {
   //----------------------------------------
   //game.status = 0;
@@ -13,15 +13,18 @@ void restart(Game *game)
   game->live = 3;
   char tmp[42];
   sprintf(tmp, "Lives : %i \n", game->live);
-  set_live_label(tmp);
+  if(interface_on == 1)
+    set_live_label(tmp);
   game->level = 1;
   char lev[42];
   sprintf(lev, "Level : %i \n", game->level);
-  set_level_label(lev);
+  if(interface_on == 1)
+    set_level_label(lev);
   game->score = 0;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
-  set_score_label(str);
+  if(interface_on == 1)
+    set_score_label(str);
   for (int x = 0; x < 31; x++)
   {
     for (int y = 0; y < 28; y++)
@@ -38,7 +41,8 @@ void restart(Game *game)
       }
     }
   }
-  draw(0, 0, 637, 760);
+  if(interface_on == 1)
+    draw(0, 0, 637, 760);
   //on_Pause_clicked();
 }
 

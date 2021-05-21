@@ -20,7 +20,7 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  network = genann_init(121, 2, 60, 4);
+  network = genann_init(121, 2, 10, 4);
 }
 
 
@@ -47,13 +47,13 @@ int pick_action(Game *game, double *inputs)
       }
     }
   }/*
-  if(res == 0)
-    return 'N';
-  if(res == 1)
-    return 'S';
-  if(res == 3)
-    return 'E';
-  return 'W';*/
+      if(res == 0)
+      return 'N';
+      if(res == 1)
+      return 'S';
+      if(res == 3)
+      return 'E';
+      return 'W';*/
   return res;
 }
 
@@ -69,10 +69,10 @@ void update_batch(Game *game)
     int action = pick_action(game, inputs);
     //int ind_action = 0;
     /*for (size_t j = 0; j < 4; j++)
-    {
-      //get the index of the choosen action
-      if (action = cardinals[j])
-        ind_action = j;
+      {
+    //get the index of the choosen action
+    if (action = cardinals[j])
+    ind_action = j;
     }*/
 
     execute_game(game, action);
@@ -80,11 +80,8 @@ void update_batch(Game *game)
 
     batch.actions = action;
     batch.reward = game->reward;
-      print_batch(&batch);
-printf("\n");
     inputs = init_inputs(game);
     batch.next_state = inputs;
-
     batch.desired_output = (double *)genann_run(network, (double const *)batch.cur_state);
     batch.q = batch.desired_output[batch.actions];
     batch.desired_output[batch.actions] = batch.reward;
@@ -123,7 +120,6 @@ void train()
         batchs = Batch_push(batchs, choosen_b);
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
-      return;
     }
     printf("perte = %lf\n", choosen_b.reward - choosen_b.q);
   }
@@ -136,8 +132,18 @@ void train()
 
 int execute_game(Game *game, int action)
 {
+  char dir = 'N';
+  if(action == 0)
+    dir = 'N';
+  if(action == 1)
+    dir = 'S';
+  if(action == 2)
+    dir = 'W';
+  if(action == 3)
+    dir = 'E';
   game->reward = 0;
-  request_move(game, action);
+  //request_move(game, dir);
+  game->pac_man.dir = dir;
   int X = 0;
   int Y = 0;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);

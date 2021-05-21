@@ -3,7 +3,7 @@
 
 int random_int(int max)
 {
-/*
+
   if ((max - 1) == RAND_MAX) {
     return rand();
   } else {
@@ -22,7 +22,7 @@ int random_int(int max)
 
     return r % max;
   }
-*/
+/*
   int randval;
 
   FILE *f;
@@ -41,5 +41,5 @@ int random_int(int max)
 
   //printf("%i\n",randval);
 
-  return randval;
+  return randval;*/
 }

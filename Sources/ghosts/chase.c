@@ -9,7 +9,7 @@ void chase(Game *game)
   randome_dir(game, &game->pinky);
 }
 
-void ghost_kill(Game *game, int n)
+void ghost_kill(Game *game, int n, int interface_on)
 {
   if (n == 1)
   {
@@ -39,7 +39,8 @@ void ghost_kill(Game *game, int n)
   game->reward += 10;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
-  set_score_label(str);
+  if(interface_on == 1)
+    set_score_label(str);
   game->combo = game->combo * 2;
 }
 

@@ -288,7 +288,6 @@ void genann_train(genann const *ann, double const *inputs, double qtarget, int n
         double *d = ann->delta + ann->hidden * ann->hidden_layers; /* First delta. */
         double const *t = desired_outputs; /* First desired output. */
 
-
         /* Set output layer deltas. */
         if (genann_act_output == genann_act_linear ||
                 ann->activation_output == genann_act_linear) {
