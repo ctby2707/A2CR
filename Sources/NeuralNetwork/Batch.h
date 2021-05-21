@@ -9,6 +9,7 @@ typedef struct Batch
   double *next_state;
   double q_target;
   double q;
+  double *desired_output;
 }Batch;
 
 typedef struct queue_b

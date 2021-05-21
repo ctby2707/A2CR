@@ -36,7 +36,7 @@ void ghost_kill(Game *game, int n)
     game->pinky.eat = 1;
   }
   game->score = game->score + game->combo;
-  game->reward += game->combo;
+  game->reward += 10;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
   set_score_label(str);
