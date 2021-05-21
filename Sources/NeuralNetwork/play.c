@@ -11,7 +11,7 @@ int layers[] = {121, 60, 20, 4};
 
 void play_init()
 {
-  FILE *in = fopen("network.txt", "r");
+  FILE *in = fopen("Network.txt", "r");
   network = genann_read(in);
   fclose(in);
 }

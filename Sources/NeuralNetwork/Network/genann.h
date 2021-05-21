@@ -89,7 +89,7 @@ void genann_free(genann *ann);
 double const *genann_run(genann const *ann, double const *inputs);
 
 /* Does a single backprop update. */
-void genann_train(genann const *ann, double const *inputs, double const *desired_outputs, double learning_rate);
+void genann_train(genann const *ann, double const *inputs, double qtarget, int neuron, double learning_rate);
 
 /* Saves the ann. */
 void genann_write(genann const *ann, FILE *out);

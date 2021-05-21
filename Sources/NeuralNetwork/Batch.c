@@ -14,6 +14,7 @@ queue_b *Batch_push(queue_b *start, struct Batch val)
   batch->next_state = val.next_state;
   batch->q_target = val.q_target;
   batch->q = val.q;
+  batch->desired_output = val.desired_output;
 
 
   if (q == NULL)

@@ -213,9 +213,6 @@ double const *genann_run(genann const *ann, double const *inputs) {
     double *o = ann->output + ann->inputs;
     double const *i = ann->output;
 
-    for(size_t t = 0; t < 121; t++)
-      printf("%lf\n", inputs[t]);
-
     /* Copy the inputs to the scratch area, where we also store each neuron's
      * output, for consistency. This way the first layer isn't a special case. */
     memcpy(ann->output, inputs, sizeof(double) * ann->inputs);
@@ -278,9 +275,10 @@ double const *genann_run(genann const *ann, double const *inputs) {
 }
 
 
-void genann_train(genann const *ann, double const *inputs, double const *desired_outputs, double learning_rate) {
+void genann_train(genann const *ann, double const *inputs, double qtarget, int neuron, double learning_rate) {
     /* To begin with, we must run the network forward. */
-    genann_run(ann, inputs);
+    double *desired_outputs = (double *) genann_run(ann, inputs);
+    desired_outputs[neuron] = qtarget;
 
     int h, j, k;
 

@@ -17,9 +17,6 @@ genann *network;
 queue_b *batchs;
 double epsilon = 100;
 
-int layer[] = {121, 60, 20, 4};
-
-
 //initialize the network
 void deep_init()
 {
@@ -39,9 +36,6 @@ char pick_action(Game *game, double *inputs)
   }
   else
   {
-    for(size_t i = 0; i < 121; i++)
-      printf("%d\n", inputs[i]);
-    printf("\n");
     const double *output =  genann_run(network, (double const *)inputs);
     double out = -1000;
     for(size_t i = 0; i < 4; i++)
@@ -88,10 +82,8 @@ void update_batch(Game *game)
     inputs = init_inputs(game);
     batch.next_state = inputs;
 
-    for(size_t t = 0; t< 121; t++)
-      printf("%d\n", batch.cur_state[t]);
-
     batch.desired_output = (double *)genann_run(network, (double const *)batch.cur_state);
+    batch.q = batch.desired_output[batch.actions];
     batch.desired_output[batch.actions] = batch.reward;
 
     //stop the number of batch to 10000
@@ -113,7 +105,7 @@ void train()
   double loss = 0;
   int average_reward = 0;
   double average_loss = 0;
-  for(int episode = 0; episode < 10000; episode++)
+  for(int episode = 0; episode < 1000; episode++)
   {
 
     update_batch(game);
@@ -121,12 +113,16 @@ void train()
     //get a random batch to do the training
     Batch choosen_b;
     int random_number = random_int(Batch_len(batchs));
-    for(int h = 0; h < random_number; h++)
+    for(size_t selection = 0; selection < 32; selection++)
     {
-      batchs = Batch_pop(batchs, &choosen_b);
-      batchs = Batch_push(batchs, choosen_b);
+      for(int h = 0; h < random_number; h++)
+      {
+        batchs = Batch_pop(batchs, &choosen_b);
+        batchs = Batch_push(batchs, choosen_b);
+      }
+      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
     }
-    genann_train(network, (double const *) choosen_b.cur_state, choosen_b.desired_output, 0.1);
+    printf("perte = %lf\n", choosen_b.reward - choosen_b.q);
   }
   FILE *out = fopen("Network.txt", "w");
   genann_write(network, out);

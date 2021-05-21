@@ -34,7 +34,7 @@ double *init_inputs()
   int pos_pacman = X_pc * 28 + Y_pc;
   int map_point = pos_pacman -5 - (5 * 28);
 
-  double *lidar = calloc(11*11,sizeof(int));
+  double *lidar = calloc(11*11,sizeof(double));
   for (size_t i = 0; i < 11; i++)
   {
     for (size_t j = 0; j < 11; j++)
