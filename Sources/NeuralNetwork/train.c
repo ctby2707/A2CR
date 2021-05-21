@@ -2,7 +2,6 @@
 #include "game_init.h"
 #include "game_events.h"
 #include "Batch.h"
-#include "NeuralNetwork.h"
 #include "Inputs.h"
 #include "pac-man.h"
 #include "loop.h"
@@ -10,11 +9,11 @@
 #include "random.h"
 #include "train.h"
 #include "main.h"
-#include "backpropagation.h"
+#include "genann.h"
 
 #define NB_BATCHS 10000
 
-struct Network network;
+genann *network;
 queue_b *batchs;
 double epsilon = 100;
 
@@ -24,8 +23,7 @@ int layer[] = {121, 60, 20, 4};
 //initialize the network
 void deep_init()
 {
-  network = init(4, layer);
-  load_Network(&network);
+  network = genann_init(121, 2, 60, 4);
 }
 
 
@@ -34,51 +32,35 @@ void deep_init()
 char pick_action(Game *game, int *inputs)
 {
   int random =  random_int(100);
+  int res = 0;
   if(random < epsilon) //exploration
   {
-    int rest = random_int(4);
-    char res = 'N';
-    if(rest == 0)
-      res = 'N';
-    if(rest == 1)
-      res = 'S';
-    if(rest == 2)
-      res = 'W';
-    if(rest == 3)
-      res = 'E';
-    return res;
+    res = random_int(4);
   }
   else
   {
-    double val;
-    return execute_network(&network, inputs, 1, &val, game);
+    for(size_t i = 0; i < 121; i++)
+      printf("%d\n", inputs[i]);
+    printf("\n");
+    const double *output =  genann_run(network, (double const *)inputs);
+    double out = -1000;
+    for(size_t i = 0; i < 4; i++)
+    {
+      if(output[i] >out)
+      {
+        res = i;
+        out = output[i];
+      }
+    }
   }
+  if(res == 0)
+    return 'N';
+  if(res == 1)
+    return 'S';
+  if(res == 2)
+    return 'W';
   return 'E';
 }
-
-
-// return the value of the derivate of the cost function
-double derivate_cost(Batch batch)
-{
-  if((batch.q - batch.q_target) < 1 && (batch.q - batch.q_target) > -1)
-    return (batch.q - batch.q_target);
-  else
-    if((batch.q - batch.q_target) < 0)
-      return -1;
-    else
-      return 1;
-}
-
-
-// return the value of the cost function (MSE)
-double cost(Batch batch)
-{
-  if((batch.q - batch.q_target) < 1 && (batch.q - batch.q_target) > -1)
-    return 0.5*pow((batch.q - batch.q_target), 2);
-  else
-    return abs(batch.q - batch.q_target) - 0.5;
-}
-
 
 //Update the queue by adding new batchs
 void update_batch(Game *game)
@@ -99,16 +81,18 @@ void update_batch(Game *game)
 
     execute_game(game, action);
     batch.cur_state = inputs;
-    execute_network(&network, batch.cur_state, ind_action, &batch.q, game);
 
     batch.actions = ind_action;
     batch.reward = game->reward;
 
     inputs = init_inputs(game);
     batch.next_state = inputs;
-    execute_network(&network, batch.next_state, ind_action, &batch.q_target, game);
-    batch.q_target *= 0.99;
-    batch.q_target = batch.reward; //!!! Debbuging : juste give the reward
+
+    for(size_t t = 0; t< 121; t++)
+      printf("%d\n", batch.cur_state[t]);
+
+    batch.desired_output = (double *)genann_run(network, (double const *)batch.cur_state);
+    batch.desired_output[batch.actions] = batch.reward;
 
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
@@ -126,13 +110,9 @@ void train()
   Game *game = get_game();
   int len_batch = Batch_len(batchs);
   Batch batch;
-  double loss = 0;
-  int average_reward = 0;
-  double average_loss = 0;
+
   for(int episode = 0; episode < 10000; episode++)
   {
-    loss = 3;
-    double derivate_loss = 0;
 
     update_batch(game);
 
@@ -144,34 +124,13 @@ void train()
       batchs = Batch_pop(batchs, &choosen_b);
       batchs = Batch_push(batchs, choosen_b);
     }
-
-    average_loss += loss;
-
-    do //reajust weights until the result is good
-    {
-      execute_network(&network, choosen_b.cur_state, choosen_b.actions, &choosen_b.q, game);
-      printf("%d = %lf\n", choosen_b.reward, choosen_b.q);
-      loss = cost(choosen_b);
-      derivate_loss = derivate_cost(choosen_b);
-
-      backpropagation(&network, choosen_b.cur_state, choosen_b.actions, derivate_loss);
-    }while(loss > 0.5);
-
-     printf("%d = %lf\n", choosen_b.reward, choosen_b.q);
-
-    //diplay average reward and average loss every 5 episodes
-    average_reward += choosen_b.reward;
-    if(episode % 5 == 0 && episode != 0)
-    {
-      //printf("moyenne des récompenses : %i\n", average_reward/5);
-      printf("moyenne des pertes : %lf\n", average_loss/5);
-      printf("__________________________________\n");
-      average_reward = 0;
-      average_loss = 0;
-      epsilon -= 0.0001;
-      save_Network(&network);
-    }
+    genann_train(network, (double const *) choosen_b.cur_state, choosen_b.desired_output, 0.1);
   }
+  FILE *out = fopen("Network.txt", "w");
+  genann_write(network, out);
+
+  fclose(out);
+  genann_free(network);
 }
 
 int execute_game(Game *game, char action)

@@ -2,17 +2,18 @@
 #include "game_init.h"
 #include "main.h"
 #include "Inputs.h"
-#include "NeuralNetwork.h"
+#include "genann.h"
 #include "loop.h"
 #include "pac-man.h"
 
-struct Network network;
+genann *network;
 int layers[] = {121, 60, 20, 4};
 
 void play_init()
 {
-  network = init(4, layers);
-  load_Network(&network);
+  FILE *in = fopen("network.txt", "r");
+  network = genann_read(in);
+  fclose(in);
 }
 
 gboolean play()
@@ -26,7 +27,26 @@ gboolean play()
 
   int *inputs = init_inputs();
   double val;
-  char action = execute_network(&network, inputs, 1, &val, game);
+  double const *output = genann_run(network, (double const *)inputs);
+  char action = 'N';
+  int index = 0;
+  double max = -1000;
+  for(size_t i = 0; i < 4; i++)
+  {
+    if(output[i] > max)
+    {
+      index = i;
+      max = output[i];
+    }
+  }
+  if(index == 0)
+    action = 'N';
+  if(index == 1)
+    action = 'S';
+  if(index == 2)
+    action = 'W';
+  if(index == 3)
+    action = 'E';
   request_move(game, action);
   int X = 0;
   int Y = 0;

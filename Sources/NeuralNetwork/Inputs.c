@@ -4,12 +4,12 @@
 #include "GTK.h"
 #include "main.h"
 
-#define REWARD_GHOST -9
-#define REWARD_GHOST_CHASE 200
+#define REWARD_GHOST -5
+#define REWARD_GHOST_CHASE 10
 #define REWARD_PATH 1
-#define REWARD_PACGUM 11
-#define REWARD_WALL -50
-#define REWARD_SUPERPACGUM 16
+#define REWARD_PACGUM 2
+#define REWARD_WALL -10
+#define REWARD_SUPERPACGUM 3
 #define REWARD_FRUIT 100
 
 int *init_inputs()
