@@ -31,7 +31,7 @@ void deep_init()
 
 //Choose a random action or execute the network
 //It return the direction choosen (N, S, W, E)
-char pick_action(Game *game, int *inputs)
+char pick_action(Game *game, double *inputs)
 {
   int random =  random_int(100);
   if(random < epsilon) //exploration
@@ -87,7 +87,7 @@ void update_batch(Game *game)
   {
     Batch batch;
     char cardinals[] = {'N','S','W','E'};
-    int *inputs = init_inputs();
+    double *inputs = init_inputs();
     char action = pick_action(game, inputs);
     int ind_action = 0;
     for (size_t j = 0; j < 4; j++)
@@ -129,7 +129,7 @@ void train()
   double loss = 0;
   int average_reward = 0;
   double average_loss = 0;
-  for(int episode = 0; episode < 10000; episode++)
+  for(int episode = 0; episode < 1000000000; episode++)
   {
     loss = 3;
     double derivate_loss = 0;

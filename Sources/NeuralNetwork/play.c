@@ -24,7 +24,7 @@ gboolean play()
   game->reward = 0;
 
 
-  int *inputs = init_inputs();
+  double *inputs = init_inputs();
   double val;
   char action = execute_network(&network, inputs, 1, &val, game);
   request_move(game, action);

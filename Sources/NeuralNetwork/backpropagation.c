@@ -8,7 +8,7 @@ double learning_rate = 0.003;
 
 void control_network(struct Network *network);
 
-void backpropagation(struct Network *network, int *inputs, int out, double derivate_loss)
+void backpropagation(struct Network *network, double *inputs, int out, double derivate_loss)
 {
   //------------------------PROPAGATION----------------------------------------
   for(int i = 0; i < network->nb_neuron_layer[0]; i++)

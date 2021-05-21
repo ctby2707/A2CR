@@ -3,10 +3,10 @@
 
 typedef struct Batch
 {
-  int *cur_state;
+  double *cur_state;
   int actions;
   int reward;
-  int *next_state;
+  double *next_state;
   double q_target;
   double q;
 }Batch;

@@ -16,7 +16,7 @@ struct Network {
 };
 
 struct Network init(int nb_layer, int *nb_neuron);
-char execute_network(struct Network *network, int *inputs,int index_val, double *value, Game *game);
+char execute_network(struct Network *network, double *inputs,int index_val, double *value, Game *game);
 void destroy_network(struct Network *network);
 void randomizeNetwork(struct Network *network);
 void save_Network(struct Network *network);
