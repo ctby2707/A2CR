@@ -35,8 +35,8 @@ void ghost_kill(Game *game, int n, int interface_on)
     game->pinky.y = 311;
     game->pinky.eat = 1;
   }
-  game->score = game->score + game->combo;
-  game->reward += 10;
+  game->score += game->combo;
+  game->reward += game->combo;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
   if(interface_on == 1)
@@ -53,23 +53,22 @@ void randome_dir(Game *game, Ghost *pl)
     boo = 1;
   if (pl->dir == 'S' && game->map[(X + 1)*28+Y] == 0)
     boo = 1;
-  if (pl->dir == 'G' && game->map[X*28+(Y- 1)] == 0)
+  if (pl->dir == 'W' && game->map[X*28+(Y- 1)] == 0)
     boo = 1;
-  if (pl->dir == 'D' && game->map[(X + 1)*28+(Y + 1)] == 0)
+  if (pl->dir == 'E' && game->map[(X + 1)*28+(Y + 1)] == 0)
     boo = 1;
 
   if (boo == 1) //change of direction
   {
-    srand(time(NULL));
     int ran = random_int(3);
     char newdir = pl->dir;
     if (pl->dir == 'N')
     {
 
       if (ran == 0)
-        newdir = 'G';
+        newdir = 'W';
       if (ran == 1)
-        newdir = 'D';
+        newdir = 'E';
       if (ran == 2)
         newdir = 'S';
     }
@@ -77,27 +76,27 @@ void randome_dir(Game *game, Ghost *pl)
     {
 
       if (ran == 0)
-        newdir = 'G';
+        newdir = 'W';
       if (ran == 1)
-        newdir = 'D';
+        newdir = 'E';
       if (ran == 2)
         newdir = 'N';
     }
-    if (pl->dir == 'G')
+    if (pl->dir == 'W')
     {
 
       if (ran == 0)
         newdir = 'N';
       if (ran == 1)
-        newdir = 'D';
+        newdir = 'E';
       if (ran == 2)
         newdir = 'S';
     }
-    if (pl->dir == 'D')
+    if (pl->dir == 'E')
     {
 
       if (ran == 0)
-        newdir = 'G';
+        newdir = 'W';
       if (ran == 1)
         newdir = 'N';
       if (ran == 2)

@@ -4,11 +4,11 @@
 #include "GTK.h"
 #include "main.h"
 
-#define REWARD_GHOST -9
+#define REWARD_GHOST 0.1
 #define REWARD_GHOST_CHASE 200
 #define REWARD_PATH 1
 #define REWARD_PACGUM 11
-#define REWARD_WALL -50
+#define REWARD_WALL 0.005
 #define REWARD_SUPERPACGUM 16
 #define REWARD_FRUIT 100
 
@@ -41,14 +41,12 @@ double *init_inputs()
     {
       if(map_point < 0 || map_point > 868)
       {
-        lidar[i*11+j] = -1;
+        lidar[i*11+j] = 0;
       }
       else
       {
-        if (i==5 && j==5)
-          lidar[i*11+j] = 10000;
-        if (game->map[map_point] == 0 || game->map[map_point] == 4)
-          lidar[i*11+j] += REWARD_WALL;
+        //if (i==5 && j==5)
+         // lidar[i*11+j] = 10000;
         if (game->map[map_point] == 1 || game->map[map_point] == 42 ||
             game->map[map_point] == 43 || game->map[map_point] == 44 ||
             game->map[map_point] == 45 || game->map[map_point] == 7 ||
@@ -58,9 +56,11 @@ double *init_inputs()
           lidar[i*11+j] += REWARD_PACGUM;
         if (game->map[map_point] == 3)
           lidar[i*11+j] += REWARD_SUPERPACGUM;
+        if (game->map[map_point] == 0 || game->map[map_point] == 4)
+          lidar[i*11+j] = REWARD_WALL;
         if (game->chase > 0)
-        {
-          int reward = REWARD_GHOST_CHASE;
+        {//One possible probleme if the ghost with 1200 reward is near pac-man
+          double reward = REWARD_GHOST_CHASE;
 
           if (x_blinky * 28 + y_blinky == map_point)
           {
@@ -86,13 +86,13 @@ double *init_inputs()
         else
         {
           if (x_blinky * 28 + y_blinky == map_point)
-            lidar[i*11+j] += REWARD_GHOST;
+            lidar[i*11+j] = REWARD_GHOST;
           if (x_inky * 28 + y_inky == map_point)
-            lidar[i*11+j] += REWARD_GHOST;
+            lidar[i*11+j] = REWARD_GHOST;
           if (x_pinky * 28 + y_pinky == map_point)
-            lidar[i*11+j] += REWARD_GHOST;
+            lidar[i*11+j] = REWARD_GHOST;
           if (x_clyde * 28 + y_clyde == map_point)
-            lidar[i*11+j] += REWARD_GHOST;
+            lidar[i*11+j] = REWARD_GHOST;
         }
         /*if (game->fruit == begin + lidar_point)
           lidar[i*11+j] += REWARD_FRUIT;

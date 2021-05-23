@@ -104,13 +104,14 @@ void train()
   double loss = 0;
   int average_reward = 0;
   double average_loss = 0;
-  for(int episode = 0; episode < 1000; episode++)
+  for(int episode = 0; episode < 100000; episode++)
   {
 
     update_batch(game);
 
     //get a random batch to do the training
     Batch choosen_b;
+    double average = 0;
     int random_number = random_int(Batch_len(batchs));
     for(size_t selection = 0; selection < 32; selection++)
     {
@@ -121,7 +122,9 @@ void train()
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
     }
-    printf("perte = %lf\n", choosen_b.reward - choosen_b.q);
+    average += choosen_b.q - choosen_b.reward;
+    if (episode%100 == 0)
+      printf("perte = %lf\n", average/100);
   }
   FILE *out = fopen("Network.txt", "w");
   genann_write(network, out);
@@ -164,7 +167,7 @@ int execute_game(Game *game, int action)
   if (game->map[X_cur * 28 + Y_cur] != 0 && game->map[X_cur * 28 + Y_cur] != 4)
     game->reward ++;
   if(game->map[X_cur * 28 + Y_cur] == 0 || game->map[X_cur * 28 + Y_cur] == 4)
-    game->reward += -50;
+   game->reward += 0.005;
 
 }
 
@@ -173,7 +176,9 @@ void print_matrix(double *M)
   //double *k=M;
   for (int i =0;i<121;i++)
   {
-    printf("%d, ",(int)*(M+i));
+    printf("%f, ",*(M+i));
+    if ((int)M[i]%10 == (int)M[i])
+    printf(" ");
     if ((i+1)%11==0 && i>0)
       printf("\n");
   }
@@ -184,5 +189,5 @@ void print_batch(Batch *batch)
 {
   print_matrix(batch->cur_state);
   printf("Action = %d\n",batch->actions);
-  printf("Rexard = %d\n",batch->reward);
+  printf("Reward = %lf\n",batch->reward);
 }
