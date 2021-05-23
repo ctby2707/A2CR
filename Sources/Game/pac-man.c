@@ -183,5 +183,4 @@ void move_entity(Game *game, int *x, int *y, char dir, int speed)
       *y = y1;
     }
   }
-
 }

@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     }
     else
     {
-      printf("Your argument is a bullshit\n");
+      printf("Your argument is a bullshit\n");//could have been better just saying 
     }
   }
 }

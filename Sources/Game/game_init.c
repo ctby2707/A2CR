@@ -86,6 +86,7 @@ Game *init_game(){
   game->pac_man.reqdir = 'N';
   game->pac_man.color = 'y';
   game->pac_man.lasttile = 464;
+  game->mode = 0; //mode 0 = the dumb AI, mode 1 = the even dumber agent, mode 3 = nothing just wanted to add a third mode 
   game->status = 0; //status 0 = stopped, status 1 = playing
   game->map = (int *)map;
   game->pac_man_open = (int *)pac_man_open;

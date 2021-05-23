@@ -28,6 +28,7 @@ typedef struct Pac_Man
 
 typedef struct Game
 {
+  int mode;
   int status;
   int *map;
   int *pac_man_open;

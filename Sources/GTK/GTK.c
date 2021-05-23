@@ -51,6 +51,7 @@ int launchgtk()
   g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
   g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(Qactivate,"clicked",G_CALLBACK(on_Qactivate_clicked), NULL);
   g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
   //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
   //g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_release), NULL);
@@ -87,6 +88,21 @@ void on_Pause_clicked()
   gtk_widget_set_sensitive(Start, TRUE);
   gtk_widget_set_sensitive(Pause, FALSE);
   change_game_status(game, 0);
+}
+
+void on_Qactivate_clicked()
+{
+  Game *game = get_game();
+  if(game->mode == 0)
+    {
+      game->mode = 1;
+      gtk_button_set_label(GTK_BUTTON(Qactivate), "Agent mode enable");
+    }
+  else
+    {
+      game->mode = 0;
+      gtk_button_set_label(GTK_BUTTON(Qactivate), "AI mode enable");
+    }
 }
 
 

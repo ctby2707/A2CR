@@ -6,13 +6,13 @@
 #include "loop.h"
 #include "pac-man.h"
 
-genann *network;
+genann *networks;
 int layers[] = {121, 60, 20, 4};
 
 void play_init()
 {
   FILE *in = fopen("Network.txt", "r");
-  network = genann_read(in);
+  networks = genann_read(in);
   fclose(in);
 }
 
@@ -27,7 +27,7 @@ gboolean play()
 
   double *inputs = init_inputs();
   double val;
-  double const *output = genann_run(network, (double const *)inputs);
+  double const *output = genann_run(networks, (double const *)inputs);
   char action = 'N';
   int index = 0;
   double max = -1000;
