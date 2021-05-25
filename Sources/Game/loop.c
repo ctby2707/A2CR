@@ -108,6 +108,14 @@ gboolean loop(int interface_on)
 
   if(interface_on == 1)
     draw(0, 0, 637, 760);
+  move_entity(game,&game->blinky.x, &game->blinky.y, game->blinky.dir, ghost_speed);
+    if(game->pacgum / game->level > 5)
+    move_entity(game,&game->clyde.x, &game->clyde.y, game->clyde.dir, ghost_speed);
+  if(game->pacgum / game->level > 15)
+    move_entity(game,&game->inky.x, &game->inky.y, game->inky.dir, ghost_speed);
+  if(game->pacgum / game->level > 30)
+    move_entity(game,&game->pinky.x, &game->pinky.y, game->pinky.dir, ghost_speed);
+  
   return TRUE;
 }
 
