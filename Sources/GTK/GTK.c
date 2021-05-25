@@ -50,7 +50,8 @@ int launchgtk()
 
   g_signal_connect(Start, "clicked", G_CALLBACK(on_Start_clicked), NULL);
   g_signal_connect(Pause, "clicked", G_CALLBACK(on_Pause_clicked), NULL);
-  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(window, "destroy", G_CALLBACK(on_window_destroy), window);
+  
   g_signal_connect(Qactivate,"clicked",G_CALLBACK(on_Qactivate_clicked), NULL);
   g_signal_connect(area, "draw", G_CALLBACK(on_draw), NULL);
   //g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_press), NULL);
@@ -66,7 +67,11 @@ int launchgtk()
 
   return EXIT_SUCCESS;
 }
-
+void on_window_destroy(GtkWidget *widget,GdkEvent *event,gpointer data)
+{
+  printf("tamere \n");
+  gtk_main_quit();
+}
 void on_Start_clicked()
 {
   Game *game = get_game();

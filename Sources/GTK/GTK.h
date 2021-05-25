@@ -8,6 +8,7 @@
 #include <cairo.h>
 
 int launchgtk();
+void on_window_destroy(GtkWidget *widget,GdkEvent *event,gpointer data);
 void on_Start_clicked();
 void on_Pause_clicked();
 void on_Qactivate_clicked();
