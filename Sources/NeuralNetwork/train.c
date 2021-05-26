@@ -11,7 +11,7 @@
 #include "main.h"
 #include "genann.h"
 
-#define NB_BATCHS 10000
+#define NB_BATCHS 1000
 
 genann *network;
 queue_b *batchs;
@@ -20,7 +20,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  network = genann_init(121, 2, 10, 4);
+  FILE *in = fopen("Network.txt", "r");
+  network = genann_read(in);
+  fclose(in);
+  //network = genann_init(121, 2, 10, 4);
 }
 
 
@@ -46,34 +49,21 @@ int pick_action(Game *game, double *inputs)
         out = output[i];
       }
     }
-  }/*
-      if(res == 0)
-      return 'N';
-      if(res == 1)
-      return 'S';
-      if(res == 3)
-      return 'E';
-      return 'W';*/
+  }
   return res;
 }
 
 void print_batch(Batch *batch);
+
 //Update the queue by adding new batchs
 void update_batch(Game *game)
 {
   for(size_t i = 0; i < 100; i++)
   {
     Batch batch;
-    //char cardinals[] = {'N','S','W','E'};
+
     double *inputs = init_inputs();
     int action = pick_action(game, inputs);
-    //int ind_action = 0;
-    /*for (size_t j = 0; j < 4; j++)
-      {
-    //get the index of the choosen action
-    if (action = cardinals[j])
-    ind_action = j;
-    }*/
 
     execute_game(game, action);
     batch.cur_state = inputs;
@@ -91,6 +81,8 @@ void update_batch(Game *game)
     {
       struct Batch tmp;
       Batch_pop(batchs, &tmp);
+      free(tmp.cur_state);
+      free(tmp.next_state);
     }
     batchs = Batch_push(batchs, batch);
   }
@@ -101,9 +93,7 @@ void train()
   Game *game = get_game();
   int len_batch = Batch_len(batchs);
   Batch batch;
-  double loss = 0;
-  int average_reward = 0;
-  double average_loss = 0;
+  double average = 0;
   for(int episode = 0; episode < 100000; episode++)
   {
 
@@ -111,8 +101,7 @@ void train()
 
     //get a random batch to do the training
     Batch choosen_b;
-    double average = 0;
-    int random_number = random_int(Batch_len(batchs));
+    int random_number = 1 + random_int(Batch_len(batchs));
     for(size_t selection = 0; selection < 32; selection++)
     {
       for(int h = 0; h < random_number; h++)
@@ -123,13 +112,17 @@ void train()
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
     }
     average += choosen_b.q - choosen_b.reward;
-    if (episode%100 == 0)
-      printf("perte = %lf\n", average/100);
+    if (episode != 0 && episode % 1000 == 0)
+    {
+      if(abs(average / 1000) < 0.05)
+        CLAMP(epsilon ,0, epsilon -= 1);
+      printf("perte = %lf\n", average/1000);
+      FILE *out = fopen("Network.txt", "w");
+      genann_write(network, out);
+      fclose(out);
+      average = 0;
+    }
   }
-  FILE *out = fopen("Network.txt", "w");
-  genann_write(network, out);
-
-  fclose(out);
   genann_free(network);
 }
 
@@ -145,8 +138,8 @@ int execute_game(Game *game, int action)
   if(action == 3)
     dir = 'E';
   game->reward = 0;
-  //request_move(game, dir);
-  game->pac_man.dir = dir;
+  request_move(game, dir);
+  //game->pac_man.dir = dir;
   int X = 0;
   int Y = 0;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
@@ -164,10 +157,13 @@ int execute_game(Game *game, int action)
     }
     pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_cur, &Y_cur);
   }while(X == X_cur && Y == Y_cur);
-  if (game->map[X_cur * 28 + Y_cur] != 0 && game->map[X_cur * 28 + Y_cur] != 4)
-    game->reward ++;
-  if(game->map[X_cur * 28 + Y_cur] == 0 || game->map[X_cur * 28 + Y_cur] == 4)
-   game->reward += 0.005;
+  if(X_cur >= 0 && Y_cur >= 0 && X_cur < 31 && Y_cur < 28)
+  {
+    if (game->map[X_cur * 28 + Y_cur] != 0 && game->map[X_cur * 28 + Y_cur] != 4)
+      game->reward ++;
+    if(game->map[X_cur * 28 + Y_cur] == 0 || game->map[X_cur * 28 + Y_cur] == 4)
+    game->reward += 0.005;
+  }
 
 }
 

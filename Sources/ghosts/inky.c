@@ -33,15 +33,17 @@ char inky(int me, int blinky, int dir_pacman, int *map, int prev)
     int Bi = x2 + abs(dx) * dir_value;
     int Bj = Bi * a + b;
     B = Bi * 28 + Bj;
-    int mBp = map[Bi*28+Bj];
-    if (map[Bi*28+Bj] == 0 || map[Bi*28+Bj] >= 4)
+    int mBp = 0;
+    if(Bi >= 0 && Bi < 31 && Bj >= 0 && Bj < 28)
+      mBp = map[Bi*28+Bj];
+    if (mBp == 0 || mBp >= 4)
     {
       while ((Bi <31) && (mBp == 0 || mBp >= 4))
       {
         Bi += dir_value;
         Bj = a * Bi + b;
         B = Bi * 28 + Bj;
-        if(Bi < 0)
+        if(Bi < 0 || Bj < 0 || Bi >= 31 || Bj >= 28)
           break;
         mBp = map[Bi*28+Bj];
       }
@@ -56,14 +58,21 @@ char inky(int me, int blinky, int dir_pacman, int *map, int prev)
     int Bi = x2;
     int Bj = y2 + abs(dy) * dir_value;
     B = Bi * 28 + Bj;
-    int mBp = map[Bi*28+Bj];
+    int mBp = 0;
+    if(Bi >= 0 && Bi < 31 && Bj >= 0 && Bj < 28)
+      mBp = map[Bi*28+Bj];
     if (mBp == 0 || mBp >= 4)
     {
       while (mBp == 0 || mBp >= 4)
       {
         Bj += dir_value;
         B = Bi * 28 + Bj;
-        mBp = map[Bi*28+Bj];
+        if(Bi < 0)
+          break;
+        if(Bi >= 0 && Bi < 31 && Bj >= 0 && Bj < 28)
+          mBp = map[Bi*28+Bj];
+        else
+          mBp = 1;
       }
     }
   }

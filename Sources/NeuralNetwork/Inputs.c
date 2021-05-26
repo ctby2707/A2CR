@@ -39,7 +39,7 @@ double *init_inputs()
   {
     for (size_t j = 0; j < 11; j++)
     {
-      if(map_point < 0 || map_point > 868)
+      if(map_point < 0 || map_point >= 868)
       {
         lidar[i*11+j] = 0;
       }

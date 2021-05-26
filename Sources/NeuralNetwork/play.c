@@ -7,7 +7,6 @@
 #include "pac-man.h"
 
 genann *networks;
-int layers[] = {121, 60, 20, 4};
 
 void play_init()
 {

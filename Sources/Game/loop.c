@@ -108,14 +108,16 @@ gboolean loop(int interface_on)
 
   if(interface_on == 1)
     draw(0, 0, 637, 760);
+
   move_entity(game,&game->blinky.x, &game->blinky.y, game->blinky.dir, ghost_speed);
-    if(game->pacgum / game->level > 5)
+  if(game->pacgum / game->level > 5)
     move_entity(game,&game->clyde.x, &game->clyde.y, game->clyde.dir, ghost_speed);
   if(game->pacgum / game->level > 15)
     move_entity(game,&game->inky.x, &game->inky.y, game->inky.dir, ghost_speed);
   if(game->pacgum / game->level > 30)
-    move_entity(game,&game->pinky.x, &game->pinky.y, game->pinky.dir, ghost_speed);
-  
+    move_entity(game,&game->pinky.x, &game->pinky.y, game->pinky.dir,
+    ghost_speed);
+
   return TRUE;
 }
 
@@ -124,7 +126,7 @@ void set_score(Game *game, int interface_on)
   int X = 0;
   int Y = 0;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
-  if (game->map[X*28+Y] == 2)
+  if (X >= 0 && X < 31 && Y >= 0 && Y < 28 && game->map[X*28+Y] == 2)
   {
     game->pacgum += 1;
     game->map[X*28+Y] = 6;
@@ -136,7 +138,7 @@ void set_score(Game *game, int interface_on)
     if(interface_on == 1)
       set_score_label(str);
   }
-  if (game->map[X*28+Y] == 3)
+  if (X >= 0 && X < 31 && Y >= 0 && Y < 28 && game->map[X*28+Y] == 3)
   {
     game->reward += 15;
     game->pacgum += 1;
