@@ -12,6 +12,7 @@
 #include "genann.h"
 
 #define NB_BATCHS 1000
+#define LEARNING_RATE 2
 
 genann *network;
 queue_b *batchs;
@@ -20,10 +21,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  FILE *in = fopen("Network.txt", "r");
-  network = genann_read(in);
-  fclose(in);
-  //network = genann_init(121, 2, 10, 4);
+  //FILE *in = fopen("Network.txt", "r");
+  //network = genann_read(in);
+  //fclose(in);
+  network = genann_init(121, 2, 10, 4);
 }
 
 
@@ -94,7 +95,7 @@ void train()
   int len_batch = Batch_len(batchs);
   Batch batch;
   double average = 0;
-  for(int episode = 0; episode < 100000; episode++)
+  for(int episode = 0; episode < 200000; episode++)
   {
 
     update_batch(game);
@@ -109,9 +110,14 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, 0.3);
+      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
     average += choosen_b.q - choosen_b.reward;
+
+      /*FILE *out = fopen("Network.txt", "w");
+      genann_write(network, out);
+      fclose(out);
+return;*/
     if (episode != 0 && episode % 1000 == 0)
     {
       if(abs(average / 1000) < 0.05)
@@ -121,6 +127,7 @@ void train()
       genann_write(network, out);
       fclose(out);
       average = 0;
+
     }
   }
   genann_free(network);

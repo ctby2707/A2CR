@@ -398,7 +398,7 @@ void genann_write(genann const *ann, FILE *out) {
 
     int i;
     for (i = 0; i < ann->total_weights; ++i) {
-        fprintf(out, " %.20e", ann->weight[i]);
+        fprintf(out, " %.60e", ann->weight[i]);
     }
 }
 
