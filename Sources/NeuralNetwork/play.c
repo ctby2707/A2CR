@@ -17,7 +17,6 @@ void play_init()
 
 gboolean play()
 {
-  printf("tamere\n");
   Game *game = get_game();
   if (game->status == 0)
     return TRUE;
