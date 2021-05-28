@@ -22,4 +22,5 @@ gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 gboolean on_key_release(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 void matCoord_To_Pixel(int x, int y, int *X, int *Y);
 void pixel_To_MatCoord(int x, int y, int *X, int *Y);
+void middle_of_case(int X, int Y, int *x, int *y);
 #endif

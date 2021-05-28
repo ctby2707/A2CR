@@ -85,6 +85,7 @@ void update_batch(Game *game)
       free(tmp.cur_state);
       free(tmp.next_state);
     }
+    print_batch(&batch);
     batchs = Batch_push(batchs, batch);
   }
 }
@@ -112,6 +113,8 @@ void train()
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
+    if(episode > 100000)
+      print_batch(&choosen_b);
     average += choosen_b.q - choosen_b.reward;
 
       /*FILE *out = fopen("Network.txt", "w");
@@ -145,8 +148,7 @@ int execute_game(Game *game, int action)
   if(action == 3)
     dir = 'E';
   game->reward = 0;
-  request_move(game, dir);
-  //game->pac_man.dir = dir;
+  game->pac_man.dir = dir;
   int X = 0;
   int Y = 0;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
@@ -179,18 +181,25 @@ void print_matrix(double *M)
   //double *k=M;
   for (int i =0;i<121;i++)
   {
-    printf("%f, ",*(M+i));
+    if(i == 60)
+    {
+      printf("PPPPPPPP, ");
+    }
+    else
+    {
+      printf("%f, ",*(M+i));
+    }
     if ((int)M[i]%10 == (int)M[i])
     printf(" ");
     if ((i+1)%11==0 && i>0)
       printf("\n");
   }
-  printf("\n\n\n");
 }
 
 void print_batch(Batch *batch)
 {
-  print_matrix(batch->cur_state);
   printf("Action = %d\n",batch->actions);
+  print_matrix(batch->cur_state);
   printf("Reward = %lf\n",batch->reward);
+  printf("\n\n");
 }

@@ -68,7 +68,7 @@ void is_pac_man_dead(Game *game, int interface_on)
   }
 }
 
-void request_move(Game *game, char dir)
+/*void request_move(Game *game, char dir)
 {
   int X, Y;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
@@ -76,17 +76,17 @@ void request_move(Game *game, char dir)
   int y;
   matCoord_To_Pixel(X,Y,&x,&y);
 
-  if ((dir == 'N' /*&& game->map[(X - 1)*28+Y] != 0 && game->map[(X - 1)*28+Y] != 4*/ && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'S' /*&& game->map[(X + 1)*28+Y] != 0 && game->map[(X + 1)*28+Y] != 4 */&& (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
-      (dir == 'W' /*&& game->map[X*28+Y - 1] != 0 && game->map[X*28+Y - 1] != 4 */&& (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
-      (dir == 'E' /*&& game->map[X*28+Y + 1] != 0 && game->map[X*28+Y + 1] != 4 */&& (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
+  if ((dir == 'N' && game->map[(X - 1)*28+Y] != 0 && game->map[(X - 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'S' && game->map[(X + 1)*28+Y] != 0 && game->map[(X + 1)*28+Y] != 4 && (x >= game->pac_man.x-6 && x<= game->pac_man.x+6 )) ||
+      (dir == 'W' && game->map[X*28+Y - 1] != 0 && game->map[X*28+Y - 1] != 4  && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )) ||
+      (dir == 'E' && game->map[X*28+Y + 1] != 0 && game->map[X*28+Y + 1] != 4 && (y >= game->pac_man.y-6 && y<= game->pac_man.y+6 )))
   {
     game->pac_man.dir = dir;
     game->pac_man.reqdir = dir;
   }
   else
     game->pac_man.reqdir = dir;
-}
+}*/
 
 void move_pac_man(Game *game, int *x, int *y, char dir, int speed)
 {

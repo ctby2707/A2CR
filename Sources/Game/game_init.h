@@ -43,7 +43,7 @@ typedef struct Game
   int scater;
   int open;
   int combo;
-  int reward;
+  double reward;
   Pac_Man pac_man;
   Ghost blinky;
   Ghost inky;
