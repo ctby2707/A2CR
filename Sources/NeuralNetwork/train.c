@@ -21,10 +21,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  //FILE *in = fopen("Network.txt", "r");
-  //network = genann_read(in);
-  //fclose(in);
-  network = genann_init(121, 2, 10, 4);
+  FILE *in = fopen("Network.txt", "r");
+  network = genann_read(in);
+  fclose(in);
+  //network = genann_init(121, 2, 10, 4);
 }
 
 
@@ -81,7 +81,7 @@ void update_batch(Game *game)
     if (Batch_len(batchs) == NB_BATCHS)
     {
       struct Batch tmp;
-      Batch_pop(batchs, &tmp);
+      batchs = Batch_pop(batchs, &tmp);
       free(tmp.cur_state);
       free(tmp.next_state);
     }
@@ -111,7 +111,7 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
+//      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
     if(episode > 100000)
       print_batch(&choosen_b);
