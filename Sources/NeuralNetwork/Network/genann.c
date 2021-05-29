@@ -278,7 +278,10 @@ double const *genann_run(genann const *ann, double const *inputs) {
 
 void genann_train(genann const *ann, double const *inputs, double qtarget, int neuron, double learning_rate) {
     /* To begin with, we must run the network forward. */
-    double *desired_outputs = (double *) genann_run(ann, inputs);
+    double desired_outputs[4];
+    double const *output = genann_run(ann, inputs);
+    for(int i = 0; i < 4; i++)
+      desired_outputs[i] = output[i];
     desired_outputs[neuron] = qtarget;
 
     int h, j, k;
@@ -293,7 +296,7 @@ void genann_train(genann const *ann, double const *inputs, double qtarget, int n
         if (genann_act_output == genann_act_linear ||
                 ann->activation_output == genann_act_linear) {
             for (j = 0; j < ann->outputs; ++j) {
-                *d++ = *t++ - *o++;
+                *d = *t++ - *o++;
             }
         } else {
             for (j = 0; j < ann->outputs; ++j) {
@@ -399,7 +402,7 @@ void genann_write(genann const *ann, FILE *out) {
 
     int i;
     for (i = 0; i < ann->total_weights; ++i) {
-        fprintf(out, " %.60e", ann->weight[i]);
+        fprintf(out, " %.20e", ann->weight[i]);
     }
 }
 

@@ -12,7 +12,7 @@
 #include "genann.h"
 
 #define NB_BATCHS 1000
-#define LEARNING_RATE 2
+#define LEARNING_RATE 0.3
 
 genann *network;
 queue_b *batchs;
@@ -21,10 +21,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  FILE *in = fopen("Network.txt", "r");
+  /*FILE *in = fopen("Network.txt", "r");
   network = genann_read(in);
-  fclose(in);
-  //network = genann_init(121, 2, 10, 4);
+  fclose(in);*/
+  network = genann_init(121, 2, 20, 4);
 }
 
 
@@ -85,7 +85,6 @@ void update_batch(Game *game)
       free(tmp.cur_state);
       free(tmp.next_state);
     }
-    print_batch(&batch);
     batchs = Batch_push(batchs, batch);
   }
 }
@@ -111,16 +110,12 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-//      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
+      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
     if(episode > 100000)
       print_batch(&choosen_b);
     average += choosen_b.q - choosen_b.reward;
 
-      /*FILE *out = fopen("Network.txt", "w");
-      genann_write(network, out);
-      fclose(out);
-return;*/
     if (episode != 0 && episode % 1000 == 0)
     {
       if(abs(average / 1000) < 0.05)
@@ -136,44 +131,53 @@ return;*/
   genann_free(network);
 }
 
-int execute_game(Game *game, int action)
+int execute_game(Game *game, int index)
 {
-  char dir = 'N';
-  if(action == 0)
-    dir = 'N';
-  if(action == 1)
-    dir = 'S';
-  if(action == 2)
-    dir = 'W';
-  if(action == 3)
-    dir = 'E';
   game->reward = 0;
-  game->pac_man.dir = dir;
-  int X = 0;
-  int Y = 0;
+  char action = 'N';
+  int X, Y;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
-  int X_cur = 0;
-  int Y_cur = 0;
+  int pix_x, pix_y;
+
+  if(index == 0)
+  {
+    action = 'N';
+    middle_of_case(X - 1, Y, &pix_x, &pix_y);
+  }
+  if(index == 1)
+  {
+    action = 'S';
+    middle_of_case(X + 1, Y, &pix_x, &pix_y);
+  }
+  if(index == 2)
+  {
+    action = 'W';
+    middle_of_case(X, Y - 1, &pix_x, &pix_y);
+  }
+  if(index == 3)
+  {
+    action = 'E';
+    middle_of_case(X, Y + 1, &pix_x, &pix_y);
+  }
+
+  game->pac_man.dir = action; //define the new dir of pac-man
+
   do
   {
     loop(0);
-    pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_cur, &Y_cur);
-    if(X_cur < 0 || Y_cur < 0 || X_cur > 31 || Y_cur > 28)
+    if(game->pac_man.x < 0 || game->pac_man.y < 0 || game->pac_man.x > 626 ||  game->pac_man.y > 707)
     {
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = -1;
+      game->reward = 0;
     }
-    pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X_cur, &Y_cur);
-  }while(X == X_cur && Y == Y_cur);
-  if(X_cur >= 0 && Y_cur >= 0 && X_cur < 31 && Y_cur < 28)
-  {
-    if (game->map[X_cur * 28 + Y_cur] != 0 && game->map[X_cur * 28 + Y_cur] != 4)
-      game->reward ++;
-    if(game->map[X_cur * 28 + Y_cur] == 0 || game->map[X_cur * 28 + Y_cur] == 4)
+  }while(!(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
+         game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
+         game->pac_man.x != 307 && game->pac_man.y != 377);
+  if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
+    game->reward ++;
+  if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
     game->reward += 0.005;
-  }
-
 }
 
 void print_matrix(double *M)

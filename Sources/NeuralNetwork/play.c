@@ -70,7 +70,7 @@ gboolean play()
   {
     loop(1);
     if(game->pac_man.x < 0 || game->pac_man.y < 0 ||
-       game->pac_man.x > 626 ||  game->pac_man.x > 707)
+       game->pac_man.x > 626 ||  game->pac_man.y > 707)
     {
       game->pac_man.x = 307;
       game->pac_man.y = 377;
