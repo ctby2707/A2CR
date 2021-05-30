@@ -21,10 +21,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  /*FILE *in = fopen("Network.txt", "r");
+  FILE *in = fopen("Network.txt", "r");
   network = genann_read(in);
-  fclose(in);*/
-  network = genann_init(121, 2, 20, 4);
+  fclose(in);
+  //network = genann_init(121, 2, 20, 4);
 }
 
 
@@ -95,7 +95,7 @@ void train()
   int len_batch = Batch_len(batchs);
   Batch batch;
   double average = 0;
-  for(int episode = 0; episode < 200000; episode++)
+  for(int episode = 0; episode < 100000000; episode++)
   {
 
     update_batch(game);
@@ -112,8 +112,8 @@ void train()
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
-    if(episode > 100000)
-      print_batch(&choosen_b);
+    //if(episode > 100000)
+      //print_batch(&choosen_b);
     average += choosen_b.q - choosen_b.reward;
 
     if (episode != 0 && episode % 1000 == 0)
