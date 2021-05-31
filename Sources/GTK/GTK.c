@@ -69,7 +69,6 @@ int launchgtk()
 
 void on_window_destroy(GtkWidget *widget,GdkEvent *event,gpointer data)
 {
-  printf("tamere \n");
   gtk_main_quit();
 }
 

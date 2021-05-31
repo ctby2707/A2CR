@@ -68,9 +68,10 @@ void update_batch(Game *game)
 
     execute_game(game, action);
     batch.cur_state = inputs;
-
     batch.actions = action;
     batch.reward = game->reward;
+    if (!(batch.reward != 11.0 ||batch.reward != 16.0 || batch.reward != 0.005 || batch.reward != 0.1))
+      printf("oh putin de merde reward = %lf\n",batch.reward);
     inputs = init_inputs(game);
     batch.next_state = inputs;
     batch.desired_output = (double *)genann_run(network, (double const *)batch.cur_state);
@@ -99,17 +100,17 @@ void train()
   {
 
     update_batch(game);
-
     //get a random batch to do the training
     Batch choosen_b;
-    int random_number = 1 + random_int(Batch_len(batchs));
     for(size_t selection = 0; selection < 32; selection++)
     {
+      int random_number = 1 + random_int(Batch_len(batchs));
       for(int h = 0; h < random_number; h++)
       {
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
+      //print_batch(&choosen_b);
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
     }
     average += choosen_b.q - choosen_b.reward;
@@ -169,12 +170,11 @@ int execute_game(Game *game, int index)
       respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = -1;
+      game->reward = 0;
     }
   }while(respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
          game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
          game->pac_man.x != 307 && game->pac_man.y != 377);
-
   if(respawn == 0)
   {
     game->pac_man.x = pix_x;
@@ -187,6 +187,14 @@ int execute_game(Game *game, int index)
     game->reward ++;
   if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
     game->reward = 0.005;
+  //reward if there is a ghost on the case
+  int X_b, Y_b, X_i, Y_i, X_c, Y_c, X_p, Y_p;
+  pixel_To_MatCoord(game->blinky.x, game->blinky.y, &X_b, &Y_b);
+  pixel_To_MatCoord(game->inky.x, game->inky.y, &X_i, &Y_i);
+  pixel_To_MatCoord(game->pinky.x, game->pinky.y, &X_p, &Y_p);
+  pixel_To_MatCoord(game->clyde.x, game->clyde.y, &X_c, &Y_c);
+  if ((X_b == X && Y_b == Y) || (X_c == X && Y_c == Y) || (X_p == X && Y_p == Y) || (X_i == X && Y_i == Y))
+    game->reward = 0.1;
 }
 
 void print_matrix(double *M)

@@ -131,7 +131,7 @@ void set_score(Game *game, int interface_on)
     game->pacgum += 1;
     game->map[X*28+Y] = 6;
     game->score += 10;
-    game->reward += 10;
+    game->reward = 10;
     char str[42];
     sprintf(str, "Score : %i \n", game->score);
 
@@ -140,7 +140,7 @@ void set_score(Game *game, int interface_on)
   }
   if (X >= 0 && X < 31 && Y >= 0 && Y < 28 && game->map[X*28+Y] == 3)
   {
-    game->reward += 15;
+    game->reward = 15;
     game->pacgum += 1;
     game->pac_man.color = 'b';
     game->chase = 170;
