@@ -352,6 +352,6 @@ void pixel_To_MatCoord(int x, int y, int *X, int *Y)
 }
 void middle_of_case(int X, int Y, int *x, int *y)
 {
-  *x = 10 + Y * 22 +1;
-  *y = 25 + X * 22 +1;
+  *x = 10 + Y * 22;
+  *y = 25 + X * 22;
 }

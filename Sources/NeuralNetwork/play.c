@@ -39,6 +39,7 @@ gboolean play()
       max = output[i];
     }
   }
+  //index = rand() % 4;
   int X, Y;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   int pix_x, pix_y;
@@ -66,25 +67,30 @@ gboolean play()
 
   game->pac_man.dir = action; //define the new dir of pac-man
 
+  int respawn = 0;
   do
   {
     loop(1);
     if(game->pac_man.x < 0 || game->pac_man.y < 0 ||
        game->pac_man.x > 626 ||  game->pac_man.y > 707)
     {
+      respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
       game->reward = -1;
     }
-  }while(!(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
+  }while(respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
          game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
          game->pac_man.x != 307 && game->pac_man.y != 377);
-  game->pac_man.x = pix_x;
-  game->pac_man.y = pix_y;
+  if(respawn == 0)
+  {
+    game->pac_man.x = pix_x;
+    game->pac_man.y = pix_y;
+  }
 
   if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
     game->reward ++;
   if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
-    game->reward += 0.005;
+    game->reward = 0.005;
 
 }
