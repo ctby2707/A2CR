@@ -37,21 +37,94 @@
        <div class="timeline">
 			<div class="container left">
 				<div class="content-timeline">
-					<h2>Semaine 1</h2>
-						 <ul>
-							<li>Création de l'interface graphique</li>
-							<li>Creation de la base graphique du site web</li>
-						</ul> 
+					<h2>Soutenance 1</h2>
+						<ul>
+							<li>Le site web</li>
+							Prevu pour etre fait en fin de projet. IL a déja été 
+							créée avec quelque pages plutot sobre.
+							<li>Le pathfinding</li>
+							La fonction de pathfinding des fantômes a été implementé
+							avec un algo analogue a celui d'un parcours largeur dans
+							un graphe ou un arbre.
+							<li>Le mode chasseur</li>
+							Avec la fonction de pathfinding, le mode chasseur a été
+							devellopé respectant le comportement distinct de chaque 
+							fantômes.
+							<li>Le mode fuite</li>
+							Ce mode a été devellopé pour completer la mecanique des
+							super pacgum.
+							<li>La creation des graphisme</li>
+							Nous utilisons la library GTK et Glade pour pouvoir afficher
+							notre jeu. Cela nous permet de creer des boutons pour
+							alterner les futurs modes de jeu et aussi d'afficher le score
+							et le nombre de vies restantes.
+							<li>La carte et les pacgum</li>
+							Avec GTK nous affichons simplement une image de la map vide.
+							Et nous ajoutons une drawing area où nous dessinon les pacgums
+							super pacgums que nous effaçons au fur et à mesure du passage
+							de Pac-man.
+							<li>Les sprites</li>
+							Avec la drawing area , nous affichons les fantômes et Pac-man que
+							nous redessinons à chaque frame/movements.
+							<li>L'ameliorations des sprites</li>
+							A la base de simple carrés de couleurs diffrentes, les sprites
+							quasi identiques au jeu ont été ajouté avec en plus l'animation
+							de la bouche de pacman.
+							<li>Le deplacement</li>
+							Avec une matrice comme carte, nous gerons le deplacement de pac-man
+							et des fantômes dans la verification de cette matrice et nous le
+							reportons dans la drawing area pour l'afficher dans le jeu. Cette
+							même matrice sert à gerer la colisions.
+							<li>Le score, niveau et mort</li>
+							les mecanique basique au jeu de pacman ont été installé. Ainsi
+							le joueur a trois vie pour chaque partie. le score evolue à chaque
+							pacgums, super pacgums et fantômes mangés. Et chaque fois que la
+							map est vide de pacgums et super pacgums, on passe au niveau suivant.
+						</ul>
 				</div>
 			</div>
 			<div class="container right">
 				<div class="content-timeline">
-					<h2>Semaine 2</h2>
+					<h2>Soutenance 2</h2>
 						<ul>
-							<li>Création des pac-gums</li>
-							<li>Creation des collisions de pac-man</li>
-							<li>Creation des déplacements de pac-man</li>
-						</ul> 
+							<li>Les sprites</li>
+							Une ameliorations des sprites ont ete faite surtout pour les fantomes.
+							<li>Le deplacement</li>
+							Certains bug ont ete repere comme celui ou les fantomes longe les murs.
+							Ces bug graphiques sont corriges et maintenant tres rare.
+							<li>Le score, niveau et mort</li>
+							Comme pour les praphismes, de bugs ont ete detecter comme celui du passage
+							au niveau superieur sans pour autant avoir finis le niveau actuel. Ces bugs
+							ont regles et ne sont que mineurs
+							<li>Le pathfinding</li>
+							Des algo de plus courts chemins ont ete etudie. Mais dans le contexte
+							de notre projet, l'optimisation est tres faible et meme contre productif
+							si on inclue le temps pour l'installer.
+							<li>Le mode patrouille</li>
+							Pour completer la mecanique des fantomes et ainsi celle du jeu, le mode
+							patrouille a ete ajoute. Ainsi a partir d'une certaine distance de pacman,
+							ils finiront par arreter de le poursuivre et iront patrouiller dans leur
+							zones respective jusqu'a detecter a nouveau pacman.
+							<li>Le site web</li>
+							Les dernieres pages ont ete ajoute. De plus plusieur d'entre ont ete finis
+							ou seront finis en fonction de l'avancee du projet. Une page CSS a ete creee
+							pour styliser notre site web
+							<li>L'IA de Pac-man</li>
+							Les premieres bases de l'IA ont ete installe. Utilisant le principe
+							du reseau de neurones, le deep learning, nous avons developpe un createur
+							de reseau modulable avec la possibilite de le sauvegarder et d'en
+							telecharger un. La partie propagation a aussi ajoute. Mais du a un manque
+							de comprehension du Q-learning, modele de semi-supervized learning,
+							le developpement du reseau n'a pas ete finis.
+						</ul>
+				</div>
+			</div>
+			<div class="container left">
+				<div class="content-timeline">
+					<h2>Soutenance 3</h2>
+					<ul>
+						rien pour l'instant
+					</ul>
 				</div>
 			</div>
 		</div> 
