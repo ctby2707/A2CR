@@ -10,11 +10,8 @@ queue_b *Batch_push(queue_b *start, struct Batch val)
 
   batch->cur_state = val.cur_state;
   batch->actions = val.actions;
-  batch->reward = val.reward;
-  batch->next_state = val.next_state;
   batch->q_target = val.q_target;
   batch->q = val.q;
-  batch->desired_output = val.desired_output;
 
 
   if (q == NULL)
@@ -57,6 +54,7 @@ void Batch_empty(queue_b **pstart)
   {
     Batch vald;
     q = Batch_pop(q, &vald);
+    free(vald.cur_state);
   }
 }
 

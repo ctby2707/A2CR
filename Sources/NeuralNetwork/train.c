@@ -11,7 +11,7 @@
 #include "main.h"
 #include "genann.h"
 
-#define NB_BATCHS 1000
+#define NB_BATCHS 10000
 #define LEARNING_RATE 0.3
 
 genann *network;
@@ -69,24 +69,32 @@ void update_batch(Game *game)
     execute_game(game, action);
     batch.cur_state = inputs;
     batch.actions = action;
-    batch.reward = game->reward;
-    if (!(batch.reward != 11.0 ||batch.reward != 16.0 || batch.reward != 0.005 || batch.reward != 0.1))
-      printf("oh putin de merde reward = %lf\n",batch.reward);
+    if (!(game->reward != 11.0 ||game->reward != 16.0 || game->reward != 0.005 || game->reward != 0.1))
+      printf("oh putin de merde reward = %lf\n",game->reward);
     inputs = init_inputs(game);
-    batch.next_state = inputs;
-    batch.desired_output = (double *)genann_run(network, (double const *)batch.cur_state);
-    batch.q = batch.desired_output[batch.actions];
-    batch.desired_output[batch.actions] = batch.reward;
 
+    const double *output =  genann_run(network, (double const *)inputs);
+    double out = -1000;
+    for(size_t i = 0; i < 4; i++)
+    {
+      if(output[i] > out)
+      {
+        out = output[i];
+      }
+    }
+    if (game->reward == 0.1 || game->reward == 0.005 || game->reward == 0)
+      batch.q_target = game->reward;
+    else
+      batch.q_target = game->reward + 0.99*out;
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
     {
       struct Batch tmp;
       batchs = Batch_pop(batchs, &tmp);
       free(tmp.cur_state);
-      free(tmp.next_state);
     }
     batchs = Batch_push(batchs, batch);
+    free(inputs);
   }
 }
 
@@ -111,14 +119,17 @@ void train()
         batchs = Batch_push(batchs, choosen_b);
       }
       //print_batch(&choosen_b);
-      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.reward, choosen_b.actions, LEARNING_RATE);
+      genann_train(network, (double const *) choosen_b.cur_state, choosen_b.q_target, choosen_b.actions, LEARNING_RATE);
     }
-    average += choosen_b.q - choosen_b.reward;
+    average += choosen_b.q - choosen_b.q_target;
 
     if (episode != 0 && episode % 1000 == 0)
     {
-      if(abs(average / 1000) < 0.05)
-        CLAMP(epsilon ,0, epsilon -= 1);
+      if(average / 1000 < 0.05 && average / 1000 > -0.05)
+      {
+        CLAMP(epsilon ,20, epsilon -= 1);
+        printf("epsilon = %f\n", epsilon);
+      }
       printf("perte = %lf\n", average/1000);
       FILE *out = fopen("Network.txt", "w");
       genann_write(network, out);
@@ -128,6 +139,7 @@ void train()
     }
   }
   genann_free(network);
+  Batch_empty(&batchs);
 }
 
 int execute_game(Game *game, int index)
@@ -170,11 +182,11 @@ int execute_game(Game *game, int index)
       respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = 0;
+      game->reward = -1;
     }
   }while(respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
-         game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
-         game->pac_man.x != 307 && game->pac_man.y != 377);
+        game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
+      game->pac_man.x != 307 && game->pac_man.y != 377);
   if(respawn == 0)
   {
     game->pac_man.x = pix_x;
@@ -182,11 +194,13 @@ int execute_game(Game *game, int index)
   }
 
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
-
-  if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
-    game->reward ++;
-  if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
-    game->reward = 0.005;
+  if (X >= 0 && X < 31 && Y >= 0 && Y < 31)
+  {
+    if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
+      game->reward ++;
+    if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
+      game->reward = 0.005;
+  }
   //reward if there is a ghost on the case
   int X_b, Y_b, X_i, Y_i, X_c, Y_c, X_p, Y_p;
   pixel_To_MatCoord(game->blinky.x, game->blinky.y, &X_b, &Y_b);
@@ -211,7 +225,7 @@ void print_matrix(double *M)
       printf("%f, ",*(M+i));
     }
     if ((int)M[i]%10 == (int)M[i])
-    printf(" ");
+      printf(" ");
     if ((i+1)%11==0 && i>0)
       printf("\n");
   }
@@ -221,6 +235,5 @@ void print_batch(Batch *batch)
 {
   printf("Action = %d\n",batch->actions);
   print_matrix(batch->cur_state);
-  printf("Reward = %lf\n",batch->reward);
   printf("\n\n");
 }
