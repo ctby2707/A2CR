@@ -54,7 +54,7 @@ int pick_action(Game *game, double *inputs)
   return res;
 }
 
-void print_batch(Batch *batch);
+void print_batch(Batch *batch, Game *game);
 
 //Update the queue by adding new batchs
 void update_batch(Game *game)
@@ -118,7 +118,7 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-      print_batch(&choosen_b);
+      print_batch(&choosen_b, game);
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.q_target, choosen_b.actions, LEARNING_RATE);
     }
     average += choosen_b.q - choosen_b.q_target;
@@ -199,7 +199,7 @@ int execute_game(Game *game, int index)
     if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
       game->reward ++;
     if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
-      game->reward = 0.005;
+      game->reward = -2;
   }
   //reward if there is a ghost on the case
   int X_b, Y_b, X_i, Y_i, X_c, Y_c, X_p, Y_p;
@@ -208,7 +208,7 @@ int execute_game(Game *game, int index)
   pixel_To_MatCoord(game->pinky.x, game->pinky.y, &X_p, &Y_p);
   pixel_To_MatCoord(game->clyde.x, game->clyde.y, &X_c, &Y_c);
   if ((X_b == X && Y_b == Y) || (X_c == X && Y_c == Y) || (X_p == X && Y_p == Y) || (X_i == X && Y_i == Y))
-    game->reward = 0.1;
+    game->reward = -1;
 }
 
 void print_matrix(double *M)
@@ -231,10 +231,11 @@ void print_matrix(double *M)
   }
 }
 
-void print_batch(Batch *batch)
+void print_batch(Batch *batch, Game *game)
 {
   printf("Action = %d\n",batch->actions);
   printf("Qtarget = %f\n", batch->q_target);
   print_matrix(batch->cur_state);
+  printf("Reward = %lf", game->reward);
   printf("\n\n");
 }
