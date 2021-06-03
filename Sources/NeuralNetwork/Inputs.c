@@ -4,11 +4,11 @@
 #include "GTK.h"
 #include "main.h"
 
-#define REWARD_GHOST 0.1
+#define REWARD_GHOST -1
 #define REWARD_GHOST_CHASE 200
 #define REWARD_PATH 1
 #define REWARD_PACGUM 11
-#define REWARD_WALL 0.005
+#define REWARD_WALL -2
 #define REWARD_SUPERPACGUM 16
 #define REWARD_FRUIT 100
 
@@ -41,7 +41,7 @@ double *init_inputs()
     {
       if(map_point < 0 || map_point >= 868)
       {
-        lidar[i*11+j] = 0;
+        lidar[i*11+j] = -3;
       }
       else
       {

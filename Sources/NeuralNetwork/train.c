@@ -118,7 +118,7 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-      //print_batch(&choosen_b);
+      print_batch(&choosen_b);
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.q_target, choosen_b.actions, LEARNING_RATE);
     }
     average += choosen_b.q - choosen_b.q_target;
@@ -234,6 +234,7 @@ void print_matrix(double *M)
 void print_batch(Batch *batch)
 {
   printf("Action = %d\n",batch->actions);
+  printf("Qtarget = %f\n", batch->q_target);
   print_matrix(batch->cur_state);
   printf("\n\n");
 }
