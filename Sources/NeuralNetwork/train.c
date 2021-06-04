@@ -12,7 +12,7 @@
 #include "genann.h"
 
 #define NB_BATCHS 10000
-#define LEARNING_RATE 0.3
+#define LEARNING_RATE 0.00000001
 
 genann *network;
 queue_b *batchs;
@@ -21,10 +21,10 @@ double epsilon = 100;
 //initialize the network
 void deep_init()
 {
-  FILE *in = fopen("Network.txt", "r");
-  network = genann_read(in);
-  fclose(in);
-  //network = genann_init(121, 2, 20, 4);
+  //FILE *in = fopen("Network.txt", "r");
+  //network = genann_read(in);
+  //fclose(in);
+  network = genann_init(121, 2, 20, 4);
 }
 
 
@@ -69,11 +69,14 @@ void update_batch(Game *game)
     execute_game(game, action);
     batch.cur_state = inputs;
     batch.actions = action;
-    if (!(game->reward != 11.0 ||game->reward != 16.0 || game->reward != 0.005 || game->reward != 0.1))
-      printf("oh putin de merde reward = %lf\n",game->reward);
+    const double *output =  genann_run(network, (double const *)inputs);
+    batch.q = output[action];
+
     inputs = init_inputs(game);
 
-    const double *output =  genann_run(network, (double const *)inputs);
+    output =  genann_run(network, (double const *)inputs);
+
+
     double out = -1000;
     for(size_t i = 0; i < 4; i++)
     {
@@ -85,7 +88,7 @@ void update_batch(Game *game)
     if (game->reward == 0.1 || game->reward == 0.005 || game->reward == 0)
       batch.q_target = game->reward;
     else
-      batch.q_target = game->reward + 0.99*out;
+      batch.q_target = game->reward; //+ 0.99*out;
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
     {
@@ -118,7 +121,6 @@ void train()
         batchs = Batch_pop(batchs, &choosen_b);
         batchs = Batch_push(batchs, choosen_b);
       }
-      print_batch(&choosen_b, game);
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.q_target, choosen_b.actions, LEARNING_RATE);
     }
     average += choosen_b.q - choosen_b.q_target;
@@ -236,6 +238,5 @@ void print_batch(Batch *batch, Game *game)
   printf("Action = %d\n",batch->actions);
   printf("Qtarget = %f\n", batch->q_target);
   print_matrix(batch->cur_state);
-  printf("Reward = %lf", game->reward);
   printf("\n\n");
 }

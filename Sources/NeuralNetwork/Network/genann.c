@@ -32,6 +32,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+double *sums;
+
+
 #ifndef genann_act
 #define genann_act_hidden genann_act_hidden_indirect
 #define genann_act_output genann_act_output_indirect
@@ -57,7 +61,6 @@ double lookup[LOOKUP_SIZE];
 
 #ifdef __GNUC__
 #define likely(x)       __builtin_expect(!!(x), 1)
-
 #define unlikely(x)     __builtin_expect(!!(x), 0)
 #define unused          __attribute__((unused))
 #else
@@ -103,7 +106,10 @@ double genann_act_linear(const struct genann *ann unused, double a) {
 }
 
 double genann_act_threshold(const struct genann *ann unused, double a) {
-    return a > 0;
+    if(a > 0)
+      return a;
+    else
+      return exp(a) - 1;
 }
 
 genann *genann_init(int inputs, int hidden_layers, int hidden, int outputs) {
@@ -111,7 +117,6 @@ genann *genann_init(int inputs, int hidden_layers, int hidden, int outputs) {
     if (inputs < 1) return 0;
     if (outputs < 1) return 0;
     if (hidden_layers > 0 && hidden < 1) return 0;
-
 
     const int hidden_weights = hidden_layers ? (inputs+1) * hidden + (hidden_layers-1) * (hidden+1) * hidden : 0;
     const int output_weights = (hidden_layers ? (hidden+1) : (inputs+1)) * outputs;
@@ -139,11 +144,12 @@ genann *genann_init(int inputs, int hidden_layers, int hidden, int outputs) {
 
     genann_randomize(ret);
 
-    ret->activation_hidden = genann_act_sigmoid_cached;
-    ret->activation_output = genann_act_sigmoid_cached;
+    ret->activation_hidden = genann_act_threshold;
+    ret->activation_output = genann_act_linear;
 
-    genann_init_sigmoid_lookup(ret);
+    //genann_init_sigmoid_lookup(ret);
 
+     sums = calloc((ret->hidden_layers*ret->hidden + ret->outputs), sizeof(double));
     return ret;
 }
 
@@ -206,6 +212,7 @@ void genann_randomize(genann *ann) {
 void genann_free(genann *ann) {
     /* The weight, output, and delta pointers go to the same buffer. */
     free(ann);
+    free(sums);
 }
 
 
@@ -220,26 +227,28 @@ double const *genann_run(genann const *ann, double const *inputs) {
 
     int h, j, k;
 
+    double *sum = sums;
     if (!ann->hidden_layers) {
         double *ret = o;
         for (j = 0; j < ann->outputs; ++j) {
-            double sum = *w++ * -1.0;
+            *sum = *w++ * -1.0;
             for (k = 0; k < ann->inputs; ++k) {
-                sum += *w++ * i[k];
+                *sum += *w++ * i[k];
             }
-            *o++ = genann_act_output(ann, sum);
+            *o++ = genann_act_output(ann, *sum);
+            sum++;
         }
 
         return ret;
     }
-
     /* Figure input layer */
     for (j = 0; j < ann->hidden; ++j) {
-        double sum = *w++ * -1.0;
+        *sum = *w++ * -1.0;
         for (k = 0; k < ann->inputs; ++k) {
-            sum += *w++ * i[k];
+            *sum += *w++ * i[k];
         }
-        *o++ = genann_act_hidden(ann, sum);
+        *o++ = genann_act_hidden(ann, *sum);
+        sum++;
     }
 
     i += ann->inputs;
@@ -247,11 +256,12 @@ double const *genann_run(genann const *ann, double const *inputs) {
     /* Figure hidden layers, if any. */
     for (h = 1; h < ann->hidden_layers; ++h) {
         for (j = 0; j < ann->hidden; ++j) {
-            double sum = *w++ * -1.0;
+            *sum = *w++ * -1.0;
             for (k = 0; k < ann->hidden; ++k) {
-                sum += *w++ * i[k];
+                *sum += *w++ * i[k];
             }
-            *o++ = genann_act_hidden(ann, sum);
+            *o++ = genann_act_hidden(ann, *sum);
+            sum++;
         }
 
         i += ann->hidden;
@@ -261,17 +271,18 @@ double const *genann_run(genann const *ann, double const *inputs) {
 
     /* Figure output layer. */
     for (j = 0; j < ann->outputs; ++j) {
-        double sum = *w++ * -1.0;
+        *sum = *w++ * -1.0;
         for (k = 0; k < ann->hidden; ++k) {
-            sum += *w++ * i[k];
+            *sum += *w++ * i[k];
         }
-        *o++ = genann_act_output(ann, sum);
+        *o++ = genann_act_output(ann, *sum);
+        sum++;
     }
 
     /* Sanity check that we used all weights and wrote all outputs. */
     assert(w - ann->weight == ann->total_weights);
     assert(o - ann->output == ann->total_neurons);
-
+    assert(sum - sums == (ann->hidden_layers*ann->hidden + ann->outputs));
     return ret;
 }
 
@@ -292,11 +303,11 @@ void genann_train(genann const *ann, double const *inputs, double qtarget, int n
         double *d = ann->delta + ann->hidden * ann->hidden_layers; /* First delta. */
         double const *t = desired_outputs; /* First desired output. */
 
-        /* Set output layer deltas. */
+         /* Set output layer deltas. */
         if (genann_act_output == genann_act_linear ||
                 ann->activation_output == genann_act_linear) {
             for (j = 0; j < ann->outputs; ++j) {
-                *d = *t++ - *o++;
+                *d++ = *t++ - *o++;
             }
         } else {
             for (j = 0; j < ann->outputs; ++j) {
@@ -311,6 +322,7 @@ void genann_train(genann const *ann, double const *inputs, double qtarget, int n
     /* Note that loop is skipped in the case of hidden_layers == 0. */
     for (h = ann->hidden_layers - 1; h >= 0; --h) {
 
+        double *sum =  sums + (h * ann->hidden);
         /* Find first output and delta in this layer. */
         double const *o = ann->output + ann->inputs + (h * ann->hidden);
         double *d = ann->delta + (h * ann->hidden);
@@ -331,12 +343,18 @@ void genann_train(genann const *ann, double const *inputs, double qtarget, int n
                 const double forward_weight = ww[windex];
                 delta += forward_delta * forward_weight;
             }
-
-            *d = *o * (1.0-*o) * delta;
-            ++d; ++o;
+            //*d = *o * (1.0-*o) * delta; //IMPORTANT !!!!
+            if(*sum > 0)
+            {
+              *d = 1 * delta;
+            }
+            else
+            {
+              *d = exp(*sum) * delta;
+            }
+            ++d; ++o; ++sum;
         }
     }
-
 
     /* Train the outputs. */
     {
