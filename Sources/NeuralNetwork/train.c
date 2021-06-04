@@ -12,19 +12,19 @@
 #include "genann.h"
 
 #define NB_BATCHS 10000
-#define LEARNING_RATE 0.00000001
+#define LEARNING_RATE 0.0000003
 
 genann *network;
 queue_b *batchs;
-double epsilon = 100;
+double epsilon = 80;
 
 //initialize the network
 void deep_init()
 {
-  //FILE *in = fopen("Network.txt", "r");
-  //network = genann_read(in);
-  //fclose(in);
-  network = genann_init(121, 2, 20, 4);
+  /*FILE *in = fopen("Network.txt", "r");
+  network = genann_read(in);
+  fclose(in);*/
+  network = genann_init(121, 2, 30, 4);
 }
 
 
@@ -85,10 +85,10 @@ void update_batch(Game *game)
         out = output[i];
       }
     }
-    if (game->reward == 0.1 || game->reward == 0.005 || game->reward == 0)
+    if (game->reward == -1 || game->reward == -2 || game->reward == -3)
       batch.q_target = game->reward;
     else
-      batch.q_target = game->reward; //+ 0.99*out;
+      batch.q_target = game->reward + 0.99*out;
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
     {
@@ -123,11 +123,15 @@ void train()
       }
       genann_train(network, (double const *) choosen_b.cur_state, choosen_b.q_target, choosen_b.actions, LEARNING_RATE);
     }
-    average += choosen_b.q - choosen_b.q_target;
+    double temp = choosen_b.q - choosen_b.q_target;
+    if(temp < 0)
+      average -= temp;
+    else
+      average += temp;
 
     if (episode != 0 && episode % 1000 == 0)
     {
-      if(average / 1000 < 0.05 && average / 1000 > -0.05)
+      if(average / 1000 < 0.5 && average / 1000 > -0.5)
       {
         CLAMP(epsilon ,20, epsilon -= 1);
         printf("epsilon = %f\n", epsilon);
