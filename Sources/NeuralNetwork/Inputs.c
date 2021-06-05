@@ -5,11 +5,11 @@
 #include "main.h"
 
 #define REWARD_GHOST -1
-#define REWARD_GHOST_CHASE 200
+#define REWARD_GHOST_CHASE 20
 #define REWARD_PATH 1
-#define REWARD_PACGUM 11
+#define REWARD_PACGUM 6
 #define REWARD_WALL -2
-#define REWARD_SUPERPACGUM 16
+#define REWARD_SUPERPACGUM 7
 #define REWARD_FRUIT 100
 
 double *init_inputs()
