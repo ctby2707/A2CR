@@ -80,12 +80,12 @@ gboolean play()
       respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = -1;
+      game->reward = -4;
     }
   }while(respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
          game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
          game->pac_man.x != 307 && game->pac_man.y != 377);
-  if(respawn == 0)
+  if(respawn == 0)// && (abs(game->pac_man.x - pix_x) > 8 || abs(game->pac_man.y - pix_y) > 8))
   {
     game->pac_man.x = pix_x;
     game->pac_man.y = pix_y;
@@ -94,6 +94,13 @@ gboolean play()
   if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
     game->reward ++;
   if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
-    game->reward = 0.005;
-
+    game->reward = -3;
+    //reward if there is a ghost on the case
+  int X_b, Y_b, X_i, Y_i, X_c, Y_c, X_p, Y_p;
+  pixel_To_MatCoord(game->blinky.x, game->blinky.y, &X_b, &Y_b);
+  pixel_To_MatCoord(game->inky.x, game->inky.y, &X_i, &Y_i);
+  pixel_To_MatCoord(game->pinky.x, game->pinky.y, &X_p, &Y_p);
+  pixel_To_MatCoord(game->clyde.x, game->clyde.y, &X_c, &Y_c);
+  if ((X_b == X && Y_b == Y) || (X_c == X && Y_c == Y) || (X_p == X && Y_p == Y) || (X_i == X && Y_i == Y))
+    game->reward = -2;
 }
