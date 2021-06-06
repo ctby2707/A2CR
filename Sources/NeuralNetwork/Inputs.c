@@ -54,8 +54,6 @@ double *init_inputs()
           lidar[i*11+j] += REWARD_PATH;
         if (j > 0 && map_point % 28 <= 5 && (game->map[map_point] == 43 || game->map[map_point] == 44 || game->map[map_point] == 42 || game->map[map_point] == 45))
           lidar[i*11+j-1] = REWARD_PATH;
-        if (j < 10 && map_point % 28 < 5 && (game->map[map_point] == 43 || game->map[map_point] == 44 || game->map[map_point] == 42 || game->map[map_point] == 45))
-          lidar[i*11+j+1] = REWARD_PATH;
         if (game->map[map_point] == 2)
           lidar[i*11+j] += REWARD_PACGUM;
         if (game->map[map_point] == 3)
@@ -101,6 +99,9 @@ double *init_inputs()
         /*if (game->fruit == begin + lidar_point)
           lidar[i*11+j] += REWARD_FRUIT;
          */
+
+        if (map_point % 28 > 5 && (game->map[map_point-1] == 43 || game->map[map_point-1] == 44 || game->map[map_point-1] == 42 || game->map[map_point-1] == 45))
+          lidar[i*11+j+1] = REWARD_PATH;
       }
       map_point++;
     }
