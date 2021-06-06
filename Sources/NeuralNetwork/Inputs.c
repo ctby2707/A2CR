@@ -6,10 +6,10 @@
 
 #define REWARD_GHOST -2
 #define REWARD_GHOST_CHASE 20
-#define REWARD_PATH 1
-#define REWARD_PACGUM 8
+#define REWARD_PATH 0
+#define REWARD_PACGUM 3
 #define REWARD_WALL -3
-#define REWARD_SUPERPACGUM 9
+#define REWARD_SUPERPACGUM 5
 #define REWARD_FRUIT 100
 
 double *init_inputs()

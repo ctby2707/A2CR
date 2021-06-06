@@ -36,7 +36,14 @@ void ghost_kill(Game *game, int n, int interface_on)
     game->pinky.eat = 1;
   }
   game->score += game->combo;
-  game->reward += game->combo;
+  if(game->combo == 200)
+    game->reward += 20;
+  if(game->combo == 400)
+    game->reward += 40;
+  if(game->combo == 800)
+    game->reward += 80;
+  if(game->combo == 1600)
+    game->reward += 160;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);
   if(interface_on == 1)

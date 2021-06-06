@@ -89,6 +89,7 @@ void update_batch(Game *game)
       batch.q_target = game->reward;
     else
       batch.q_target = game->reward + 0.99*out;
+
     //stop the number of batch to 10000
     if (Batch_len(batchs) == NB_BATCHS)
     {
@@ -189,7 +190,7 @@ int execute_game(Game *game, int index)
       game->respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = -4;
+      game->reward = -3;
     }
   }while(game->respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
         game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
@@ -204,8 +205,8 @@ int execute_game(Game *game, int index)
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   if (X >= 0 && X < 31 && Y >= 0 && Y < 31)
   {
-    if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
-      game->reward ++;
+    /*if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
+      game->reward ++;*/
     if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
       game->reward = -3;
   }
