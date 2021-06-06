@@ -21,10 +21,10 @@ double epsilon = 20;
 //initialize the network
 void deep_init()
 {
-  /*FILE *in = fopen("Network.txt", "r");
+  FILE *in = fopen("Network.txt", "r");
   network = genann_read(in);
-  fclose(in);*/
-  network = genann_init(121, 2, 30, 4);
+  fclose(in);
+  //network = genann_init(121, 2, 30, 4);
 }
 
 
