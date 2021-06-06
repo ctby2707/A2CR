@@ -12,11 +12,11 @@
 #include "genann.h"
 
 #define NB_BATCHS 10000
-#define LEARNING_RATE 0.00000003
+#define LEARNING_RATE 0.0000003
 
 genann *network;
 queue_b *batchs;
-double epsilon = 70;
+double epsilon = 20;
 
 //initialize the network
 void deep_init()
@@ -85,7 +85,7 @@ void update_batch(Game *game)
         out = output[i];
       }
     }
-    if (game->reward == -1 || game->reward == -2 || game->reward == -3)
+    if (game->reward == -2 || game->reward == -1 || game->reward == -3)
       batch.q_target = game->reward;
     else
       batch.q_target = game->reward + 0.99*out;
@@ -189,11 +189,12 @@ int execute_game(Game *game, int index)
       game->respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
-      game->reward = -1;
+      game->reward = -4;
     }
   }while(game->respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
         game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
       game->pac_man.x != 307 && game->pac_man.y != 377);
+
   if(game->respawn == 0)
   {
     game->pac_man.x = pix_x;
@@ -206,7 +207,7 @@ int execute_game(Game *game, int index)
     if (game->map[X * 28 + Y] != 0 && game->map[X * 28 + Y] != 4)
       game->reward ++;
     if(game->map[X * 28 + Y] == 0 || game->map[X * 28 + Y] == 4)
-      game->reward = -2;
+      game->reward = -3;
   }
   //reward if there is a ghost on the case
   int X_b, Y_b, X_i, Y_i, X_c, Y_c, X_p, Y_p;
@@ -215,7 +216,7 @@ int execute_game(Game *game, int index)
   pixel_To_MatCoord(game->pinky.x, game->pinky.y, &X_p, &Y_p);
   pixel_To_MatCoord(game->clyde.x, game->clyde.y, &X_c, &Y_c);
   if ((X_b == X && Y_b == Y) || (X_c == X && Y_c == Y) || (X_p == X && Y_p == Y) || (X_i == X && Y_i == Y))
-    game->reward = -1;
+    game->reward = -2;
 }
 
 void print_matrix(double *M)
