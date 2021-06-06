@@ -49,6 +49,8 @@ void restart(Game *game, int interface_on)
 
 void respawn(Game *game)
 {
+  game->respawn = 1;
+
   game->pac_man.color = 'y';
   game->pac_man.x = 307;
   game->pac_man.y = 377;

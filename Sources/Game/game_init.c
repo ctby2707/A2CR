@@ -78,6 +78,7 @@ Game *init_game(){
   Ghost *pinky = malloc(sizeof(Ghost));
   Pac_Man *pac_man = malloc(sizeof(Pac_Man));
   game->pac_man = *pac_man;
+  game->respawn = 0;
   game->pac_man.x = 307;
   game->pac_man.y = 377;
   game->pac_man.X = 16;

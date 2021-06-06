@@ -70,22 +70,22 @@ gboolean play()
 
   game->pac_man.dir = action; //define the new dir of pac-man
 
-  int respawn = 0;
+  game->respawn = 0;
   do
   {
     loop(1);
     if(game->pac_man.x < 0 || game->pac_man.y < 0 ||
        game->pac_man.x > 626 ||  game->pac_man.y > 707)
     {
-      respawn = 1;
+      game->respawn = 1;
       game->pac_man.x = 307;
       game->pac_man.y = 377;
       game->reward = -1;
     }
-  }while(respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
+  }while(game->respawn == 0 && !(game->pac_man.x >= pix_x - 3 && game->pac_man.x <= pix_x + 3 &&
          game->pac_man.y >= pix_y - 3 && game->pac_man.y <= pix_y + 3) &&
          game->pac_man.x != 307 && game->pac_man.y != 377);
-  if(respawn == 0)
+  if(game->respawn == 0)
   {
     game->pac_man.x = pix_x;
     game->pac_man.y = pix_y;
