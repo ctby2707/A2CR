@@ -16,7 +16,7 @@
 
 genann *network;
 queue_b *batchs;
-double epsilon = 20;
+double epsilon = 35;
 
 //initialize the network
 void deep_init()
