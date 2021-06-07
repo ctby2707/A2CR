@@ -16,7 +16,7 @@
 
 genann *network;
 queue_b *batchs;
-double epsilon = 35;
+double epsilon = 100;
 
 //initialize the network
 void deep_init()
@@ -116,7 +116,9 @@ void train()
     Batch choosen_b;
     for(size_t selection = 0; selection < 32; selection++)
     {
-      int random_number = 1 + random_int(Batch_len(batchs));
+      int len = 0;
+      len = MIN(Batch_len(batchs), 50);
+      int random_number = random_int(len);
       for(int h = 0; h < random_number; h++)
       {
         batchs = Batch_pop(batchs, &choosen_b);
