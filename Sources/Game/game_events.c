@@ -1,6 +1,9 @@
 #include "game_init.h"
 #include "game_events.h"
 
+int hi = 0;
+int Saverage = 0;
+
 void restart(Game *game, int interface_on)
 {
   //----------------------------------------
@@ -20,6 +23,16 @@ void restart(Game *game, int interface_on)
   sprintf(lev, "Level : %i \n", game->level);
   if(interface_on == 1)
     set_level_label(lev);
+
+  /*Saverage += game->score;
+  if(hi != 0 && hi % 100 == 0)
+  {
+    printf("Score = %i\n", Saverage / 100);
+    hi = 0;
+    Saverage = 0;
+  }
+  hi++;*/
+
   game->score = 0;
   char str[42];
   sprintf(str, "Score : %i \n", game->score);

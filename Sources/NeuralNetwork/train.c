@@ -16,7 +16,7 @@
 
 genann *network;
 queue_b *batchs;
-double epsilon = 60;
+double epsilon = 100;
 
 //initialize the network
 void deep_init()
@@ -24,7 +24,7 @@ void deep_init()
   FILE *in = fopen("Network.txt", "r");
   network = genann_read(in);
   fclose(in);
-  //network = genann_init(121, 2, 30, 4);
+  //network = genann_init(121, 2, 60, 4);
 }
 
 
