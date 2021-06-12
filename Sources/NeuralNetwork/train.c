@@ -108,7 +108,7 @@ void train()
   int len_batch = Batch_len(batchs);
   Batch batch;
   double average = 0;
-  for(int episode = 0; episode < 100000000; episode++)
+  for(int episode = 0; episode < 10000000000; episode++)
   {
 
     update_batch(game);

@@ -28,10 +28,10 @@ gboolean play()
   double *inputs = init_inputs();
   double val;
   double const *output = genann_run(networks, (double const *)inputs);
-  printf("output[0] = %lf\n",output[0]);
-  printf("output[1] = %lf\n",output[1]);
-  printf("output[2] = %lf\n",output[2]);
-  printf("output[3] = %lf\n\n",output[3]);
+  //printf("output[0] = %lf\n",output[0]);
+  //printf("output[1] = %lf\n",output[1]);
+  //printf("output[2] = %lf\n",output[2]);
+  //printf("output[3] = %lf\n\n",output[3]);
   char action = 'N';
   int index = 0;
   double max = -1000;
