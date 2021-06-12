@@ -41,7 +41,7 @@ double *init_inputs()
     {
       if(map_point < 0 || map_point >= 868)
       {
-        lidar[i*11+j] = -3;
+        lidar[i*11+j] = -4;
       }
       else
       {
@@ -101,7 +101,7 @@ double *init_inputs()
          */
 
         if (map_point % 28 > 5 && (game->map[map_point-1] == 43 || game->map[map_point-1] == 44 || game->map[map_point-1] == 42 || game->map[map_point-1] == 45))
-          lidar[i*11+j+1] = REWARD_PATH;
+          lidar[i*11+j+1] = 3;
       }
       map_point++;
     }
