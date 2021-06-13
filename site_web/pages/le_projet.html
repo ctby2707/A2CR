@@ -30,28 +30,139 @@
 		Pac-Man et de faire une intelligence artificielle qui essaie de faire 
 		le score le plus élevé possible. Le but de ce projet n'est pas de coder 
 		un jeu vidéo, mais de se concentrer vraiment sur de l'intelligence 
-		artificielle avec du traitement de donnée dans un réseau de neurones. 
+		artificielle avec du traitement de données dans un réseau de neurones. 
 		L'implémentation visuelle du jeu nous permettra également de faire un 
 		peu de traitement d'image.
       </p>
        <div class="timeline">
 			<div class="container left">
 				<div class="content-timeline">
-					<h2>Semaine 1</h2>
-						 <ul>
-							<li>Création de l'interface graphique</li>
-							<li>Creation de la base graphique du site web</li>
-						</ul> 
+					<h2>Soutenance 1</h2>
+						<ul>
+							<li>Le site web</li>
+							Prévu pour être fait en fin de projet. Il a déja été 
+							crée avec quelques pages plutôt sobres.
+							<li>Le pathfinding</li>
+							La fonction de pathfinding des fantômes a été implementée
+							avec un algorithme analogue à celui d'un parcours largeur dans
+							un graphe ou un arbre.
+							<li>Le mode chasseur</li>
+							Avec la fonction de pathfinding, le mode chasseur a été
+							developpé respectant le comportement distinct de chaque 
+							fantôme.
+							<li>Le mode fuite</li>
+							Ce mode a été develeloppé pour compléter la mécanique des
+							supers pacgums.
+							<li>La création des graphismes</li>
+							Nous utilisons la bibliothèque GTK et Glade pour pouvoir afficher
+							notre jeu. Cela nous permet de créer des boutons pour
+							alterner les futurs modes de jeu et aussi d'afficher le score
+							et le nombre de vies restantes.
+							<li>La carte et les pacgums</li>
+							Avec GTK nous affichons simplement une image de la map vide.
+							Nous ajoutons ensuite  une drawing area où nous dessinons les pacgums et
+							super pacgums que nous effaçons au fur et à mesure du passage de Pac-man.
+							<li>Les sprites</li>
+							Avec la drawing area, nous affichons les fantômes et Pac-man que
+							nous redessinons à chaque frame/movements.
+							<li>L'amélioration des sprites</li>
+							A la base de simples carrés de couleurs différentes, les sprites
+							quasiment identiques au jeu ont été ajoutés avec en plus l'animation
+							de la bouche de pacman.
+							<li>Le déplacement</li>
+							Avec une matrice comme carte, nous gérons le déplacement de Pac-man
+							et des fantômes. Nous effectuons une conversion de coordonnées que nous
+							reportons ensuite dans la drawing area pour l'afficher dans le jeu. Cette
+							même matrice sert à gerer la collision des fantômes et de Pac-man avec les
+							murs.
+							<li>Le score, le niveau et la mort</li>
+							Les mécaniques basiques au jeu de Pac-Man ont été installées. Ainsi
+							le joueur a trois vies pour chaque partie. Le score évolue à chaque
+							pacgum, super pacgums et fantômes mangés. A chaque fois que toute les
+							pacgums et super pacgums ont été mangé , on passe au niveau suivant.
+						</ul>
 				</div>
 			</div>
 			<div class="container right">
 				<div class="content-timeline">
-					<h2>Semaine 2</h2>
+					<h2>Soutenance 2</h2>
 						<ul>
-							<li>Création des pac-gums</li>
-							<li>Creation des collisions de pac-man</li>
-							<li>Creation des déplacements de pac-man</li>
-						</ul> 
+							<li>Les sprites</li>
+							Une amélioration des sprites a été faites surtout pour les fantômes.
+							<li>Le déplacement</li>
+							Certains bugs ont été repérés comme celui où les fantômes longent les murs.
+							Ces bugs graphiques sont corrigés et maintenant très rares.
+							<li>Le score, le niveau et la mort</li>
+							Comme pour les graphismes, des bugs ont été detectés comme celui du passage
+							au niveau superieur sans pour autant avoir fini le niveau actuel. Ces bugs
+							ont reglés et ne sont que mineurs.
+							<li>Le pathfinding</li>
+							Des algorithmes de plus courts chemins ont été étudiés. Mais dans le 
+							contexte de notre projet, l'optimisation est très faible et même contre
+							productive si on inclut le temps de l'implémentation.
+							<li>Le mode patrouille</li>
+							Pour compléter la mécanique des fantômes et ainsi celle du jeu, le mode
+							patrouille a été ajouté. Ainsi, à partir d'une certaine distance de Pac-Man,
+							ils finiront par arrêter de le poursuivre et iront patrouiller dans leur
+							zones respectives jusqu'à détecter à nouveau pacman.
+							<li>Le site web</li>
+							Les dernières pages ont été ajoutées. De plus plusieurs d'entre elles ont 
+							été finis ou seront finis en fonction de l'avancée du projet. Une page CSS 
+							a été créée pour styliser notre site web.
+							<li>Le systeme d'agent</li>
+							Un systeme d'agent est une forme d'IA qui ne fait que reagir en fonction
+							de ses agent soit des capteur. Certaine forme d'IA avec des agents, les
+							multi-agents par exemple sont tres performant mais limitee car il n'
+							apprend rien comme le fairait un IA avec un reseau de neuronnes. Une IA
+							avec un agents a ete codee pour pouvoir comparer avec notre futur IA
+							<li>L'IA de Pac-man</li>
+							Pour l'IA de pac-man, nous avons choisis un reseau de neurones. On a
+							deja de l'experience avec les reseau avec un ancien projet d'OCR.
+							Pour faciliter notre travaille, un createur de reseau modulable au
+							niveau des couches et leur nombre de neurones a ete installe. on a
+							aussi developpe la possibilite de sauvegarder et de telecharger un
+							reseau a partir de fichier .txt.
+							La propagation du reseau est recupere de notre ancien projet. Mais l'IA
+							de pac-man utilise un apprentissage automatique different de l'OCR,
+							d'un apprentissage supervise a un semi-supervise. Etant une totale
+							decouverte la back-propagation, l'apprentissage n'a pas encore installe.
+						</ul>
+				</div>
+			</div>
+			<div class="container left">
+				<div class="content-timeline">
+					<h2>Soutenance 3</h2>
+						<ul>
+							<li>Le site web</li>
+							Il a ete mise a jour au niveau graphique et le reste des fichier et
+							des informations sur nos avancee on ete ajoute.
+							<li>Les bugs</li>
+							Les bugs moyens ont ete corrige et actuellement aucun bug visible ou
+							au minimum genant sont present pour nos utilisateur.
+							<li>Les sprites</li>
+							Certains sprites ou plutot certaines animation des sprites ont ete
+							rajoutees.
+							<li>Le réseau de neurones</li>
+							Notre réseau de neurones a subi plusieurs evolution dans son architecture.
+							Il adopte finalement en entrée 121 neurones en couche d'entrée. Ce nombre
+							a été determine avec le radar de Pacman. Il s'oriente dans un carre, une matrice
+							de coté 11 auquel Pacman se trouve au centre donc dans une surface de 11^2.
+							<li>La propagation du reseau</li>
+							Suite a nos recherche plus appronfondie dans les reseaux, la propagation
+							a ete optimise. Sigmoid a été remplacé par la fonction ELU plus adapté et
+							moins couteuse en calcul.
+							<li>Le Q-learning</li>
+							Pour l'apprentissage semi-supervized, le Q-learning fut choisi. Il va
+							calculer la meilleur recompense pour chaque action disponible de pac-man
+							dans son contexte. Et ainsi modifier chaque neurones de tel sorte a
+							favoriser l'action la plus gratifiante.
+							<li>L'entrainement</li>
+							Des entrainement sont fait pour simplement apprendre au reseau. Lors de ces
+							entrainement, le reseau fait tous simplement une partie avec quelque
+							modifications pour faciliter certains aspects. Mais avec notre
+							inconnu de ce milieu là, les entainement sont fait dans une certaine
+							aproximattion même si des resultats sont concluant.
+						</ul>
 				</div>
 			</div>
 		</div> 
