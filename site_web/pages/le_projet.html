@@ -134,34 +134,42 @@
 					<h2>Soutenance 3</h2>
 						<ul>
 							<li>Le site web</li>
-							Il a ete mise a jour au niveau graphique et le reste des fichier et
-							des informations sur nos avancee on ete ajoute.
+							Nous avons terminé l'aspect graphique du site. De plus nous avons
+compléter les différentes parties concernant l'avancée du projet.
 							<li>Les bugs</li>
-							Les bugs moyens ont ete corrige et actuellement aucun bug visible ou
-							au minimum genant sont present pour nos utilisateur.
+							Nous avons réussi à identifier quelques bug présent dans notre jeu
+et les avons corrigé pour avoir maintenant un jeu presque parfait autant
+mécaniquement que visuelement.
 							<li>Les sprites</li>
-							Certains sprites ou plutot certaines animation des sprites ont ete
-							rajoutees.
+							Les sprites ont été visuellement amélioré ainsi que l'animation
+qui clignote lorsque l'effat d'une super pacgum se termine.
 							<li>Le réseau de neurones</li>
-							Notre réseau de neurones a subi plusieurs evolution dans son architecture.
-							Il adopte finalement en entrée 121 neurones en couche d'entrée. Ce nombre
-							a été determine avec le radar de Pacman. Il s'oriente dans un carre, une matrice
-							de coté 11 auquel Pacman se trouve au centre donc dans une surface de 11^2.
-							<li>La propagation du reseau</li>
-							Suite a nos recherche plus appronfondie dans les reseaux, la propagation
-							a ete optimise. Sigmoid a été remplacé par la fonction ELU plus adapté et
+							Notre réseau de neurones a subi plusieurs évolutions dans son architecture.
+							Il adopte finalement 121 neurones en couche d'entrée. Ce nombre
+							a été determine avec le radar de Pac-man. Il s'agit d'un carré de
+11x11, avec Pac-man au centre, que nous avons créé. Cela lui permet de savoir lorsqu'un
+fantôme se rapproche de lui.
+							<li>La propagation du réseau</li>
+							Suite à nos recherches plus appronfondie dans les réseaux de
+neurones, la propagation
+							a été optimisé. Nous avons remplacé Sigmoid par la fonction ELU plus adapté et
 							moins couteuse en calcul.
 							<li>Le Q-learning</li>
 							Pour l'apprentissage semi-supervized, le Q-learning fut choisi. Il va
-							calculer la meilleur recompense pour chaque action disponible de pac-man
-							dans son contexte. Et ainsi modifier chaque neurones de tel sorte a
+							calculer la meilleur récompense pour chaque action disponible dans
+le contexe où se trouve Pac-man à un instant t. Ainsi, nous modifions chaque
+neurones de tel sorte à
 							favoriser l'action la plus gratifiante.
-							<li>L'entrainement</li>
-							Des entrainement sont fait pour simplement apprendre au reseau. Lors de ces
-							entrainement, le reseau fait tous simplement une partie avec quelque
-							modifications pour faciliter certains aspects. Mais avec notre
-							inconnu de ce milieu là, les entainement sont fait dans une certaine
-							aproximattion même si des resultats sont concluant.
+							<li>L'entraînement</li>
+							Les entraînement on pour but de donner le temps au réseau de
+neurones de savoir choisir la meilleur action quelque soit le contexte dans
+lequel Pac-man se trouve. Lors de ces
+							entraînement, le reseau joue des milliers parties. Pour accélérer
+l'entraînement nous avons désactivé l'affichage graphique. Ainsi un 1 minute il
+va pouvoir faire plusieurs centaines de parties quand il en ferait une seule
+avec les graphismes. C'est à partir de ce moment là où nous sommes arrivés dasn
+l'inconnue. Nous ne savions pas ce qu'est une bonne valeur de perte. Ainsi nous
+avons fait de nombreux tests avant de trouver une combinaison satisfaisante.
 						</ul>
 				</div>
 			</div>
