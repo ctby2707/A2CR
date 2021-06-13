@@ -8,7 +8,6 @@ void restart(Game *game, int interface_on)
 {
   //----------------------------------------
   //game.status = 0;
-  printf("final score = %i",game->score);
   game->chase = 0;
   game->hunt = 0;
   game->scater = 168;
