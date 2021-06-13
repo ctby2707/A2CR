@@ -142,9 +142,15 @@
 							<li>Les sprites</li>
 							Certains sprites ou plutot certaines animation des sprites ont ete
 							rajoutees.
+							<li>Le réseau de neurones</li>
+							Notre réseau de neurones a subi plusieurs evolution dans son architecture.
+							Il adopte finalement en entrée 121 neurones en couche d'entrée. Ce nombre
+							a été determine avec le radar de Pacman. Il s'oriente dans un carre, une matrice
+							de coté 11 auquel Pacman se trouve au centre donc dans une surface de 11^2.
 							<li>La propagation du reseau</li>
 							Suite a nos recherche plus appronfondie dans les reseaux, la propagation
-							a ete optimise.
+							a ete optimise. Sigmoid a été remplacé par la fonction ELU plus adapté et
+							moins couteuse en calcul.
 							<li>Le Q-learning</li>
 							Pour l'apprentissage semi-supervized, le Q-learning fut choisi. Il va
 							calculer la meilleur recompense pour chaque action disponible de pac-man
