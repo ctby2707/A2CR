@@ -28,10 +28,6 @@ gboolean play()
   double *inputs = init_inputs();
   double val;
   double const *output = genann_run(networks, (double const *)inputs);
-  printf("output[0] = %lf\n",output[0]);
-  printf("output[1] = %lf\n",output[1]);
-  printf("output[2] = %lf\n",output[2]);
-  printf("output[3] = %lf\n\n",output[3]);
   char action = 'N';
   int index = 0;
   double max = -1000;
@@ -43,7 +39,6 @@ gboolean play()
       max = output[i];
     }
   }
-  //index = rand() % 4;
   int X, Y;
   pixel_To_MatCoord(game->pac_man.x, game->pac_man.y, &X, &Y);
   int pix_x, pix_y;
