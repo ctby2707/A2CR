@@ -1,6 +1,4 @@
-# Project Title
-
-Pac-Man Ai
+# Pac-Man AI
 
 ## Description
 
