@@ -25,7 +25,7 @@ playing :
 ```
 ## Authors
 
-* Alexandre BOurcier
+* Alexandre Bourcier
 * Clément Bruley
 * Clément Iliou
 * Rémi Monteil
